@@ -21,13 +21,18 @@
 }
 
 body{
+  background:#001a0d;
   background:var(--emerald-deep);
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  color:#fdf8f0;
   color:var(--cream);
   min-height:100vh;
   overflow-x:hidden;
   cursor:default;
 }
+
+/* Force content visibility */
+.page{opacity:1!important;visibility:visible!important}
 
 /* === CANVAS PARTICLES === */
 #particle-canvas{
@@ -185,15 +190,14 @@ body.lang-es .lang-es-i,body.lang-en .lang-en-i{display:inline}
 
 /* === POETIC TEXT === */
 .poetic{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Cormorant Garamond',Georgia,serif;
   font-style:italic;
   font-size:1.2rem;
+  color:#fdf8f0;
   color:var(--cream);
   text-align:center;
   line-height:1.8;
-  opacity:0;
-  animation:fadeIn 1.2s ease forwards;
-  animation-delay:var(--delay,0s);
+  opacity:1;
 }
 .poetic em{
   font-style:italic;
@@ -210,9 +214,7 @@ body.lang-es .lang-es-i,body.lang-en .lang-en-i{display:inline}
   justify-content:center;
   gap:16px;
   margin:24px 0;
-  opacity:0;
-  animation:fadeIn 1s ease forwards;
-  animation-delay:var(--delay,0s);
+  opacity:1;
 }
 .ornament-divider::before,
 .ornament-divider::after{
@@ -254,7 +256,7 @@ h1.name{
   font-family:'Great Vibes',cursive;
   font-size:5rem;
   color:transparent;
-  background:linear-gradient(180deg,var(--gold-bright) 0%,var(--gold) 50%,var(--gold-light) 100%);
+  background:linear-gradient(180deg,#f0d060 0%,#d4a843 50%,#e8cc7a 100%);
   -webkit-background-clip:text;
   background-clip:text;
   text-align:center;
@@ -262,9 +264,7 @@ h1.name{
   line-height:1;
   margin:4px 0 8px;
   font-weight:400;
-  opacity:0;
-  transform:scale(0.8);
-  animation:nameReveal 1.5s cubic-bezier(0.16,1,0.3,1) forwards 6.5s;
+  opacity:1;
 }
 @keyframes nameReveal{
   0%{opacity:0;transform:scale(0.8);filter:drop-shadow(0 0 0 rgba(212,168,67,0)) blur(4px)}
@@ -364,8 +364,7 @@ h1.name{
   margin-top:40px;
   padding-top:28px;
   border-top:1px solid rgba(212,168,67,0.2);
-  opacity:0;
-  animation:fadeIn 1s ease forwards 7s;
+  opacity:1;
 }
 .rsvp-section h2{
   font-family:'Great Vibes',cursive;
