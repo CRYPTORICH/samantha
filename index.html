@@ -30,7 +30,6 @@ body{
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 
-/* ═══ FILM GRAIN ═══ */
 body::after{
   content:'';position:fixed;inset:0;z-index:999;
   pointer-events:none;opacity:0.035;
@@ -41,19 +40,11 @@ body::after{
 /* ═══ HERO ═══ */
 .hero{
   position:relative;width:100%;min-height:100vh;
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
 }
-.hero-video{
-  position:absolute;inset:0;z-index:1;
-}
-.hero-video video{
-  width:100%;height:100%;object-fit:cover;
-  filter:brightness(0.42) saturate(0.7);
-}
-.hero-arch{
-  position:absolute;inset:0;z-index:2;pointer-events:none;
-}
+.hero-video{position:absolute;inset:0;z-index:1}
+.hero-video video{width:100%;height:100%;object-fit:cover;filter:brightness(0.4) saturate(0.65)}
+.hero-arch{position:absolute;inset:0;z-index:2;pointer-events:none}
 .hero-arch svg{width:100%;height:100%}
 .hero-vignette{
   position:absolute;inset:0;z-index:3;
@@ -63,27 +54,30 @@ body::after{
   position:absolute;z-index:4;pointer-events:none;
   top:-20%;left:50%;transform:translateX(-50%);
   width:60%;height:140%;
-  background:radial-gradient(ellipse at 50% 30%,rgba(212,196,160,0.06) 0%,transparent 60%);
+  background:radial-gradient(ellipse at 50% 30%,rgba(212,196,160,0.05) 0%,transparent 60%);
 }
-.hero-content{
-  position:relative;z-index:5;text-align:center;
-  padding:40px 24px;
+.hero-content{position:relative;z-index:5;text-align:center;padding:48px 28px}
+
+/* ═══ GOLDEN CROWN SVG ═══ */
+.crown-svg{
+  display:block;margin:0 auto 12px;
+  width:48px;height:36px;opacity:0.5;
 }
 
 /* ═══ ANTIGRAVITY ═══ */
-.float{animation:antigravity 8s ease-in-out infinite}
-.float-slow{animation-duration:12s}
-.float-d1{animation-delay:-1.5s}
-.float-d2{animation-delay:-3s}
-.float-d3{animation-delay:-5s}
+.float{animation:antigravity 9s ease-in-out infinite}
+.float-slow{animation-duration:13s}
+.float-d1{animation-delay:-2s}
+.float-d2{animation-delay:-4s}
+.float-d3{animation-delay:-6s}
 @keyframes antigravity{
   0%,100%{transform:translateY(0) rotate(0deg)}
-  25%{transform:translateY(-16px) rotate(1deg)}
-  50%{transform:translateY(-6px) rotate(-0.5deg)}
-  75%{transform:translateY(-20px) rotate(0.5deg)}
+  25%{transform:translateY(-18px) rotate(0.8deg)}
+  50%{transform:translateY(-6px) rotate(-0.4deg)}
+  75%{transform:translateY(-22px) rotate(0.4deg)}
 }
 
-/* ═══ TYPOGRAPHY — LARGER ═══ */
+/* ═══ TYPOGRAPHY ═══ */
 .title-script{
   font-family:'Great Vibes',cursive;
   font-size:clamp(5.5rem,14vw,11rem);
@@ -97,27 +91,26 @@ body::after{
   font-size:clamp(1.2rem,3vw,1.6rem);
   font-weight:400;letter-spacing:0.5em;
   text-transform:uppercase;color:var(--ivory);
-  margin-top:16px;
+  margin-top:20px;
 }
 .title-label{
   font-family:'Cinzel',Georgia,serif;
   font-size:clamp(0.7rem,2vw,0.9rem);
   font-weight:500;letter-spacing:0.6em;
   text-transform:uppercase;color:var(--muted);
-  margin-top:16px;
+  margin-top:18px;
 }
 .poetic{
   font-style:italic;font-size:clamp(1.3rem,2.6vw,1.6rem);
-  text-align:center;line-height:2.2;
-  color:var(--muted);
-  margin-bottom:6px;
+  text-align:center;line-height:2.3;
+  color:var(--muted);margin-bottom:6px;
 }
 .poetic em{font-style:italic;color:var(--champagne);font-size:1.15em}
 
 /* ═══ LANGUAGE ═══ */
 .lang{
   position:fixed;top:28px;right:28px;z-index:100;
-  display:flex;gap:12px;
+  display:flex;gap:14px;
 }
 .lang button{
   font-family:'Montserrat',sans-serif;font-size:0.52rem;
@@ -125,7 +118,7 @@ body::after{
   padding:6px 0;border:none;background:none;
   color:var(--muted);cursor:pointer;
   border-bottom:1px solid transparent;
-  transition:all 0.4s;
+  transition:all 0.45s;
 }
 .lang button.active{color:var(--champagne);border-bottom-color:var(--gold)}
 [data-es],[data-en]{display:none}
@@ -138,34 +131,29 @@ body.en [data-en]{display:block}
   padding:180px 36px;
   display:flex;align-items:center;justify-content:center;
 }
-.section-inner{max-width:580px;width:100%}
+.section-inner{max-width:600px;width:100%}
 
-/* ═══ PORTAL DIVIDERS ═══ */
-.portal{
-  position:relative;z-index:2;
-  height:80px;display:flex;align-items:center;justify-content:center;
-}
-.portal svg{width:140px;height:60px;opacity:0.3}
-
-/* ═══ DIVIDER ═══ */
-.divider{
+/* ═══ ORNAMENTAL DIVIDER ═══ */
+.ornament{
   display:flex;align-items:center;justify-content:center;
-  gap:24px;margin:48px 0;
+  gap:28px;margin:52px 0;
 }
-.divider::before,.divider::after{
+.ornament::before,.ornament::after{
   content:'';flex:1;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(196,160,74,0.12),transparent);
+  background:linear-gradient(90deg,transparent,rgba(196,160,74,0.14),transparent);
 }
-.divider span{font-size:0.9rem;opacity:0.3}
+.ornament-svg{width:28px;height:28px;opacity:0.35}
+.ornament-svg path{fill:var(--champagne)}
 
 /* ═══ DETAIL ROWS ═══ */
 .detail{
-  display:flex;align-items:flex-start;gap:24px;
-  margin:24px 0;padding:24px 0;
+  display:flex;align-items:flex-start;gap:28px;
+  margin:28px 0;padding:28px 0;
   border-bottom:1px solid rgba(196,160,74,0.05);
 }
 .detail:last-child{border-bottom:none}
-.detail-icon{font-size:1.6rem;opacity:0.45;flex-shrink:0;margin-top:2px}
+.detail-svg{width:28px;height:28px;opacity:0.4;flex-shrink:0;margin-top:3px}
+.detail-svg path{stroke:var(--champagne);fill:none}
 .detail-label{
   font-family:'Montserrat',sans-serif;font-size:0.5rem;
   letter-spacing:0.35em;text-transform:uppercase;
@@ -174,21 +162,21 @@ body.en [data-en]{display:block}
 .detail-value{font-size:1.25rem;font-family:'Playfair Display',Georgia,serif;line-height:1.5}
 
 /* ═══ COUNTDOWN ═══ */
-.cd-grid{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
-.cd-box{text-align:center;min-width:80px}
+.cd-grid{display:flex;justify-content:center;gap:36px;flex-wrap:wrap}
+.cd-box{text-align:center;min-width:84px}
 .cd-num{
   font-family:'Playfair Display',Georgia,serif;
-  font-size:2.8rem;font-weight:600;
+  font-size:3rem;font-weight:600;
   color:var(--champagne);line-height:1;
 }
 .cd-label{
   font-family:'Montserrat',sans-serif;font-size:0.5rem;
   letter-spacing:0.3em;text-transform:uppercase;
-  color:var(--muted);margin-top:10px;
+  color:var(--muted);margin-top:12px;
 }
 
 /* ═══ RSVP ═══ */
-.form-group{margin-bottom:28px}
+.form-group{margin-bottom:30px}
 .form-label{
   font-family:'Montserrat',sans-serif;font-size:0.5rem;
   letter-spacing:0.35em;text-transform:uppercase;
@@ -207,7 +195,7 @@ body.en [data-en]{display:block}
 .btn{
   display:inline-block;font-family:'Montserrat',sans-serif;
   font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;
-  padding:18px 48px;cursor:pointer;
+  padding:20px 52px;cursor:pointer;
   background:transparent;color:var(--champagne);
   border:1px solid rgba(196,160,74,0.15);
   transition:all 0.5s ease;margin-top:8px;
@@ -224,7 +212,7 @@ body.en [data-en]{display:block}
 /* ═══ FOOTER ═══ */
 .footer{
   position:relative;z-index:2;
-  text-align:center;padding:140px 32px 100px;
+  text-align:center;padding:160px 32px 100px;
   font-family:'Montserrat',sans-serif;font-size:0.5rem;
   letter-spacing:0.35em;text-transform:uppercase;
   color:rgba(232,224,212,0.2);
@@ -235,16 +223,15 @@ body.en [data-en]{display:block}
 @media(max-width:480px){
   .section{padding:120px 22px}
   .title-script{font-size:4.5rem}
-  .hero-content{padding:28px 18px}
+  .hero-content{padding:32px 20px}
   .lang{top:18px;right:16px}
-  .cd-grid{gap:18px}
-  .cd-num{font-size:2rem}
+  .cd-grid{gap:20px}
+  .cd-num{font-size:2.2rem}
 }
 </style>
 </head>
 <body class="es">
 
-<!-- ═══════ HERO ═══════ -->
 <div class="hero">
   <div class="hero-video">
     <video autoplay muted loop playsinline>
@@ -253,23 +240,27 @@ body.en [data-en]{display:block}
   </div>
   <div class="hero-arch">
     <svg viewBox="0 0 1000 900" preserveAspectRatio="none">
-      <defs>
-        <mask id="arch">
-          <rect width="1000" height="900" fill="white"/>
-          <ellipse cx="500" cy="420" rx="290" ry="360" fill="black"/>
-        </mask>
-      </defs>
+      <defs><mask id="arch"><rect width="1000" height="900" fill="white"/><ellipse cx="500" cy="420" rx="290" ry="360" fill="black"/></mask></defs>
       <rect width="1000" height="900" fill="rgba(4,6,4,0.85)" mask="url(#arch)"/>
-      <ellipse cx="500" cy="420" rx="290" ry="360" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="1.5"/>
-      <ellipse cx="500" cy="420" rx="288" ry="358" fill="none" stroke="rgba(212,196,160,0.06)" stroke-width="4"/>
+      <ellipse cx="500" cy="420" rx="290" ry="360" fill="none" stroke="rgba(180,148,47,0.16)" stroke-width="1.5"/>
+      <ellipse cx="500" cy="420" rx="288" ry="358" fill="none" stroke="rgba(212,196,160,0.05)" stroke-width="5"/>
     </svg>
   </div>
   <div class="hero-vignette"></div>
   <div class="hero-light"></div>
   <canvas id="particles"></canvas>
+
   <div class="hero-content">
-    <p class="title-label reveal" data-es>✦ Te Invitamos ✦</p>
-    <p class="title-label reveal" data-en>✦ You Are Invited ✦</p>
+    <!-- Golden crown — SVG, not emoji -->
+    <svg class="crown-svg float float-slow" viewBox="0 0 48 36">
+      <path d="M4 32 L8 12 L16 24 L24 6 L32 24 L40 12 L44 32 Z" fill="none" stroke="var(--champagne)" stroke-width="1.2" opacity="0.6"/>
+      <circle cx="24" cy="6" r="2" fill="var(--champagne)" opacity="0.4"/>
+      <circle cx="8" cy="12" r="1.5" fill="var(--champagne)" opacity="0.3"/>
+      <circle cx="40" cy="12" r="1.5" fill="var(--champagne)" opacity="0.3"/>
+    </svg>
+
+    <p class="title-label reveal" data-es>Te Invitamos a Celebrar</p>
+    <p class="title-label reveal" data-en>You Are Invited to Celebrate</p>
     <h1 class="title-script reveal d1 float float-slow">Samantha</h1>
     <p class="title-display reveal d2 float float-d1">Quince Años</p>
   </div>
@@ -280,14 +271,13 @@ body.en [data-en]{display:block}
   <button id="btn-en" onclick="setLang('en')">EN</button>
 </div>
 
-<!-- ═══════ PORTAL ═══════ -->
-<div class="portal"><svg viewBox="0 0 120 60"><ellipse cx="60" cy="55" rx="48" ry="42" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="0.8"/><ellipse cx="60" cy="55" rx="45" ry="39" fill="none" stroke="rgba(180,148,47,0.06)" stroke-width="2"/></svg></div>
-
 <!-- ═══════ INVITATION ═══════ -->
 <section class="section">
   <div class="section-inner" style="text-align:center">
 
-    <div class="divider"><span>✦</span></div>
+    <div class="ornament">
+      <svg class="ornament-svg" viewBox="0 0 24 24"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"/></svg>
+    </div>
 
     <div data-es>
       <p class="poetic reveal"><em>En un Sueño Esmeralda,</em></p>
@@ -298,7 +288,9 @@ body.en [data-en]{display:block}
       <p class="poetic reveal d1">where memories drift<br>like petals in the breeze,</p>
     </div>
 
-    <div class="divider reveal d2"><span>💚</span></div>
+    <div class="ornament reveal d2">
+      <svg class="ornament-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="var(--champagne)" opacity="0.4"/></svg>
+    </div>
 
     <div data-es>
       <p class="poetic reveal d2">una joven despierta<br>a un nuevo amanecer.</p>
@@ -309,24 +301,22 @@ body.en [data-en]{display:block}
       <p class="poetic reveal d3">With love and joy,<br>we invite you to celebrate<br>the Sweet Fifteen of</p>
     </div>
 
-    <p class="title-script reveal d4 float float-slow float-d2" style="font-size:clamp(3.5rem,9vw,6rem);margin-top:24px">Samantha</p>
+    <p class="title-script reveal d4 float float-slow float-d2" style="font-size:clamp(3.5rem,9vw,6rem);margin-top:28px">Samantha</p>
 
   </div>
 </section>
 
-<div class="portal"><svg viewBox="0 0 120 60"><ellipse cx="60" cy="55" rx="48" ry="42" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="0.8"/><ellipse cx="60" cy="55" rx="45" ry="39" fill="none" stroke="rgba(180,148,47,0.06)" stroke-width="2"/></svg></div>
-
-<!-- ═══════ EVENT DETAILS ═══════ -->
+<!-- ═══════ DETAILS ═══════ -->
 <section class="section">
   <div class="section-inner">
 
-    <p class="title-display reveal float float-slow" style="text-align:center;margin-bottom:48px">
+    <p class="title-display reveal float float-slow" style="text-align:center;margin-bottom:52px">
       <span data-es>Detalles</span>
       <span data-en>Details</span>
     </p>
 
     <div class="detail reveal">
-      <span class="detail-icon float">📅</span>
+      <svg class="detail-svg float" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="3" stroke-width="1.2"/><line x1="8" y1="2" x2="8" y2="6" stroke-width="1.2"/><line x1="16" y1="2" x2="16" y2="6" stroke-width="1.2"/><line x1="3" y1="10" x2="21" y2="10" stroke-width="1.2"/></svg>
       <div>
         <p class="detail-label" data-es>Fecha</p><p class="detail-label" data-en>Date</p>
         <p class="detail-value" data-es>Sábado, 3 de Octubre 2026</p>
@@ -335,7 +325,7 @@ body.en [data-en]{display:block}
     </div>
 
     <div class="detail reveal d1">
-      <span class="detail-icon float float-d1">🕐</span>
+      <svg class="detail-svg float float-d1" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="1.2"/><line x1="12" y1="6" x2="12" y2="12" stroke-width="1.2"/><line x1="12" y1="12" x2="16" y2="14" stroke-width="1.2"/></svg>
       <div>
         <p class="detail-label" data-es>Hora</p><p class="detail-label" data-en>Time</p>
         <p class="detail-value">3:00 PM</p>
@@ -343,24 +333,22 @@ body.en [data-en]{display:block}
     </div>
 
     <div class="detail reveal d2">
-      <span class="detail-icon float float-d2">📍</span>
+      <svg class="detail-svg float float-d2" viewBox="0 0 24 24"><path d="M12 2 C8 2 4 6 4 10 C4 16 12 22 12 22 C12 22 20 16 20 10 C20 6 16 2 12 2 Z" stroke-width="1.2"/><circle cx="12" cy="10" r="3" stroke-width="1.2"/></svg>
       <div>
         <p class="detail-label" data-es>Lugar</p><p class="detail-label" data-en>Venue</p>
         <p class="detail-value">Fairwind Baptist Church</p>
-        <p class="detail-value" style="font-size:1rem;color:var(--muted);margin-top:2px">801 Seymour Rd · Bear, DE 19701</p>
+        <p class="detail-value" style="font-size:1rem;color:var(--muted);margin-top:4px">801 Seymour Rd · Bear, DE 19701</p>
       </div>
     </div>
 
   </div>
 </section>
 
-<div class="portal"><svg viewBox="0 0 120 60"><ellipse cx="60" cy="55" rx="48" ry="42" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="0.8"/><ellipse cx="60" cy="55" rx="45" ry="39" fill="none" stroke="rgba(180,148,47,0.06)" stroke-width="2"/></svg></div>
-
 <!-- ═══════ COUNTDOWN ═══════ -->
 <section class="section">
   <div class="section-inner" style="text-align:center">
 
-    <p class="title-label reveal float float-slow" style="margin-bottom:36px">
+    <p class="title-label reveal float float-slow" style="margin-bottom:40px">
       <span data-es>Cuenta Regresiva</span>
       <span data-en>Countdown</span>
     </p>
@@ -372,7 +360,10 @@ body.en [data-en]{display:block}
       <div class="cd-box float float-slow float-d3"><div class="cd-num" id="cd-s">--</div><div class="cd-label" data-es>Seg</div><div class="cd-label" data-en>Sec</div></div>
     </div>
 
-    <div class="divider reveal d2"><span>💎</span></div>
+    <div class="ornament reveal d2">
+      <svg class="ornament-svg" viewBox="0 0 24 24"><path d="M12 3 L14 9 L20 11 L14 13 L12 19 L10 13 L4 11 L10 9 Z"/></svg>
+    </div>
+
     <p class="poetic reveal d3" style="font-size:1.1rem">
       <span data-es>Hasta que la magia comience</span>
       <span data-en>Until the magic begins</span>
@@ -380,8 +371,6 @@ body.en [data-en]{display:block}
 
   </div>
 </section>
-
-<div class="portal"><svg viewBox="0 0 120 60"><ellipse cx="60" cy="55" rx="48" ry="42" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="0.8"/><ellipse cx="60" cy="55" rx="45" ry="39" fill="none" stroke="rgba(180,148,47,0.06)" stroke-width="2"/></svg></div>
 
 <!-- ═══════ RSVP ═══════ -->
 <section class="section">
@@ -391,21 +380,23 @@ body.en [data-en]{display:block}
       <span data-es>Confirmar Asistencia</span>
       <span data-en>RSVP</span>
     </p>
-    <p class="title-label reveal d1" style="text-align:center;margin-bottom:40px">✦</p>
+
+    <div class="ornament reveal d1" style="margin:20px 0 40px">
+      <svg class="ornament-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5" fill="var(--champagne)" opacity="0.35"/></svg>
+    </div>
 
     <form id="rsvp">
       <div class="form-group reveal d2"><label class="form-label" data-es>Nombre Completo</label><label class="form-label" data-en>Full Name</label><input class="form-input" id="n" type="text" placeholder="Tu nombre..." required></div>
       <div class="form-group reveal d2"><label class="form-label" data-es>Correo o Teléfono</label><label class="form-label" data-en>Email or Phone</label><input class="form-input" id="c" type="text" placeholder="tu@email.com"></div>
       <div class="form-group reveal d3"><label class="form-label" data-es>Acompañantes</label><label class="form-label" data-en>Guests</label><input class="form-input" id="g" type="number" min="0" max="5" value="0"></div>
       <div class="form-group reveal d3"><label class="form-label" data-es>Mensaje para Samantha</label><label class="form-label" data-en>Message for Samantha</label><textarea class="form-input" id="m" rows="2" placeholder="Tus deseos..."></textarea></div>
-      <div class="reveal d4" style="text-align:center;margin-top:40px">
+      <div class="reveal d4" style="text-align:center;margin-top:48px">
         <button type="submit" class="btn"><span data-es>Confirmar Asistencia</span><span data-en>Send RSVP</span></button>
       </div>
     </form>
 
     <div id="ok" style="display:none;text-align:center;padding:80px 20px">
-      <p style="font-size:3rem;margin-bottom:20px">✨</p>
-      <p class="poetic"><span data-es>¡Gracias! Te esperamos.</span><span data-en>Thank you! We can't wait.</span></p>
+      <p class="poetic" style="font-size:1.6rem"><span data-es>Gracias. Te esperamos.</span><span data-en>Thank you. We cannot wait.</span></p>
     </div>
 
   </div>
@@ -426,13 +417,11 @@ body.en [data-en]{display:block}
   };
   try{setLang(localStorage.getItem('sl')||'es')}catch(e){setLang('es')}
 
-  /* Reveal */
   var r=D.querySelectorAll('.reveal');
   function chk(){for(var i=0;i<r.length;i++){var e=r[i];if(!e.classList.contains('visible')&&e.getBoundingClientRect().top<W.innerHeight*0.88)e.classList.add('visible')}}
   W.addEventListener('scroll',chk,{passive:true});
   setTimeout(chk,200);setTimeout(chk,600);
 
-  /* Particles */
   var c=D.getElementById('particles'),ctx=c.getContext('2d'),p=[];
   function rz(){c.width=W.innerWidth;c.height=W.innerHeight}rz();W.addEventListener('resize',rz);
   for(var i=0;i<160;i++)p.push({x:Math.random()*9999,y:Math.random()*9999,s:Math.random()*2+0.5,vx:(Math.random()-0.5)*0.12,vy:(Math.random()-0.5)*0.12-0.06,life:Math.random(),ph:Math.random()*Math.PI*2,gd:Math.random()>0.5});
@@ -448,7 +437,6 @@ body.en [data-en]{display:block}
     }requestAnimationFrame(dr);
   }dr();
 
-  /* Countdown */
   var t=new Date('2026-10-03T15:00:00');
   function tk(){var df=t-new Date();if(df<=0){D.getElementById('cd-d').textContent='00';D.getElementById('cd-h').textContent='00';D.getElementById('cd-m').textContent='00';D.getElementById('cd-s').textContent='00';return}
     D.getElementById('cd-d').textContent=String(Math.floor(df/86400000)).padStart(2,'0');
@@ -457,7 +445,6 @@ body.en [data-en]{display:block}
     D.getElementById('cd-s').textContent=String(Math.floor((df%60000)/1000)).padStart(2,'0');
   }tk();setInterval(tk,1000);
 
-  /* RSVP */
   D.getElementById('rsvp').addEventListener('submit',function(e){
     e.preventDefault();var nm=D.getElementById('n').value.trim();if(!nm)return;
     var d={name:nm,contact:D.getElementById('c').value.trim(),guests:D.getElementById('g').value,message:D.getElementById('m').value.trim(),date:new Date().toISOString()};
