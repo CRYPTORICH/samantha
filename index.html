@@ -10,27 +10,24 @@
 <style>
 /* ═══════════════════════════════════════
    SAMANTHA · QUINCE AÑOS
-   Antigravity · Lush Portal · Dream Suspension
+   Antigravity Portal · Emerald Dream
    ═══════════════════════════════════════ */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --gold:#b8942f;
   --champagne:#d4c4a0;
   --ivory:#ede4d3;
-  --emerald:#004d30;
   --dark:#080c09;
   --darker:#040604;
   --text:#e8e0d4;
-  --muted:rgba(232,224,212,0.5);
+  --muted:rgba(232,224,212,0.55);
 }
 html{scroll-behavior:smooth;background:var(--darker);overflow-x:hidden}
 
 body{
   font-family:'Cormorant Garamond',Georgia,serif;
-  color:var(--text);
-  background:var(--darker);
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+  color:var(--text);background:var(--darker);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 
 /* ═══ FILM GRAIN ═══ */
@@ -41,9 +38,9 @@ body::after{
   background-size:256px;
 }
 
-/* ═══ HERO — FULL BLEED VIDEO WITH ARCH ═══ */
+/* ═══ HERO ═══ */
 .hero{
-  position:relative;width:100%;height:100vh;
+  position:relative;width:100%;min-height:100vh;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
 }
@@ -52,100 +49,85 @@ body::after{
 }
 .hero-video video{
   width:100%;height:100%;object-fit:cover;
-  filter:brightness(0.45) saturate(0.75);
+  filter:brightness(0.42) saturate(0.7);
 }
-/* Stone arch overlay — SVG mask creates portal effect */
 .hero-arch{
   position:absolute;inset:0;z-index:2;pointer-events:none;
 }
 .hero-arch svg{width:100%;height:100%}
 .hero-vignette{
   position:absolute;inset:0;z-index:3;
-  background:radial-gradient(ellipse 70% 50% at 50% 40%,transparent 0%,rgba(4,6,4,0.6) 60%,rgba(4,6,4,0.9) 100%);
+  background:radial-gradient(ellipse 65% 45% at 50% 40%,transparent 0%,rgba(4,6,4,0.6) 55%,rgba(4,6,4,0.9) 100%);
 }
-/* Golden light rays */
 .hero-light{
   position:absolute;z-index:4;pointer-events:none;
   top:-20%;left:50%;transform:translateX(-50%);
   width:60%;height:140%;
   background:radial-gradient(ellipse at 50% 30%,rgba(212,196,160,0.06) 0%,transparent 60%);
 }
-
 .hero-content{
   position:relative;z-index:5;text-align:center;
-  padding:40px;
+  padding:40px 24px;
 }
 
-/* ═══ FLOATING PORTAL PARTICLES ═══ */
-#portal-canvas{
-  position:absolute;inset:0;z-index:4;pointer-events:none;
-}
-
-/* ═══ ANTIGRAVITY FLOATING ═══ */
-.float{
-  animation:antigravity 8s ease-in-out infinite;
-}
-.float-slow{animation-duration:11s}
-.float-fast{animation-duration:5.5s}
-.float-reverse{animation-direction:reverse}
+/* ═══ ANTIGRAVITY ═══ */
+.float{animation:antigravity 8s ease-in-out infinite}
+.float-slow{animation-duration:12s}
 .float-d1{animation-delay:-1.5s}
 .float-d2{animation-delay:-3s}
 .float-d3{animation-delay:-5s}
-
 @keyframes antigravity{
   0%,100%{transform:translateY(0) rotate(0deg)}
-  25%{transform:translateY(-14px) rotate(1.5deg)}
-  50%{transform:translateY(-6px) rotate(-1deg)}
-  75%{transform:translateY(-18px) rotate(0.5deg)}
+  25%{transform:translateY(-16px) rotate(1deg)}
+  50%{transform:translateY(-6px) rotate(-0.5deg)}
+  75%{transform:translateY(-20px) rotate(0.5deg)}
 }
 
-/* ═══ TYPOGRAPHY ═══ */
+/* ═══ TYPOGRAPHY — LARGER ═══ */
 .title-script{
   font-family:'Great Vibes',cursive;
-  font-size:clamp(4.5rem,12vw,9rem);
+  font-size:clamp(5.5rem,14vw,11rem);
   font-weight:400;line-height:1.05;
   color:var(--champagne);
-  text-shadow:0 0 100px rgba(180,148,47,0.12);
+  text-shadow:0 0 120px rgba(180,148,47,0.1);
   letter-spacing:0.02em;
 }
 .title-display{
   font-family:'Playfair Display',Georgia,serif;
-  font-size:clamp(0.9rem,2.2vw,1.15rem);
-  font-weight:400;letter-spacing:0.4em;
+  font-size:clamp(1.2rem,3vw,1.6rem);
+  font-weight:400;letter-spacing:0.5em;
   text-transform:uppercase;color:var(--ivory);
-  margin-top:12px;
+  margin-top:16px;
 }
 .title-label{
   font-family:'Cinzel',Georgia,serif;
-  font-size:clamp(0.55rem,1.6vw,0.7rem);
-  font-weight:500;letter-spacing:0.5em;
+  font-size:clamp(0.7rem,2vw,0.9rem);
+  font-weight:500;letter-spacing:0.6em;
   text-transform:uppercase;color:var(--muted);
-  margin-top:14px;
+  margin-top:16px;
 }
 .poetic{
-  font-style:italic;font-size:clamp(1.05rem,2vw,1.2rem);
+  font-style:italic;font-size:clamp(1.3rem,2.6vw,1.6rem);
   text-align:center;line-height:2.2;
   color:var(--muted);
+  margin-bottom:6px;
 }
-.poetic em{font-style:italic;color:var(--champagne)}
+.poetic em{font-style:italic;color:var(--champagne);font-size:1.15em}
 
 /* ═══ LANGUAGE ═══ */
 .lang{
   position:fixed;top:28px;right:28px;z-index:100;
-  display:flex;gap:8px;
+  display:flex;gap:12px;
 }
 .lang button{
-  font-family:'Montserrat',sans-serif;font-size:0.5rem;
-  letter-spacing:0.3em;text-transform:uppercase;
+  font-family:'Montserrat',sans-serif;font-size:0.52rem;
+  letter-spacing:0.35em;text-transform:uppercase;
   padding:6px 0;border:none;background:none;
   color:var(--muted);cursor:pointer;
   border-bottom:1px solid transparent;
   transition:all 0.4s;
 }
-.lang button.active{
-  color:var(--champagne);
-  border-bottom-color:var(--gold);
-}
+.lang button.active{color:var(--champagne);border-bottom-color:var(--gold)}
 [data-es],[data-en]{display:none}
 body.es [data-es]{display:block}
 body.en [data-en]{display:block}
@@ -153,68 +135,68 @@ body.en [data-en]{display:block}
 /* ═══ SECTIONS ═══ */
 .section{
   position:relative;z-index:2;
-  padding:160px 32px;
+  padding:180px 36px;
   display:flex;align-items:center;justify-content:center;
 }
-.section-inner{max-width:520px;width:100%}
+.section-inner{max-width:580px;width:100%}
 
-/* ═══ GOLDEN PORTAL ARCH BETWEEN SECTIONS ═══ */
-.portal-divider{
+/* ═══ PORTAL DIVIDERS ═══ */
+.portal{
   position:relative;z-index:2;
   height:80px;display:flex;align-items:center;justify-content:center;
 }
-.portal-divider svg{width:120px;height:60px;opacity:0.3}
+.portal svg{width:140px;height:60px;opacity:0.3}
 
 /* ═══ DIVIDER ═══ */
 .divider{
   display:flex;align-items:center;justify-content:center;
-  gap:20px;margin:40px 0;
+  gap:24px;margin:48px 0;
 }
 .divider::before,.divider::after{
   content:'';flex:1;height:1px;
   background:linear-gradient(90deg,transparent,rgba(196,160,74,0.12),transparent);
 }
-.divider span{font-size:0.8rem;opacity:0.3}
+.divider span{font-size:0.9rem;opacity:0.3}
 
 /* ═══ DETAIL ROWS ═══ */
 .detail{
-  display:flex;align-items:flex-start;gap:20px;
-  margin:18px 0;padding:18px 0;
+  display:flex;align-items:flex-start;gap:24px;
+  margin:24px 0;padding:24px 0;
   border-bottom:1px solid rgba(196,160,74,0.05);
 }
 .detail:last-child{border-bottom:none}
-.detail-icon{font-size:1.3rem;opacity:0.45;flex-shrink:0;margin-top:2px}
+.detail-icon{font-size:1.6rem;opacity:0.45;flex-shrink:0;margin-top:2px}
 .detail-label{
-  font-family:'Montserrat',sans-serif;font-size:0.45rem;
-  letter-spacing:0.3em;text-transform:uppercase;
-  color:rgba(0,168,107,0.35);margin-bottom:5px;
+  font-family:'Montserrat',sans-serif;font-size:0.5rem;
+  letter-spacing:0.35em;text-transform:uppercase;
+  color:rgba(0,168,107,0.35);margin-bottom:6px;
 }
-.detail-value{font-size:1.05rem;font-family:'Playfair Display',Georgia,serif}
+.detail-value{font-size:1.25rem;font-family:'Playfair Display',Georgia,serif;line-height:1.5}
 
 /* ═══ COUNTDOWN ═══ */
-.cd-grid{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
-.cd-box{text-align:center;min-width:70px}
+.cd-grid{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.cd-box{text-align:center;min-width:80px}
 .cd-num{
   font-family:'Playfair Display',Georgia,serif;
-  font-size:2.4rem;font-weight:600;
+  font-size:2.8rem;font-weight:600;
   color:var(--champagne);line-height:1;
 }
 .cd-label{
-  font-family:'Montserrat',sans-serif;font-size:0.45rem;
-  letter-spacing:0.25em;text-transform:uppercase;
-  color:var(--muted);margin-top:8px;
+  font-family:'Montserrat',sans-serif;font-size:0.5rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--muted);margin-top:10px;
 }
 
 /* ═══ RSVP ═══ */
-.form-group{margin-bottom:20px}
+.form-group{margin-bottom:28px}
 .form-label{
-  font-family:'Montserrat',sans-serif;font-size:0.45rem;
-  letter-spacing:0.3em;text-transform:uppercase;
-  color:var(--champagne);display:block;margin-bottom:8px;
+  font-family:'Montserrat',sans-serif;font-size:0.5rem;
+  letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--champagne);display:block;margin-bottom:10px;
 }
 .form-input{
   width:100%;font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:1.05rem;padding:14px 0;color:var(--text);
+  font-size:1.2rem;padding:16px 0;color:var(--text);
   background:transparent;border:none;
   border-bottom:1px solid rgba(196,160,74,0.1);
   outline:none;transition:border-color 0.4s;
@@ -224,110 +206,82 @@ body.en [data-en]{display:block}
 
 .btn{
   display:inline-block;font-family:'Montserrat',sans-serif;
-  font-size:0.55rem;letter-spacing:0.35em;text-transform:uppercase;
-  padding:16px 40px;cursor:pointer;
+  font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;
+  padding:18px 48px;cursor:pointer;
   background:transparent;color:var(--champagne);
   border:1px solid rgba(196,160,74,0.15);
-  transition:all 0.5s ease;
+  transition:all 0.5s ease;margin-top:8px;
 }
-.btn:hover{
-  background:rgba(180,148,47,0.06);
-  border-color:rgba(196,160,74,0.35);
-}
+.btn:hover{background:rgba(180,148,47,0.06);border-color:rgba(196,160,74,0.35)}
 
 /* ═══ REVEAL ═══ */
-.reveal{
-  opacity:0;transform:translateY(20px);
-  transition:opacity 1s ease,transform 1s ease;
-}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 1s ease,transform 1s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
-.reveal.d1{transition-delay:0.1s}
-.reveal.d2{transition-delay:0.2s}
-.reveal.d3{transition-delay:0.3s}
-.reveal.d4{transition-delay:0.4s}
+.reveal.d1{transition-delay:0.1s}.reveal.d2{transition-delay:0.2s}
+.reveal.d3{transition-delay:0.3s}.reveal.d4{transition-delay:0.4s}
 .reveal.d5{transition-delay:0.5s}
 
 /* ═══ FOOTER ═══ */
 .footer{
   position:relative;z-index:2;
-  text-align:center;padding:120px 32px 80px;
-  font-family:'Montserrat',sans-serif;font-size:0.45rem;
-  letter-spacing:0.3em;text-transform:uppercase;
+  text-align:center;padding:140px 32px 100px;
+  font-family:'Montserrat',sans-serif;font-size:0.5rem;
+  letter-spacing:0.35em;text-transform:uppercase;
   color:rgba(232,224,212,0.2);
 }
 
+#particles{position:absolute;inset:0;z-index:4;pointer-events:none}
+
 @media(max-width:480px){
-  .section{padding:100px 20px}
-  .title-script{font-size:3.8rem}
-  .hero-content{padding:24px}
-  .lang{top:18px;right:18px}
-  .lang button{font-size:0.45rem}
-  .cd-grid{gap:16px}
-  .cd-num{font-size:1.8rem}
+  .section{padding:120px 22px}
+  .title-script{font-size:4.5rem}
+  .hero-content{padding:28px 18px}
+  .lang{top:18px;right:16px}
+  .cd-grid{gap:18px}
+  .cd-num{font-size:2rem}
 }
 </style>
 </head>
 <body class="es">
 
-<!-- ═══════ HERO — PORTAL WORLD ═══════ -->
+<!-- ═══════ HERO ═══════ -->
 <div class="hero">
   <div class="hero-video">
-    <video id="hero-vid" autoplay muted loop playsinline>
+    <video autoplay muted loop playsinline>
       <source src="hero-elegant.mp4" type="video/mp4">
     </video>
   </div>
-
-  <!-- Stone arch portal frame -->
   <div class="hero-arch">
     <svg viewBox="0 0 1000 900" preserveAspectRatio="none">
       <defs>
-        <mask id="arch-mask">
+        <mask id="arch">
           <rect width="1000" height="900" fill="white"/>
-          <ellipse cx="500" cy="420" rx="280" ry="350" fill="black"/>
+          <ellipse cx="500" cy="420" rx="290" ry="360" fill="black"/>
         </mask>
-        <filter id="arch-glow">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-        </filter>
       </defs>
-      <!-- Dark stone frame -->
-      <rect width="1000" height="900" fill="rgba(4,6,4,0.85)" mask="url(#arch-mask)" filter="url(#arch-glow)"/>
-      <!-- Gold arch outline -->
-      <ellipse cx="500" cy="420" rx="280" ry="350" fill="none" stroke="rgba(180,148,47,0.2)" stroke-width="1.5"/>
-      <!-- Inner gold glow -->
-      <ellipse cx="500" cy="420" rx="278" ry="348" fill="none" stroke="rgba(212,196,160,0.08)" stroke-width="4"/>
+      <rect width="1000" height="900" fill="rgba(4,6,4,0.85)" mask="url(#arch)"/>
+      <ellipse cx="500" cy="420" rx="290" ry="360" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="1.5"/>
+      <ellipse cx="500" cy="420" rx="288" ry="358" fill="none" stroke="rgba(212,196,160,0.06)" stroke-width="4"/>
     </svg>
   </div>
-
   <div class="hero-vignette"></div>
   <div class="hero-light"></div>
-
-  <!-- Floating portal particles -->
-  <canvas id="portal-canvas"></canvas>
-
+  <canvas id="particles"></canvas>
   <div class="hero-content">
     <p class="title-label reveal" data-es>✦ Te Invitamos ✦</p>
     <p class="title-label reveal" data-en>✦ You Are Invited ✦</p>
     <h1 class="title-script reveal d1 float float-slow">Samantha</h1>
-    <p class="title-display reveal d2 float float-reverse float-d1">Quince Años</p>
-    <p class="title-label reveal d3" data-es>15 · Noviembre · 2025</p>
-    <p class="title-label reveal d3" data-en>15 · November · 2025</p>
+    <p class="title-display reveal d2 float float-d1">Quince Años</p>
   </div>
 </div>
 
-<!-- ═══════ LANGUAGE ═══════ -->
 <div class="lang">
   <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
   <button id="btn-en" onclick="setLang('en')">EN</button>
 </div>
 
-<!-- ═══════ GOLDEN PORTAL ═══════ -->
-<div class="portal-divider">
-  <svg viewBox="0 0 120 60">
-    <ellipse cx="60" cy="55" rx="45" ry="40" fill="none" stroke="rgba(180,148,47,0.2)" stroke-width="0.8"/>
-    <ellipse cx="60" cy="55" rx="42" ry="37" fill="none" stroke="rgba(180,148,47,0.08)" stroke-width="2"/>
-  </svg>
-</div>
+<!-- ═══════ PORTAL ═══════ -->
+<div class="portal"><svg viewBox="0 0 120 60"><ellipse cx="60" cy="55" rx="48" ry="42" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="0.8"/><ellipse cx="60" cy="55" rx="45" ry="39" fill="none" stroke="rgba(180,148,47,0.06)" stroke-width="2"/></svg></div>
 
 <!-- ═══════ INVITATION ═══════ -->
 <section class="section">
@@ -336,97 +290,77 @@ body.en [data-en]{display:block}
     <div class="divider"><span>✦</span></div>
 
     <div data-es>
-      <p class="poetic reveal"><em>En un sueño esmeralda,</em></p>
-      <p class="poetic reveal d1 float float-slow">donde los recuerdos flotan<br>como pétalos en la brisa,</p>
-      <p class="poetic reveal d2">una joven despierta<br>a un nuevo amanecer.</p>
+      <p class="poetic reveal"><em>En un Sueño Esmeralda,</em></p>
+      <p class="poetic reveal d1">donde los recuerdos flotan<br>como pétalos en la brisa,</p>
     </div>
     <div data-en>
-      <p class="poetic reveal"><em>In an emerald dream,</em></p>
-      <p class="poetic reveal d1 float float-slow">where memories drift<br>like petals in the breeze,</p>
-      <p class="poetic reveal d2">a young woman awakens<br>to a new dawn.</p>
+      <p class="poetic reveal"><em>In an Emerald Dream,</em></p>
+      <p class="poetic reveal d1">where memories drift<br>like petals in the breeze,</p>
     </div>
 
-    <div class="divider reveal d3"><span>💚</span></div>
+    <div class="divider reveal d2"><span>💚</span></div>
 
     <div data-es>
+      <p class="poetic reveal d2">una joven despierta<br>a un nuevo amanecer.</p>
       <p class="poetic reveal d3">Con amor y alegría,<br>te invitamos a celebrar<br>los Quince Años de</p>
     </div>
     <div data-en>
+      <p class="poetic reveal d2">a young woman awakens<br>to a new dawn.</p>
       <p class="poetic reveal d3">With love and joy,<br>we invite you to celebrate<br>the Sweet Fifteen of</p>
     </div>
 
-    <p class="title-script reveal d4 float float-slow float-d2" style="font-size:clamp(3rem,8vw,5rem);margin-top:16px">Samantha</p>
+    <p class="title-script reveal d4 float float-slow float-d2" style="font-size:clamp(3.5rem,9vw,6rem);margin-top:24px">Samantha</p>
 
   </div>
 </section>
 
-<!-- ═══════ PORTAL ═══════ -->
-<div class="portal-divider">
-  <svg viewBox="0 0 120 60">
-    <ellipse cx="60" cy="55" rx="45" ry="40" fill="none" stroke="rgba(180,148,47,0.2)" stroke-width="0.8"/>
-    <ellipse cx="60" cy="55" rx="42" ry="37" fill="none" stroke="rgba(180,148,47,0.08)" stroke-width="2"/>
-  </svg>
-</div>
+<div class="portal"><svg viewBox="0 0 120 60"><ellipse cx="60" cy="55" rx="48" ry="42" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="0.8"/><ellipse cx="60" cy="55" rx="45" ry="39" fill="none" stroke="rgba(180,148,47,0.06)" stroke-width="2"/></svg></div>
 
-<!-- ═══════ DETAILS ═══════ -->
+<!-- ═══════ EVENT DETAILS ═══════ -->
 <section class="section">
   <div class="section-inner">
 
-    <p class="title-display reveal float float-slow" style="text-align:center;margin-bottom:40px">
+    <p class="title-display reveal float float-slow" style="text-align:center;margin-bottom:48px">
       <span data-es>Detalles</span>
       <span data-en>Details</span>
     </p>
 
     <div class="detail reveal">
-      <span class="detail-icon float float-fast">📅</span>
+      <span class="detail-icon float">📅</span>
       <div>
         <p class="detail-label" data-es>Fecha</p><p class="detail-label" data-en>Date</p>
-        <p class="detail-value">Sábado, 15 de Noviembre 2025</p>
+        <p class="detail-value" data-es>Sábado, 3 de Octubre 2026</p>
+        <p class="detail-value" data-en>Saturday, October 3, 2026</p>
       </div>
     </div>
 
     <div class="detail reveal d1">
-      <span class="detail-icon float float-fast float-d1">🕐</span>
+      <span class="detail-icon float float-d1">🕐</span>
       <div>
         <p class="detail-label" data-es>Hora</p><p class="detail-label" data-en>Time</p>
-        <p class="detail-value">6:00 PM — 12:00 AM</p>
+        <p class="detail-value">3:00 PM</p>
       </div>
     </div>
 
     <div class="detail reveal d2">
-      <span class="detail-icon float float-fast float-d2">📍</span>
+      <span class="detail-icon float float-d2">📍</span>
       <div>
         <p class="detail-label" data-es>Lugar</p><p class="detail-label" data-en>Venue</p>
-        <p class="detail-value" data-es>Salón de Eventos La Esmeralda</p>
-        <p class="detail-value" data-en>La Esmeralda Event Hall</p>
-      </div>
-    </div>
-
-    <div class="detail reveal d3">
-      <span class="detail-icon float float-fast float-d3">👗</span>
-      <div>
-        <p class="detail-label" data-es>Código de Vestimenta</p><p class="detail-label" data-en>Dress Code</p>
-        <p class="detail-value" data-es>Formal — Tonos Esmeralda y Dorado</p>
-        <p class="detail-value" data-en>Formal — Emerald &amp; Gold</p>
+        <p class="detail-value">Fairwind Baptist Church</p>
+        <p class="detail-value" style="font-size:1rem;color:var(--muted);margin-top:2px">801 Seymour Rd · Bear, DE 19701</p>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ═══════ PORTAL ═══════ -->
-<div class="portal-divider">
-  <svg viewBox="0 0 120 60">
-    <ellipse cx="60" cy="55" rx="45" ry="40" fill="none" stroke="rgba(180,148,47,0.2)" stroke-width="0.8"/>
-    <ellipse cx="60" cy="55" rx="42" ry="37" fill="none" stroke="rgba(180,148,47,0.08)" stroke-width="2"/>
-  </svg>
-</div>
+<div class="portal"><svg viewBox="0 0 120 60"><ellipse cx="60" cy="55" rx="48" ry="42" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="0.8"/><ellipse cx="60" cy="55" rx="45" ry="39" fill="none" stroke="rgba(180,148,47,0.06)" stroke-width="2"/></svg></div>
 
 <!-- ═══════ COUNTDOWN ═══════ -->
 <section class="section">
   <div class="section-inner" style="text-align:center">
 
-    <p class="title-label reveal float float-slow" style="margin-bottom:32px">
+    <p class="title-label reveal float float-slow" style="margin-bottom:36px">
       <span data-es>Cuenta Regresiva</span>
       <span data-en>Countdown</span>
     </p>
@@ -439,7 +373,7 @@ body.en [data-en]{display:block}
     </div>
 
     <div class="divider reveal d2"><span>💎</span></div>
-    <p class="poetic reveal d3" style="font-size:0.95rem">
+    <p class="poetic reveal d3" style="font-size:1.1rem">
       <span data-es>Hasta que la magia comience</span>
       <span data-en>Until the magic begins</span>
     </p>
@@ -447,136 +381,89 @@ body.en [data-en]{display:block}
   </div>
 </section>
 
-<!-- ═══════ PORTAL ═══════ -->
-<div class="portal-divider">
-  <svg viewBox="0 0 120 60">
-    <ellipse cx="60" cy="55" rx="45" ry="40" fill="none" stroke="rgba(180,148,47,0.2)" stroke-width="0.8"/>
-    <ellipse cx="60" cy="55" rx="42" ry="37" fill="none" stroke="rgba(180,148,47,0.08)" stroke-width="2"/>
-  </svg>
-</div>
+<div class="portal"><svg viewBox="0 0 120 60"><ellipse cx="60" cy="55" rx="48" ry="42" fill="none" stroke="rgba(180,148,47,0.18)" stroke-width="0.8"/><ellipse cx="60" cy="55" rx="45" ry="39" fill="none" stroke="rgba(180,148,47,0.06)" stroke-width="2"/></svg></div>
 
 <!-- ═══════ RSVP ═══════ -->
 <section class="section">
   <div class="section-inner">
 
-    <p class="title-display reveal float float-slow" style="text-align:center;margin-bottom:4px">
+    <p class="title-display reveal float float-slow" style="text-align:center;margin-bottom:6px">
       <span data-es>Confirmar Asistencia</span>
       <span data-en>RSVP</span>
     </p>
-    <p class="title-label reveal d1" style="text-align:center;margin-bottom:36px">✦</p>
+    <p class="title-label reveal d1" style="text-align:center;margin-bottom:40px">✦</p>
 
-    <form id="rsvp-form">
-      <div class="form-group reveal d2"><label class="form-label" data-es>Nombre Completo</label><label class="form-label" data-en>Full Name</label><input class="form-input" id="name" type="text" placeholder="Tu nombre..." required></div>
-      <div class="form-group reveal d2"><label class="form-label" data-es>Correo o Teléfono</label><label class="form-label" data-en>Email or Phone</label><input class="form-input" id="contact" type="text" placeholder="tu@email.com"></div>
-      <div class="form-group reveal d3"><label class="form-label" data-es>Acompañantes</label><label class="form-label" data-en>Guests</label><input class="form-input" id="guests" type="number" min="0" max="5" value="0"></div>
-      <div class="form-group reveal d3"><label class="form-label" data-es>Mensaje para Samantha</label><label class="form-label" data-en>Message for Samantha</label><textarea class="form-input" id="msg" rows="2" placeholder="Tus deseos..."></textarea></div>
-      <div class="reveal d4" style="text-align:center;margin-top:32px">
+    <form id="rsvp">
+      <div class="form-group reveal d2"><label class="form-label" data-es>Nombre Completo</label><label class="form-label" data-en>Full Name</label><input class="form-input" id="n" type="text" placeholder="Tu nombre..." required></div>
+      <div class="form-group reveal d2"><label class="form-label" data-es>Correo o Teléfono</label><label class="form-label" data-en>Email or Phone</label><input class="form-input" id="c" type="text" placeholder="tu@email.com"></div>
+      <div class="form-group reveal d3"><label class="form-label" data-es>Acompañantes</label><label class="form-label" data-en>Guests</label><input class="form-input" id="g" type="number" min="0" max="5" value="0"></div>
+      <div class="form-group reveal d3"><label class="form-label" data-es>Mensaje para Samantha</label><label class="form-label" data-en>Message for Samantha</label><textarea class="form-input" id="m" rows="2" placeholder="Tus deseos..."></textarea></div>
+      <div class="reveal d4" style="text-align:center;margin-top:40px">
         <button type="submit" class="btn"><span data-es>Confirmar Asistencia</span><span data-en>Send RSVP</span></button>
       </div>
     </form>
 
-    <div id="success" style="display:none;text-align:center;padding:60px 20px">
-      <p style="font-size:2.5rem;margin-bottom:16px">✨</p>
+    <div id="ok" style="display:none;text-align:center;padding:80px 20px">
+      <p style="font-size:3rem;margin-bottom:20px">✨</p>
       <p class="poetic"><span data-es>¡Gracias! Te esperamos.</span><span data-en>Thank you! We can't wait.</span></p>
     </div>
 
   </div>
 </section>
 
-<div class="footer"><p>Samantha · Quince Años · 2025</p></div>
+<div class="footer"><p>Samantha · Quince Años · 2026</p></div>
 
 
-<!-- ═══════ PORTAL PARTICLES CANVAS ═══════ -->
 <script>
 (function(){
   var D=document,W=window;
 
-  /* ═══ LANGUAGE ═══ */
   W.setLang=function(l){
     D.body.className=l;
     D.getElementById('btn-es').className=l==='es'?'active':'';
     D.getElementById('btn-en').className=l==='en'?'active':'';
-    try{localStorage.setItem('samantha-lang',l)}catch(e){}
+    try{localStorage.setItem('sl',l)}catch(e){}
   };
-  try{setLang(localStorage.getItem('samantha-lang')||'es')}catch(e){setLang('es')}
+  try{setLang(localStorage.getItem('sl')||'es')}catch(e){setLang('es')}
 
-  /* ═══ SCROLL REVEAL ═══ */
-  var reveals=D.querySelectorAll('.reveal');
-  function check(){
-    for(var i=0;i<reveals.length;i++){
-      var el=reveals[i];
-      if(el.classList.contains('visible'))continue;
-      if(el.getBoundingClientRect().top<W.innerHeight*0.88)el.classList.add('visible');
-    }
-  }
-  W.addEventListener('scroll',check,{passive:true});
-  setTimeout(check,200);setTimeout(check,600);
+  /* Reveal */
+  var r=D.querySelectorAll('.reveal');
+  function chk(){for(var i=0;i<r.length;i++){var e=r[i];if(!e.classList.contains('visible')&&e.getBoundingClientRect().top<W.innerHeight*0.88)e.classList.add('visible')}}
+  W.addEventListener('scroll',chk,{passive:true});
+  setTimeout(chk,200);setTimeout(chk,600);
 
-  /* ═══ PORTAL PARTICLES ═══ */
-  var canvas=D.getElementById('portal-canvas');
-  if(canvas){
-    var ctx=canvas.getContext('2d');
-    var pw=200; // particle count
-    var parts=[];
-    function resize(){canvas.width=W.innerWidth;canvas.height=W.innerHeight}
-    resize();W.addEventListener('resize',resize);
+  /* Particles */
+  var c=D.getElementById('particles'),ctx=c.getContext('2d'),p=[];
+  function rz(){c.width=W.innerWidth;c.height=W.innerHeight}rz();W.addEventListener('resize',rz);
+  for(var i=0;i<160;i++)p.push({x:Math.random()*9999,y:Math.random()*9999,s:Math.random()*2+0.5,vx:(Math.random()-0.5)*0.12,vy:(Math.random()-0.5)*0.12-0.06,life:Math.random(),ph:Math.random()*Math.PI*2,gd:Math.random()>0.5});
+  function dr(){
+    ctx.clearRect(0,0,c.width,c.height);
+    for(var i=0;i<p.length;i++){var o=p[i];o.x+=o.vx;o.y+=o.vy;o.life+=0.003;o.ph+=0.014;
+      if(o.life>1){o.life=0;o.x=Math.random()*c.width;o.y=c.height+20}
+      if(o.y<-20){o.y=c.height+20;o.x=Math.random()*c.width}
+      var a=(0.25+Math.sin(o.ph)*0.35)*(o.gd?0.45:0.25);
+      var cl=o.gd?'rgba(212,196,160,'+a.toFixed(2)+')':'rgba(0,168,107,'+a.toFixed(2)+')';
+      ctx.beginPath();ctx.arc(o.x,o.y,o.s,0,Math.PI*2);ctx.fillStyle=cl;ctx.fill();
+      if(o.s>1.5){ctx.beginPath();ctx.arc(o.x,o.y,o.s*3,0,Math.PI*2);ctx.fillStyle=cl.replace(/[\d.]+\)$/,(a*0.07).toFixed(2)+')');ctx.fill()}
+    }requestAnimationFrame(dr);
+  }dr();
 
-    for(var i=0;i<pw;i++){
-      parts.push({
-        x:Math.random()*canvas.width,
-        y:Math.random()*canvas.height,
-        s:Math.random()*2+0.5,
-        vx:(Math.random()-0.5)*0.15,
-        vy:(Math.random()-0.5)*0.15-0.08,
-        life:Math.random(),phase:Math.random()*Math.PI*2,
-        gold:Math.random()>0.45
-      });
-    }
+  /* Countdown */
+  var t=new Date('2026-10-03T15:00:00');
+  function tk(){var df=t-new Date();if(df<=0){D.getElementById('cd-d').textContent='00';D.getElementById('cd-h').textContent='00';D.getElementById('cd-m').textContent='00';D.getElementById('cd-s').textContent='00';return}
+    D.getElementById('cd-d').textContent=String(Math.floor(df/86400000)).padStart(2,'0');
+    D.getElementById('cd-h').textContent=String(Math.floor((df%86400000)/3600000)).padStart(2,'0');
+    D.getElementById('cd-m').textContent=String(Math.floor((df%3600000)/60000)).padStart(2,'0');
+    D.getElementById('cd-s').textContent=String(Math.floor((df%60000)/1000)).padStart(2,'0');
+  }tk();setInterval(tk,1000);
 
-    function drawParticles(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      for(var i=0;i<parts.length;i++){
-        var p=parts[i];
-        p.x+=p.vx;p.y+=p.vy;p.life+=0.003;p.phase+=0.015;
-        if(p.life>1){p.life=0;p.x=Math.random()*canvas.width;p.y=canvas.height+20}
-        if(p.y<-20){p.y=canvas.height+20;p.x=Math.random()*canvas.width}
-        var a=(0.3+Math.sin(p.phase)*0.4)*(p.gold?0.5:0.3);
-        var col=p.gold?'rgba(212,196,160,'+a.toFixed(2)+')':'rgba(0,168,107,'+a.toFixed(2)+')';
-        ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
-        // Subtle glow on larger particles
-        if(p.s>1.5){
-          ctx.beginPath();ctx.arc(p.x,p.y,p.s*3,0,Math.PI*2);
-          ctx.fillStyle=col.replace(/[\d.]+\)$/,(a*0.08).toFixed(2)+')');ctx.fill();
-        }
-      }
-      requestAnimationFrame(drawParticles);
-    }
-    drawParticles();
-  }
-
-  /* ═══ COUNTDOWN ═══ */
-  var target=new Date('2025-11-15T18:00:00');
-  function tick(){
-    var diff=target-new Date();
-    if(diff<=0){D.getElementById('cd-d').textContent='00';D.getElementById('cd-h').textContent='00';D.getElementById('cd-m').textContent='00';D.getElementById('cd-s').textContent='00';return}
-    D.getElementById('cd-d').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
-    D.getElementById('cd-h').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
-    D.getElementById('cd-m').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
-    D.getElementById('cd-s').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-  }
-  tick();setInterval(tick,1000);
-
-  /* ═══ RSVP ═══ */
-  D.getElementById('rsvp-form').addEventListener('submit',function(e){
-    e.preventDefault();
-    var name=D.getElementById('name').value.trim();
-    if(!name)return;
-    var r={name:name,contact:D.getElementById('contact').value.trim(),guests:D.getElementById('guests').value,message:D.getElementById('msg').value.trim(),date:new Date().toISOString()};
-    try{var list=JSON.parse(localStorage.getItem('samantha-rsvp')||'[]');list.push(r);localStorage.setItem('samantha-rsvp',JSON.stringify(list))}catch(err){}
-    D.getElementById('rsvp-form').style.display='none';
-    D.getElementById('success').style.display='block';
+  /* RSVP */
+  D.getElementById('rsvp').addEventListener('submit',function(e){
+    e.preventDefault();var nm=D.getElementById('n').value.trim();if(!nm)return;
+    var d={name:nm,contact:D.getElementById('c').value.trim(),guests:D.getElementById('g').value,message:D.getElementById('m').value.trim(),date:new Date().toISOString()};
+    try{var l=JSON.parse(localStorage.getItem('sr')||'[]');l.push(d);localStorage.setItem('sr',JSON.stringify(l))}catch(er){}
+    D.getElementById('rsvp').style.display='none';D.getElementById('ok').style.display='block';
   });
-
 })();
 </script>
 </body>
