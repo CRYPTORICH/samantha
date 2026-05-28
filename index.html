@@ -3,93 +3,98 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Samantha Quince Años — 3 de Octubre 2026, Fairwind Baptist Church, Bear DE">
 <title>Samantha · Quince Años</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Great+Vibes&family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --gold:#b8942f;--champagne:#d4c4a0;--ivory:#ede4d3;
-  --dark:#080c09;--darker:#040604;
-  --text:#e8e0d4;--muted:rgba(232,224,212,0.5);
+  --gold:#b8942f;--champagne:#dcc898;--ivory:#f0e8d8;
+  --emerald:#005c3f;--dark:#0a0c09;--deep:#060805;
+  --text:#ece4d4;--muted:rgba(236,228,212,0.65);
 }
-html{scroll-behavior:smooth;background:var(--darker)}
+html{scroll-behavior:smooth;background:var(--deep)}
 
 body{
   font-family:'Cormorant Garamond',Georgia,serif;
-  color:var(--text);background:var(--darker);
-  -webkit-font-smoothing:antialiased;
+  color:var(--text);background:var(--deep);
+  -webkit-font-smoothing:antialiased;line-height:1.6;
 }
 
-body::after{
-  content:'';position:fixed;inset:0;z-index:999;
-  pointer-events:none;opacity:0.03;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size:256px;
-}
-
-/* ═══ HERO ═══ */
+/* ═══ VIDEO HERO ═══ */
 .hero{
   position:relative;min-height:100vh;
   display:flex;align-items:center;justify-content:center;overflow:hidden;
 }
-.hero-video{position:absolute;inset:0;z-index:1}
-.hero-video video{width:100%;height:100%;object-fit:cover;filter:brightness(0.35) saturate(0.6)}
-.hero-arch{position:absolute;inset:0;z-index:2;pointer-events:none}
-.hero-arch svg{width:100%;height:100%}
-.hero-veil{
-  position:absolute;inset:0;z-index:3;
-  background:radial-gradient(ellipse 60% 40% at 50% 40%,transparent 0%,rgba(4,6,4,0.55) 50%,rgba(4,6,4,0.88) 100%);
+.hero video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;
+  filter:brightness(0.55) saturate(0.85);
 }
-.hero-content{position:relative;z-index:5;text-align:center;padding:60px 28px 80px}
+.hero::after{
+  content:'';position:absolute;inset:0;z-index:2;
+  background:linear-gradient(180deg,
+    rgba(6,8,5,0.35) 0%,
+    rgba(6,8,5,0.2) 30%,
+    rgba(6,8,5,0.25) 70%,
+    rgba(6,8,5,0.8) 100%
+  );
+}
+.hero-content{position:relative;z-index:3;text-align:center;padding:60px 28px 80px}
 
-/* ═══ BLOCKS — compact sections ═══ */
-.block{
+/* ═══ GOLD FILIGREE CORNERS ═══ */
+.corner{position:absolute;z-index:4;width:80px;height:80px;opacity:0.25;pointer-events:none}
+.corner path{stroke:var(--champagne);fill:none}
+.corner.tl{top:20px;left:20px}
+.corner.tr{top:20px;right:20px;transform:scaleX(-1)}
+.corner.bl{bottom:20px;left:20px;transform:scaleY(-1)}
+.corner.br{bottom:20px;right:20px;transform:scale(-1,-1)}
+
+/* ═══ SECTIONS ═══ */
+.sec{
   position:relative;z-index:2;
-  padding:60px 32px;
+  padding:80px 32px;
   display:flex;align-items:center;justify-content:center;
 }
-.block-inner{max-width:560px;width:100%}
+.sec-inner{max-width:540px;width:100%}
 
 /* ═══ TYPOGRAPHY ═══ */
 .title-script{
   font-family:'Great Vibes',cursive;
-  font-size:clamp(5rem,13vw,10rem);
+  font-size:clamp(4.8rem,12vw,9.5rem);
   font-weight:400;line-height:1.04;
   color:var(--champagne);
-  text-shadow:0 0 100px rgba(180,148,47,0.1);
+  text-shadow:0 0 60px rgba(180,148,47,0.12);
 }
 .title-display{
   font-family:'Playfair Display',Georgia,serif;
-  font-size:clamp(1.1rem,2.8vw,1.4rem);
-  font-weight:400;letter-spacing:0.5em;
+  font-size:clamp(1.1rem,2.6vw,1.35rem);
+  font-weight:400;letter-spacing:0.45em;
   text-transform:uppercase;color:var(--ivory);
   margin-top:18px;
 }
 .title-label{
   font-family:'Cinzel',Georgia,serif;
-  font-size:clamp(0.65rem,1.8vw,0.85rem);
-  font-weight:500;letter-spacing:0.55em;
+  font-size:clamp(0.62rem,1.7vw,0.8rem);
+  font-weight:500;letter-spacing:0.5em;
   text-transform:uppercase;color:var(--muted);
-  margin-top:14px;
+  margin-top:16px;
 }
 .poetic{
-  font-style:italic;font-size:clamp(1.2rem,2.4vw,1.4rem);
-  text-align:center;line-height:2.2;
+  font-style:italic;font-size:clamp(1.15rem,2.3vw,1.35rem);
+  text-align:center;line-height:2.1;
   color:var(--muted);
 }
-.poetic em{font-style:italic;color:var(--champagne);font-size:1.12em}
+.poetic em{font-style:italic;color:var(--champagne);font-size:1.1em}
 
-/* ═══ ANTIGRAVITY ═══ */
-.float{animation:ag 10s ease-in-out infinite}
-.float-s{animation-duration:14s}
-.float-d1{animation-delay:-2s}.float-d2{animation-delay:-4s}.float-d3{animation-delay:-6s}
-@keyframes ag{
-  0%,100%{transform:translateY(0)}
-  25%{transform:translateY(-14px)}
-  50%{transform:translateY(-5px)}
-  75%{transform:translateY(-18px)}
+/* ═══ THEME HEADER ═══ */
+.theme{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(1rem,2.4vw,1.3rem);
+  font-style:italic;text-align:center;
+  color:var(--champagne);letter-spacing:0.15em;
+  margin-bottom:8px;
 }
 
 /* ═══ LANGUAGE ═══ */
@@ -98,172 +103,199 @@ body::after{
   display:flex;gap:12px;
 }
 .lang button{
-  font-family:'Montserrat',sans-serif;font-size:0.48rem;
-  letter-spacing:0.32em;text-transform:uppercase;
-  padding:5px 0;border:none;background:none;
+  font-family:'Montserrat',sans-serif;font-size:0.5rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  padding:6px 0;border:none;background:none;
   color:var(--muted);cursor:pointer;
-  border-bottom:1px solid transparent;
-  transition:all 0.4s;
+  border-bottom:1px solid transparent;transition:all 0.4s;
 }
 .lang button.active{color:var(--champagne);border-bottom-color:var(--gold)}
 [data-es],[data-en]{display:none}
 body.es [data-es]{display:block}
 body.en [data-en]{display:block}
 
-/* ═══ ORNAMENT ═══ */
-.orn{
+/* ═══ ORNAMENTAL RULE ═══ */
+.rule{
   display:flex;align-items:center;justify-content:center;
-  gap:20px;margin:28px 0;
+  gap:18px;margin:24px 0;
 }
-.orn::before,.orn::after{
+.rule::before,.rule::after{
   content:'';flex:1;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(196,160,74,0.12),transparent);
+  background:linear-gradient(90deg,transparent,rgba(196,160,74,0.15),transparent);
 }
-.orn span{font-size:0.7rem;opacity:0.3;color:var(--champagne)}
+.rule span{font-size:0.65rem;opacity:0.35;color:var(--champagne)}
 
-/* ═══ DETAILS ═══ */
+/* ═══ HERO CARDS — date/location visible immediately ═══ */
+.hero-cards{
+  display:flex;gap:12px;justify-content:center;
+  flex-wrap:wrap;margin-top:28px;
+}
+.hc{
+  background:rgba(6,8,5,0.5);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(196,160,74,0.12);
+  border-radius:12px;padding:14px 20px;text-align:center;min-width:100px;
+}
+.hc-label{
+  font-family:'Montserrat',sans-serif;font-size:0.42rem;
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:rgba(0,168,107,0.4);margin-bottom:4px;
+}
+.hc-value{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:0.9rem;color:var(--ivory);line-height:1.3;
+}
+
+/* ═══ DETAIL ROWS ═══ */
 .detail{
-  display:flex;align-items:flex-start;gap:22px;
-  margin:16px 0;padding:16px 0;
-  border-bottom:1px solid rgba(196,160,74,0.04);
+  display:flex;align-items:flex-start;gap:20px;
+  margin:14px 0;padding:16px 0;
+  border-bottom:1px solid rgba(196,160,74,0.05);
 }
 .detail:last-child{border:none}
-.detail-svg{width:24px;height:24px;opacity:0.35;flex-shrink:0;margin-top:2px}
+.detail-svg{width:26px;height:26px;opacity:0.4;flex-shrink:0;margin-top:2px}
 .detail-svg path,.detail-svg line,.detail-svg rect,.detail-svg circle{stroke:var(--champagne);fill:none}
 .detail-label{
   font-family:'Montserrat',sans-serif;font-size:0.45rem;
   letter-spacing:0.3em;text-transform:uppercase;
-  color:rgba(0,168,107,0.32);margin-bottom:4px;
+  color:rgba(0,168,107,0.35);margin-bottom:4px;
 }
 .detail-value{font-size:1.15rem;font-family:'Playfair Display',Georgia,serif;line-height:1.45}
 
 /* ═══ COUNTDOWN ═══ */
-.cd{display:flex;justify-content:center;gap:28px;flex-wrap:wrap}
-.cd-box{text-align:center;min-width:72px}
-.cd-num{font-family:'Playfair Display',Georgia,serif;font-size:2.6rem;font-weight:600;color:var(--champagne)}
-.cd-label{font-family:'Montserrat',sans-serif;font-size:0.45rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.cd{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.cd-box{text-align:center;min-width:68px}
+.cd-num{font-family:'Playfair Display',Georgia,serif;font-size:2.5rem;font-weight:600;color:var(--champagne)}
+.cd-label{font-family:'Montserrat',sans-serif;font-size:0.45rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-top:8px}
 
-/* ═══ FORM ═══ */
-.fg{margin-bottom:22px}
+/* ═══ RSVP — visible, prominent ═══ */
+.rsvp-section{
+  background:linear-gradient(180deg,var(--deep) 0%,rgba(0,92,63,0.15) 40%,var(--deep) 100%);
+  padding:80px 32px;
+  display:flex;align-items:center;justify-content:center;position:relative;z-index:2;
+}
+.rsvp-box{
+  max-width:500px;width:100%;
+  background:rgba(6,8,5,0.6);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(196,160,74,0.15);
+  border-radius:20px;padding:44px 36px;
+}
+.fg{margin-bottom:24px}
 .fl{
-  font-family:'Montserrat',sans-serif;font-size:0.45rem;
+  font-family:'Montserrat',sans-serif;font-size:0.48rem;
   letter-spacing:0.3em;text-transform:uppercase;
   color:var(--champagne);display:block;margin-bottom:8px;
 }
 .fi{
   width:100%;font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:1.1rem;padding:12px 0;color:var(--text);
+  font-size:1.1rem;padding:14px 0;color:var(--text);
   background:transparent;border:none;
-  border-bottom:1px solid rgba(196,160,74,0.08);
-  outline:none;transition:border-color 0.4s;
+  border-bottom:1px solid rgba(196,160,74,0.12);
+  outline:none;transition:border-color 0.35s;
 }
-.fi:focus{border-bottom-color:rgba(196,160,74,0.32)}
-.fi::placeholder{color:rgba(232,224,212,0.08)}
+.fi:focus{border-bottom-color:var(--gold);box-shadow:0 1px 0 var(--gold)}
+.fi::placeholder{color:rgba(236,228,212,0.1)}
 .btn{
-  display:inline-block;font-family:'Montserrat',sans-serif;
-  font-size:0.55rem;letter-spacing:0.35em;text-transform:uppercase;
-  padding:16px 44px;cursor:pointer;
-  background:transparent;color:var(--champagne);
-  border:1px solid rgba(196,160,74,0.14);
-  transition:all 0.45s ease;
+  display:block;width:100%;font-family:'Montserrat',sans-serif;
+  font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;
+  padding:18px;cursor:pointer;text-align:center;
+  background:rgba(180,148,47,0.15);color:var(--champagne);
+  border:1px solid rgba(196,160,74,0.25);
+  border-radius:12px;transition:all 0.4s ease;margin-top:24px;
 }
-.btn:hover{background:rgba(180,148,47,0.05);border-color:rgba(196,160,74,0.3)}
+.btn:hover,.btn:focus{background:rgba(180,148,47,0.25);border-color:var(--champagne);outline:none}
+.btn:focus-visible{box-shadow:0 0 0 2px var(--gold)}
 
 /* ═══ REVEAL ═══ */
-.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.9s ease,transform 0.9s ease}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity 0.8s ease,transform 0.8s ease}
 .reveal.on{opacity:1;transform:translateY(0)}
 .reveal.d1{transition-delay:0.08s}.reveal.d2{transition-delay:0.16s}
 .reveal.d3{transition-delay:0.24s}.reveal.d4{transition-delay:0.32s}
 
+/* ═══ SOCIAL PROOF ═══ */
+.social-proof{
+  text-align:center;margin-top:20px;
+  font-family:'Montserrat',sans-serif;font-size:0.5rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);
+}
+.social-proof strong{color:var(--champagne)}
+
 /* ═══ FOOTER ═══ */
 .foot{
   position:relative;z-index:2;text-align:center;
-  padding:80px 32px 60px;
+  padding:60px 32px 48px;
   font-family:'Montserrat',sans-serif;font-size:0.45rem;
   letter-spacing:0.3em;text-transform:uppercase;
-  color:rgba(232,224,212,0.18);
+  color:rgba(236,228,212,0.2);
 }
 
-#p{position:absolute;inset:0;z-index:4;pointer-events:none}
-
 @media(max-width:480px){
-  .block{padding:48px 20px}
-  .title-script{font-size:4.2rem}
-  .hero-content{padding:50px 18px 60px}
-  .cd{gap:18px}.cd-num{font-size:2rem}
+  .sec{padding:56px 20px}
+  .rsvp-section{padding:60px 20px}
+  .rsvp-box{padding:32px 24px}
+  .title-script{font-size:4rem}
+  .hero-content{padding:48px 16px 60px}
+  .corner{width:50px;height:50px}
+  .cd{gap:16px}.cd-num{font-size:1.9rem}
 }
 </style>
 </head>
 <body class="es">
 
 <!-- ═══ HERO ═══ -->
-<div class="hero">
-  <div class="hero-video"><video autoplay muted loop playsinline><source src="hero-elegant.mp4" type="video/mp4"></video></div>
-  <div class="hero-arch">
-    <svg viewBox="0 0 1000 900" preserveAspectRatio="none">
-      <defs><mask id="a"><rect width="1000" height="900" fill="white"/><ellipse cx="500" cy="420" rx="300" ry="370" fill="black"/></mask></defs>
-      <rect width="1000" height="900" fill="rgba(4,6,4,0.85)" mask="url(#a)"/>
-      <ellipse cx="500" cy="420" rx="300" ry="370" fill="none" stroke="rgba(180,148,47,0.14)" stroke-width="1.5"/>
-      <ellipse cx="500" cy="420" rx="298" ry="368" fill="none" stroke="rgba(212,196,160,0.04)" stroke-width="4"/>
-    </svg>
-  </div>
-  <div class="hero-veil"></div>
-  <canvas id="p"></canvas>
+<section class="hero" aria-label="Invitación principal">
+  <video autoplay muted loop playsinline preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 16'%3E%3Crect fill='%23060805' width='9' height='16'/%3E%3C/svg%3E">
+    <source src="hero-warm.mp4" type="video/mp4">
+  </video>
+
+  <!-- Gold filigree corners -->
+  <svg class="corner tl" viewBox="0 0 80 80"><path d="M8 72 L8 40 Q8 8 40 8 L72 8" stroke-width="1"/><path d="M16 64 L16 40 Q16 16 40 16 L64 16" stroke-width="0.6" opacity="0.6"/><circle cx="40" cy="40" r="2" fill="var(--champagne)" opacity="0.5"/></svg>
+  <svg class="corner tr" viewBox="0 0 80 80"><path d="M8 72 L8 40 Q8 8 40 8 L72 8" stroke-width="1"/><path d="M16 64 L16 40 Q16 16 40 16 L64 16" stroke-width="0.6" opacity="0.6"/><circle cx="40" cy="40" r="2" fill="var(--champagne)" opacity="0.5"/></svg>
+  <svg class="corner bl" viewBox="0 0 80 80"><path d="M8 72 L8 40 Q8 8 40 8 L72 8" stroke-width="1"/><path d="M16 64 L16 40 Q16 16 40 16 L64 16" stroke-width="0.6" opacity="0.6"/><circle cx="40" cy="40" r="2" fill="var(--champagne)" opacity="0.5"/></svg>
+  <svg class="corner br" viewBox="0 0 80 80"><path d="M8 72 L8 40 Q8 8 40 8 L72 8" stroke-width="1"/><path d="M16 64 L16 40 Q16 16 40 16 L64 16" stroke-width="0.6" opacity="0.6"/><circle cx="40" cy="40" r="2" fill="var(--champagne)" opacity="0.5"/></svg>
 
   <div class="hero-content">
-    <p class="title-label reveal" data-es>Te Invitamos a Celebrar</p>
-    <p class="title-label reveal" data-en>You Are Invited to Celebrate</p>
-    <h1 class="title-script reveal d1 float float-s">Samantha</h1>
-    <p class="title-display reveal d2 float float-d1">Quince Años</p>
-  </div>
-</div>
+    <p class="theme reveal">En un Sueño Esmeralda</p>
+    <p class="title-label reveal" data-es>Te Invitamos a los Quince Años de</p>
+    <p class="title-label reveal" data-en>You Are Invited to the Sweet Fifteen of</p>
+    <h1 class="title-script reveal d1">Samantha</h1>
 
-<div class="lang">
-  <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
-  <button id="btn-en" onclick="setLang('en')">EN</button>
-</div>
-
-<!-- ═══ INVITATION ═══ -->
-<section class="block">
-  <div class="block-inner" style="text-align:center">
-
-    <div class="orn"><span>✦</span></div>
-
-    <div data-es>
-      <p class="poetic reveal"><em>En un Sueño Esmeralda,</em></p>
-      <p class="poetic reveal d1">donde los recuerdos flotan<br>como pétalos en la brisa,</p>
-      <p class="poetic reveal d2">una joven despierta<br>a un nuevo amanecer.</p>
+    <!-- Key info visible immediately -->
+    <div class="hero-cards reveal d2">
+      <div class="hc">
+        <p class="hc-label" data-es>Fecha</p><p class="hc-label" data-en>Date</p>
+        <p class="hc-value">Oct 3, 2026</p>
+      </div>
+      <div class="hc">
+        <p class="hc-label" data-es>Hora</p><p class="hc-label" data-en>Time</p>
+        <p class="hc-value">3:00 PM</p>
+      </div>
+      <div class="hc">
+        <p class="hc-label" data-es>Lugar</p><p class="hc-label" data-en>Venue</p>
+        <p class="hc-value">Bear, DE</p>
+      </div>
     </div>
-    <div data-en>
-      <p class="poetic reveal"><em>In an Emerald Dream,</em></p>
-      <p class="poetic reveal d1">where memories drift<br>like petals in the breeze,</p>
-      <p class="poetic reveal d2">a young woman awakens<br>to a new dawn.</p>
-    </div>
-
-    <div class="orn reveal d2"><span>◇</span></div>
-
-    <div data-es>
-      <p class="poetic reveal d3">Con amor y alegría, te invitamos<br>a celebrar los Quince Años de</p>
-    </div>
-    <div data-en>
-      <p class="poetic reveal d3">With love and joy, we invite you<br>to celebrate the Sweet Fifteen of</p>
-    </div>
-
-    <p class="title-script reveal d4 float float-s float-d2" style="font-size:clamp(3.2rem,8vw,5.5rem);margin-top:20px">Samantha</p>
-
   </div>
 </section>
 
-<!-- ═══ DETAILS ═══ -->
-<section class="block">
-  <div class="block-inner">
+<div class="lang">
+  <button id="btn-es" class="active" onclick="setLang('es')" aria-label="Español">ES</button>
+  <button id="btn-en" onclick="setLang('en')" aria-label="English">EN</button>
+</div>
 
-    <p class="title-display reveal float float-s" style="text-align:center;margin-bottom:32px">
-      <span data-es>Detalles</span><span data-en>Details</span>
+<!-- ═══ DETAILS ═══ -->
+<section class="sec">
+  <div class="sec-inner">
+
+    <p class="title-display reveal" style="text-align:center;margin-bottom:36px">
+      <span data-es>Detalles de la Celebración</span>
+      <span data-en>Celebration Details</span>
     </p>
 
     <div class="detail reveal">
-      <svg class="detail-svg float" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="3" stroke-width="1.2"/><line x1="8" y1="2" x2="8" y2="6" stroke-width="1.2"/><line x1="16" y1="2" x2="16" y2="6" stroke-width="1.2"/><line x1="3" y1="10" x2="21" y2="10" stroke-width="1.2"/></svg>
+      <svg class="detail-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3" stroke-width="1.2"/><line x1="8" y1="2" x2="8" y2="6" stroke-width="1.2"/><line x1="16" y1="2" x2="16" y2="6" stroke-width="1.2"/><line x1="3" y1="10" x2="21" y2="10" stroke-width="1.2"/></svg>
       <div>
         <p class="detail-label" data-es>Fecha</p><p class="detail-label" data-en>Date</p>
         <p class="detail-value" data-es>Sábado, 3 de Octubre 2026</p>
@@ -272,7 +304,7 @@ body.en [data-en]{display:block}
     </div>
 
     <div class="detail reveal d1">
-      <svg class="detail-svg float float-d1" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="1.2"/><line x1="12" y1="6" x2="12" y2="12" stroke-width="1.2"/><line x1="12" y1="12" x2="16" y2="14" stroke-width="1.2"/></svg>
+      <svg class="detail-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke-width="1.2"/><line x1="12" y1="6" x2="12" y2="12" stroke-width="1.2"/><line x1="12" y1="12" x2="16" y2="14" stroke-width="1.2"/></svg>
       <div>
         <p class="detail-label" data-es>Hora</p><p class="detail-label" data-en>Time</p>
         <p class="detail-value">3:00 PM</p>
@@ -280,33 +312,43 @@ body.en [data-en]{display:block}
     </div>
 
     <div class="detail reveal d2">
-      <svg class="detail-svg float float-d2" viewBox="0 0 24 24"><path d="M12 2 C8 2 4 6 4 10 C4 16 12 22 12 22 C12 22 20 16 20 10 C20 6 16 2 12 2 Z" stroke-width="1.2"/><circle cx="12" cy="10" r="3" stroke-width="1.2"/></svg>
+      <svg class="detail-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 C8 2 4 6 4 10 C4 16 12 22 12 22 C12 22 20 16 20 10 C20 6 16 2 12 2 Z" stroke-width="1.2"/><circle cx="12" cy="10" r="3" stroke-width="1.2"/></svg>
       <div>
         <p class="detail-label" data-es>Lugar</p><p class="detail-label" data-en>Venue</p>
         <p class="detail-value">Fairwind Baptist Church</p>
-        <p class="detail-value" style="font-size:0.95rem;color:var(--muted);margin-top:2px">801 Seymour Rd · Bear, DE 19701</p>
+        <p class="detail-value" style="font-size:0.95rem;color:var(--muted)">801 Seymour Rd · Bear, DE 19701</p>
+      </div>
+    </div>
+
+    <div class="detail reveal d3">
+      <svg class="detail-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L15 9 L22 9 L16 14 L18 21 L12 17 L6 21 L8 14 L2 9 L9 9 Z" stroke-width="1"/></svg>
+      <div>
+        <p class="detail-label" data-es>Celebración</p><p class="detail-label" data-en>Celebration</p>
+        <p class="detail-value" data-es>Ceremonia religiosa y recepción</p>
+        <p class="detail-value" data-en>Religious ceremony and reception</p>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ═══ COUNTDOWN ═══ -->
-<section class="block">
-  <div class="block-inner" style="text-align:center">
+<!-- ═══ COUNTDOWN + URGENCY ═══ -->
+<section class="sec" style="padding-top:40px">
+  <div class="sec-inner" style="text-align:center">
 
-    <p class="title-label reveal float float-s" style="margin-bottom:28px">
+    <p class="title-label reveal" style="margin-bottom:24px">
       <span data-es>Cuenta Regresiva</span><span data-en>Countdown</span>
     </p>
 
     <div class="cd reveal d1">
-      <div class="cd-box float float-s"><div class="cd-num" id="cd-d">--</div><div class="cd-label" data-es>Días</div><div class="cd-label" data-en>Days</div></div>
-      <div class="cd-box float float-s float-d1"><div class="cd-num" id="cd-h">--</div><div class="cd-label" data-es>Horas</div><div class="cd-label" data-en>Hours</div></div>
-      <div class="cd-box float float-s float-d2"><div class="cd-num" id="cd-m">--</div><div class="cd-label" data-es>Min</div><div class="cd-label" data-en>Min</div></div>
-      <div class="cd-box float float-s float-d3"><div class="cd-num" id="cd-s">--</div><div class="cd-label" data-es>Seg</div><div class="cd-label" data-en>Sec</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-d">--</div><div class="cd-label" data-es>Días</div><div class="cd-label" data-en>Days</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-h">--</div><div class="cd-label" data-es>Horas</div><div class="cd-label" data-en>Hours</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-m">--</div><div class="cd-label" data-es>Min</div><div class="cd-label" data-en>Min</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-label" data-es>Seg</div><div class="cd-label" data-en>Sec</div></div>
     </div>
 
-    <div class="orn reveal d2"><span>◆</span></div>
+    <div class="rule reveal d2"><span>◆</span></div>
+
     <p class="poetic reveal d3" style="font-size:1.05rem">
       <span data-es>Hasta que la magia comience</span>
       <span data-en>Until the magic begins</span>
@@ -315,27 +357,57 @@ body.en [data-en]{display:block}
   </div>
 </section>
 
-<!-- ═══ RSVP ═══ -->
-<section class="block">
-  <div class="block-inner">
+<!-- ═══ RSVP — PROMINENT, WARM, FUNCTIONAL ═══ -->
+<section class="rsvp-section">
+  <div class="rsvp-box">
 
-    <p class="title-display reveal float float-s" style="text-align:center;margin-bottom:6px">
-      <span data-es>Confirmar Asistencia</span><span data-en>RSVP</span>
+    <p class="title-display reveal" style="text-align:center;margin-bottom:4px">
+      <span data-es>Confirmar Asistencia</span>
+      <span data-en>RSVP</span>
     </p>
-    <div class="orn reveal d1" style="margin:16px 0 28px"><span>·</span></div>
+    <p class="reveal d1" style="text-align:center;font-size:0.85rem;color:var(--muted);margin-bottom:24px">
+      <span data-es>Te esperamos para celebrar juntos</span>
+      <span data-en>We look forward to celebrating with you</span>
+    </p>
 
-    <form id="f">
-      <div class="fg reveal d2"><label class="fl" data-es>Nombre Completo</label><label class="fl" data-en>Full Name</label><input class="fi" id="n" type="text" placeholder="Tu nombre..." required></div>
-      <div class="fg reveal d2"><label class="fl" data-es>Correo o Teléfono</label><label class="fl" data-en>Email or Phone</label><input class="fi" id="c" type="text" placeholder="tu@email.com"></div>
-      <div class="fg reveal d3"><label class="fl" data-es>Acompañantes</label><label class="fl" data-en>Guests</label><input class="fi" id="g" type="number" min="0" max="5" value="0"></div>
-      <div class="fg reveal d3"><label class="fl" data-es>Mensaje para Samantha</label><label class="fl" data-en>Message for Samantha</label><textarea class="fi" id="m" rows="2" placeholder="Tus deseos..."></textarea></div>
-      <div class="reveal d4" style="text-align:center;margin-top:32px">
-        <button type="submit" class="btn"><span data-es>Confirmar Asistencia</span><span data-en>Send RSVP</span></button>
+    <form id="f" aria-label="Formulario de confirmación">
+      <div class="fg reveal d2">
+        <label class="fl" for="n" data-es>Nombre Completo</label>
+        <label class="fl" for="n" data-en>Full Name</label>
+        <input class="fi" id="n" type="text" placeholder="Tu nombre..." required autocomplete="name">
+      </div>
+      <div class="fg reveal d2">
+        <label class="fl" for="c" data-es>Correo o Teléfono</label>
+        <label class="fl" for="c" data-en>Email or Phone</label>
+        <input class="fi" id="c" type="text" placeholder="tu@email.com" autocomplete="email">
+      </div>
+      <div class="fg reveal d3">
+        <label class="fl" for="g" data-es>Acompañantes</label>
+        <label class="fl" for="g" data-en>Guests</label>
+        <input class="fi" id="g" type="number" min="0" max="10" value="0">
+      </div>
+      <div class="fg reveal d3">
+        <label class="fl" for="m" data-es>Mensaje para Samantha</label>
+        <label class="fl" for="m" data-en>Message for Samantha</label>
+        <textarea class="fi" id="m" rows="2" placeholder="Tus deseos y bendiciones..."></textarea>
+      </div>
+      <div class="reveal d4">
+        <button type="submit" class="btn">
+          <span data-es>Confirmar Asistencia</span>
+          <span data-en>Send RSVP</span>
+        </button>
       </div>
     </form>
 
-    <div id="ok" style="display:none;text-align:center;padding:60px 20px">
-      <p class="poetic" style="font-size:1.4rem"><span data-es>Gracias. Te esperamos.</span><span data-en>Thank you. We cannot wait.</span></p>
+    <!-- Social proof -->
+    <p class="social-proof reveal d4">
+      <span data-es><strong id="rc">0</strong> personas han confirmado</span>
+      <span data-en><strong id="rc-en">0</strong> guests have confirmed</span>
+    </p>
+
+    <div id="ok" style="display:none;text-align:center;padding:40px 10px">
+      <p class="poetic" style="font-size:1.3rem"><span data-es>Gracias. Te esperamos el 3 de Octubre.</span><span data-en>Thank you. See you October 3rd.</span></p>
+      <p style="font-size:0.8rem;color:var(--muted);margin-top:12px"><span data-es>Fairwind Baptist Church · 3:00 PM</span><span data-en>Fairwind Baptist Church · 3:00 PM</span></p>
     </div>
 
   </div>
@@ -344,10 +416,18 @@ body.en [data-en]{display:block}
 <div class="foot"><p>Samantha · Quince Años · 2026</p></div>
 
 
+<!-- ═══ ADMIN LINK — hidden but accessible ═══ -->
+<nav style="position:fixed;bottom:16px;right:16px;z-index:101" aria-label="Admin">
+  <a href="admin.html" style="font-family:Montserrat,sans-serif;font-size:0.4rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(236,228,212,0.12);text-decoration:none;padding:8px" data-es>Registro</a>
+  <a href="admin.html" style="font-family:Montserrat,sans-serif;font-size:0.4rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(236,228,212,0.12);text-decoration:none;padding:8px" data-en>Registry</a>
+</nav>
+
+
 <script>
 (function(){
   var D=document,W=window;
 
+  /* ═══ LANGUAGE ═══ */
   W.setLang=function(l){
     D.body.className=l;D.getElementById('btn-es').className=l=='es'?'active':'';
     D.getElementById('btn-en').className=l=='en'?'active':'';
@@ -355,25 +435,12 @@ body.en [data-en]{display:block}
   };
   try{setLang(localStorage.getItem('sl')||'es')}catch(e){setLang('es')}
 
+  /* ═══ REVEAL ═══ */
   var rv=D.querySelectorAll('.reveal');
-  function ck(){for(var i=0;i<rv.length;i++){var e=rv[i];if(!e.classList.contains('on')&&e.getBoundingClientRect().top<W.innerHeight*0.9)e.classList.add('on')}}
-  W.addEventListener('scroll',ck,{passive:true});setTimeout(ck,200);setTimeout(ck,500);
+  function ck(){for(var i=0;i<rv.length;i++){var e=rv[i];if(!e.classList.contains('on')&&e.getBoundingClientRect().top<W.innerHeight*0.92)e.classList.add('on')}}
+  W.addEventListener('scroll',ck,{passive:true});setTimeout(ck,100);setTimeout(ck,400);
 
-  var cv=D.getElementById('p'),ctx=cv.getContext('2d'),pt=[];
-  function rz(){cv.width=W.innerWidth;cv.height=W.innerHeight}rz();W.addEventListener('resize',rz);
-  for(var i=0;i<140;i++)pt.push({x:Math.random()*9999,y:Math.random()*9999,s:Math.random()*2+0.5,vx:(Math.random()-0.5)*0.1,vy:(Math.random()-0.5)*0.1-0.05,lf:Math.random(),ph:Math.random()*Math.PI*2,gd:Math.random()>0.5});
-  function dr(){
-    ctx.clearRect(0,0,cv.width,cv.height);
-    for(var i=0;i<pt.length;i++){var o=pt[i];o.x+=o.vx;o.y+=o.vy;o.lf+=0.003;o.ph+=0.012;
-      if(o.lf>1){o.lf=0;o.x=Math.random()*cv.width;o.y=cv.height+20}
-      if(o.y<-20){o.y=cv.height+20;o.x=Math.random()*cv.width}
-      var a=(0.22+Math.sin(o.ph)*0.32)*(o.gd?0.4:0.22);
-      var cl=o.gd?'rgba(212,196,160,'+a.toFixed(2)+')':'rgba(0,168,107,'+a.toFixed(2)+')';
-      ctx.beginPath();ctx.arc(o.x,o.y,o.s,0,Math.PI*2);ctx.fillStyle=cl;ctx.fill();
-      if(o.s>1.5){ctx.beginPath();ctx.arc(o.x,o.y,o.s*3,0,Math.PI*2);ctx.fillStyle=cl.replace(/[\d.]+\)$/,(a*0.06).toFixed(2)+')');ctx.fill()}
-    }requestAnimationFrame(dr);
-  }dr();
-
+  /* ═══ COUNTDOWN ═══ */
   var tg=new Date('2026-10-03T15:00:00');
   function tk(){var df=tg-new Date();if(df<=0){D.getElementById('cd-d').textContent='00';D.getElementById('cd-h').textContent='00';D.getElementById('cd-m').textContent='00';D.getElementById('cd-s').textContent='00';return}
     D.getElementById('cd-d').textContent=String(Math.floor(df/86400000)).padStart(2,'0');
@@ -382,12 +449,25 @@ body.en [data-en]{display:block}
     D.getElementById('cd-s').textContent=String(Math.floor((df%60000)/1000)).padStart(2,'0');
   }tk();setInterval(tk,1000);
 
+  /* ═══ RSVP ═══ */
+  function loadRSVPs(){
+    try{
+      var list=JSON.parse(localStorage.getItem('sr')||'[]');
+      D.getElementById('rc').textContent=list.length;
+      D.getElementById('rc-en').textContent=list.length;
+    }catch(e){}
+  }
+  loadRSVPs();
+
   D.getElementById('f').addEventListener('submit',function(e){
-    e.preventDefault();var nm=D.getElementById('n').value.trim();if(!nm)return;
+    e.preventDefault();
+    var nm=D.getElementById('n').value.trim();if(!nm)return;
     var d={name:nm,contact:D.getElementById('c').value.trim(),guests:D.getElementById('g').value,message:D.getElementById('m').value.trim(),date:new Date().toISOString()};
-    try{var l=JSON.parse(localStorage.getItem('sr')||'[]');l.push(d);localStorage.setItem('sr',JSON.stringify(l))}catch(er){}
+    try{var list=JSON.parse(localStorage.getItem('sr')||'[]');list.push(d);localStorage.setItem('sr',JSON.stringify(list))}catch(er){}
     D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
+    loadRSVPs();
   });
+
 })();
 </script>
 </body>
