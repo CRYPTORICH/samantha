@@ -87,6 +87,20 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 .frame .gem.tl-g{top:-5px;left:-5px}.frame .gem.tr-g{top:-5px;right:-5px}
 .frame .gem.bl-g{bottom:-5px;left:-5px}.frame .gem.br-g{bottom:-5px;right:-5px}
 
+/* ═══ VIDEO HERO ═══ */
+.video-hero{
+  position:fixed;inset:0;z-index:0;overflow:hidden;
+}
+.video-hero video{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  min-width:100%;min-height:100%;width:auto;height:auto;
+  object-fit:cover;
+}
+.video-hero::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,13,6,0.3) 0%,rgba(0,26,13,0.5) 60%,#001a0d 100%);
+}
+
 /* ═══ PAGE ═══ */
 .page{position:relative;z-index:3;max-width:680px;margin:0 auto;padding:80px 28px 100px}
 
@@ -348,6 +362,13 @@ h1.name:hover{transform:scale(1.03);filter:drop-shadow(0 4px 20px rgba(212,168,6
 
 <!-- Parallax background -->
 <div class="parallax-bg" id="parallax-bg"></div>
+
+<!-- Video Hero -->
+<div class="video-hero">
+  <video autoplay loop muted playsinline poster="">
+    <source src="hero-video.mp4" type="video/mp4">
+  </video>
+</div>
 
 <!-- Particles -->
 <canvas id="particles"></canvas>
