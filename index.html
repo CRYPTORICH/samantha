@@ -8,260 +8,212 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Great+Vibes&family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════
-   SAMANTHA · QUINCE AÑOS
-   Antigravity Portal · Emerald Dream
-   ═══════════════════════════════════════ */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --gold:#b8942f;
-  --champagne:#d4c4a0;
-  --ivory:#ede4d3;
-  --dark:#080c09;
-  --darker:#040604;
-  --text:#e8e0d4;
-  --muted:rgba(232,224,212,0.55);
+  --gold:#b8942f;--champagne:#d4c4a0;--ivory:#ede4d3;
+  --dark:#080c09;--darker:#040604;
+  --text:#e8e0d4;--muted:rgba(232,224,212,0.5);
 }
-html{scroll-behavior:smooth;background:var(--darker);overflow-x:hidden}
+html{scroll-behavior:smooth;background:var(--darker)}
 
 body{
   font-family:'Cormorant Garamond',Georgia,serif;
   color:var(--text);background:var(--darker);
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
 }
 
 body::after{
   content:'';position:fixed;inset:0;z-index:999;
-  pointer-events:none;opacity:0.035;
+  pointer-events:none;opacity:0.03;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size:256px;
 }
 
 /* ═══ HERO ═══ */
 .hero{
-  position:relative;width:100%;min-height:100vh;
+  position:relative;min-height:100vh;
   display:flex;align-items:center;justify-content:center;overflow:hidden;
 }
 .hero-video{position:absolute;inset:0;z-index:1}
-.hero-video video{width:100%;height:100%;object-fit:cover;filter:brightness(0.4) saturate(0.65)}
+.hero-video video{width:100%;height:100%;object-fit:cover;filter:brightness(0.35) saturate(0.6)}
 .hero-arch{position:absolute;inset:0;z-index:2;pointer-events:none}
 .hero-arch svg{width:100%;height:100%}
-.hero-vignette{
+.hero-veil{
   position:absolute;inset:0;z-index:3;
-  background:radial-gradient(ellipse 65% 45% at 50% 40%,transparent 0%,rgba(4,6,4,0.6) 55%,rgba(4,6,4,0.9) 100%);
+  background:radial-gradient(ellipse 60% 40% at 50% 40%,transparent 0%,rgba(4,6,4,0.55) 50%,rgba(4,6,4,0.88) 100%);
 }
-.hero-light{
-  position:absolute;z-index:4;pointer-events:none;
-  top:-20%;left:50%;transform:translateX(-50%);
-  width:60%;height:140%;
-  background:radial-gradient(ellipse at 50% 30%,rgba(212,196,160,0.05) 0%,transparent 60%);
-}
-.hero-content{position:relative;z-index:5;text-align:center;padding:48px 28px}
+.hero-content{position:relative;z-index:5;text-align:center;padding:60px 28px 80px}
 
-/* ═══ GOLDEN CROWN SVG ═══ */
-.crown-svg{
-  display:block;margin:0 auto 12px;
-  width:48px;height:36px;opacity:0.5;
+/* ═══ BLOCKS — compact sections ═══ */
+.block{
+  position:relative;z-index:2;
+  padding:60px 32px;
+  display:flex;align-items:center;justify-content:center;
 }
-
-/* ═══ ANTIGRAVITY ═══ */
-.float{animation:antigravity 9s ease-in-out infinite}
-.float-slow{animation-duration:13s}
-.float-d1{animation-delay:-2s}
-.float-d2{animation-delay:-4s}
-.float-d3{animation-delay:-6s}
-@keyframes antigravity{
-  0%,100%{transform:translateY(0) rotate(0deg)}
-  25%{transform:translateY(-18px) rotate(0.8deg)}
-  50%{transform:translateY(-6px) rotate(-0.4deg)}
-  75%{transform:translateY(-22px) rotate(0.4deg)}
-}
+.block-inner{max-width:560px;width:100%}
 
 /* ═══ TYPOGRAPHY ═══ */
 .title-script{
   font-family:'Great Vibes',cursive;
-  font-size:clamp(5.5rem,14vw,11rem);
-  font-weight:400;line-height:1.05;
+  font-size:clamp(5rem,13vw,10rem);
+  font-weight:400;line-height:1.04;
   color:var(--champagne);
-  text-shadow:0 0 120px rgba(180,148,47,0.1);
-  letter-spacing:0.02em;
+  text-shadow:0 0 100px rgba(180,148,47,0.1);
 }
 .title-display{
   font-family:'Playfair Display',Georgia,serif;
-  font-size:clamp(1.2rem,3vw,1.6rem);
+  font-size:clamp(1.1rem,2.8vw,1.4rem);
   font-weight:400;letter-spacing:0.5em;
   text-transform:uppercase;color:var(--ivory);
-  margin-top:20px;
+  margin-top:18px;
 }
 .title-label{
   font-family:'Cinzel',Georgia,serif;
-  font-size:clamp(0.7rem,2vw,0.9rem);
-  font-weight:500;letter-spacing:0.6em;
+  font-size:clamp(0.65rem,1.8vw,0.85rem);
+  font-weight:500;letter-spacing:0.55em;
   text-transform:uppercase;color:var(--muted);
-  margin-top:18px;
+  margin-top:14px;
 }
 .poetic{
-  font-style:italic;font-size:clamp(1.3rem,2.6vw,1.6rem);
-  text-align:center;line-height:2.3;
-  color:var(--muted);margin-bottom:6px;
+  font-style:italic;font-size:clamp(1.2rem,2.4vw,1.4rem);
+  text-align:center;line-height:2.2;
+  color:var(--muted);
 }
-.poetic em{font-style:italic;color:var(--champagne);font-size:1.15em}
+.poetic em{font-style:italic;color:var(--champagne);font-size:1.12em}
+
+/* ═══ ANTIGRAVITY ═══ */
+.float{animation:ag 10s ease-in-out infinite}
+.float-s{animation-duration:14s}
+.float-d1{animation-delay:-2s}.float-d2{animation-delay:-4s}.float-d3{animation-delay:-6s}
+@keyframes ag{
+  0%,100%{transform:translateY(0)}
+  25%{transform:translateY(-14px)}
+  50%{transform:translateY(-5px)}
+  75%{transform:translateY(-18px)}
+}
 
 /* ═══ LANGUAGE ═══ */
 .lang{
-  position:fixed;top:28px;right:28px;z-index:100;
-  display:flex;gap:14px;
+  position:fixed;top:24px;right:24px;z-index:100;
+  display:flex;gap:12px;
 }
 .lang button{
-  font-family:'Montserrat',sans-serif;font-size:0.52rem;
-  letter-spacing:0.35em;text-transform:uppercase;
-  padding:6px 0;border:none;background:none;
+  font-family:'Montserrat',sans-serif;font-size:0.48rem;
+  letter-spacing:0.32em;text-transform:uppercase;
+  padding:5px 0;border:none;background:none;
   color:var(--muted);cursor:pointer;
   border-bottom:1px solid transparent;
-  transition:all 0.45s;
+  transition:all 0.4s;
 }
 .lang button.active{color:var(--champagne);border-bottom-color:var(--gold)}
 [data-es],[data-en]{display:none}
 body.es [data-es]{display:block}
 body.en [data-en]{display:block}
 
-/* ═══ SECTIONS ═══ */
-.section{
-  position:relative;z-index:2;
-  padding:180px 36px;
+/* ═══ ORNAMENT ═══ */
+.orn{
   display:flex;align-items:center;justify-content:center;
+  gap:20px;margin:28px 0;
 }
-.section-inner{max-width:600px;width:100%}
-
-/* ═══ ORNAMENTAL DIVIDER ═══ */
-.ornament{
-  display:flex;align-items:center;justify-content:center;
-  gap:28px;margin:52px 0;
-}
-.ornament::before,.ornament::after{
+.orn::before,.orn::after{
   content:'';flex:1;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(196,160,74,0.14),transparent);
+  background:linear-gradient(90deg,transparent,rgba(196,160,74,0.12),transparent);
 }
-.ornament-svg{width:28px;height:28px;opacity:0.35}
-.ornament-svg path{fill:var(--champagne)}
+.orn span{font-size:0.7rem;opacity:0.3;color:var(--champagne)}
 
-/* ═══ DETAIL ROWS ═══ */
+/* ═══ DETAILS ═══ */
 .detail{
-  display:flex;align-items:flex-start;gap:28px;
-  margin:28px 0;padding:28px 0;
-  border-bottom:1px solid rgba(196,160,74,0.05);
+  display:flex;align-items:flex-start;gap:22px;
+  margin:16px 0;padding:16px 0;
+  border-bottom:1px solid rgba(196,160,74,0.04);
 }
-.detail:last-child{border-bottom:none}
-.detail-svg{width:28px;height:28px;opacity:0.4;flex-shrink:0;margin-top:3px}
-.detail-svg path{stroke:var(--champagne);fill:none}
+.detail:last-child{border:none}
+.detail-svg{width:24px;height:24px;opacity:0.35;flex-shrink:0;margin-top:2px}
+.detail-svg path,.detail-svg line,.detail-svg rect,.detail-svg circle{stroke:var(--champagne);fill:none}
 .detail-label{
-  font-family:'Montserrat',sans-serif;font-size:0.5rem;
-  letter-spacing:0.35em;text-transform:uppercase;
-  color:rgba(0,168,107,0.35);margin-bottom:6px;
+  font-family:'Montserrat',sans-serif;font-size:0.45rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(0,168,107,0.32);margin-bottom:4px;
 }
-.detail-value{font-size:1.25rem;font-family:'Playfair Display',Georgia,serif;line-height:1.5}
+.detail-value{font-size:1.15rem;font-family:'Playfair Display',Georgia,serif;line-height:1.45}
 
 /* ═══ COUNTDOWN ═══ */
-.cd-grid{display:flex;justify-content:center;gap:36px;flex-wrap:wrap}
-.cd-box{text-align:center;min-width:84px}
-.cd-num{
-  font-family:'Playfair Display',Georgia,serif;
-  font-size:3rem;font-weight:600;
-  color:var(--champagne);line-height:1;
-}
-.cd-label{
-  font-family:'Montserrat',sans-serif;font-size:0.5rem;
-  letter-spacing:0.3em;text-transform:uppercase;
-  color:var(--muted);margin-top:12px;
-}
+.cd{display:flex;justify-content:center;gap:28px;flex-wrap:wrap}
+.cd-box{text-align:center;min-width:72px}
+.cd-num{font-family:'Playfair Display',Georgia,serif;font-size:2.6rem;font-weight:600;color:var(--champagne)}
+.cd-label{font-family:'Montserrat',sans-serif;font-size:0.45rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-top:8px}
 
-/* ═══ RSVP ═══ */
-.form-group{margin-bottom:30px}
-.form-label{
-  font-family:'Montserrat',sans-serif;font-size:0.5rem;
-  letter-spacing:0.35em;text-transform:uppercase;
-  color:var(--champagne);display:block;margin-bottom:10px;
+/* ═══ FORM ═══ */
+.fg{margin-bottom:22px}
+.fl{
+  font-family:'Montserrat',sans-serif;font-size:0.45rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--champagne);display:block;margin-bottom:8px;
 }
-.form-input{
+.fi{
   width:100%;font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:1.2rem;padding:16px 0;color:var(--text);
+  font-size:1.1rem;padding:12px 0;color:var(--text);
   background:transparent;border:none;
-  border-bottom:1px solid rgba(196,160,74,0.1);
+  border-bottom:1px solid rgba(196,160,74,0.08);
   outline:none;transition:border-color 0.4s;
 }
-.form-input:focus{border-bottom-color:rgba(196,160,74,0.35)}
-.form-input::placeholder{color:rgba(232,224,212,0.1)}
-
+.fi:focus{border-bottom-color:rgba(196,160,74,0.32)}
+.fi::placeholder{color:rgba(232,224,212,0.08)}
 .btn{
   display:inline-block;font-family:'Montserrat',sans-serif;
-  font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;
-  padding:20px 52px;cursor:pointer;
+  font-size:0.55rem;letter-spacing:0.35em;text-transform:uppercase;
+  padding:16px 44px;cursor:pointer;
   background:transparent;color:var(--champagne);
-  border:1px solid rgba(196,160,74,0.15);
-  transition:all 0.5s ease;margin-top:8px;
+  border:1px solid rgba(196,160,74,0.14);
+  transition:all 0.45s ease;
 }
-.btn:hover{background:rgba(180,148,47,0.06);border-color:rgba(196,160,74,0.35)}
+.btn:hover{background:rgba(180,148,47,0.05);border-color:rgba(196,160,74,0.3)}
 
 /* ═══ REVEAL ═══ */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity 1s ease,transform 1s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal.d1{transition-delay:0.1s}.reveal.d2{transition-delay:0.2s}
-.reveal.d3{transition-delay:0.3s}.reveal.d4{transition-delay:0.4s}
-.reveal.d5{transition-delay:0.5s}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.9s ease,transform 0.9s ease}
+.reveal.on{opacity:1;transform:translateY(0)}
+.reveal.d1{transition-delay:0.08s}.reveal.d2{transition-delay:0.16s}
+.reveal.d3{transition-delay:0.24s}.reveal.d4{transition-delay:0.32s}
 
 /* ═══ FOOTER ═══ */
-.footer{
-  position:relative;z-index:2;
-  text-align:center;padding:160px 32px 100px;
-  font-family:'Montserrat',sans-serif;font-size:0.5rem;
-  letter-spacing:0.35em;text-transform:uppercase;
-  color:rgba(232,224,212,0.2);
+.foot{
+  position:relative;z-index:2;text-align:center;
+  padding:80px 32px 60px;
+  font-family:'Montserrat',sans-serif;font-size:0.45rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(232,224,212,0.18);
 }
 
-#particles{position:absolute;inset:0;z-index:4;pointer-events:none}
+#p{position:absolute;inset:0;z-index:4;pointer-events:none}
 
 @media(max-width:480px){
-  .section{padding:120px 22px}
-  .title-script{font-size:4.5rem}
-  .hero-content{padding:32px 20px}
-  .lang{top:18px;right:16px}
-  .cd-grid{gap:20px}
-  .cd-num{font-size:2.2rem}
+  .block{padding:48px 20px}
+  .title-script{font-size:4.2rem}
+  .hero-content{padding:50px 18px 60px}
+  .cd{gap:18px}.cd-num{font-size:2rem}
 }
 </style>
 </head>
 <body class="es">
 
+<!-- ═══ HERO ═══ -->
 <div class="hero">
-  <div class="hero-video">
-    <video autoplay muted loop playsinline>
-      <source src="hero-elegant.mp4" type="video/mp4">
-    </video>
-  </div>
+  <div class="hero-video"><video autoplay muted loop playsinline><source src="hero-elegant.mp4" type="video/mp4"></video></div>
   <div class="hero-arch">
     <svg viewBox="0 0 1000 900" preserveAspectRatio="none">
-      <defs><mask id="arch"><rect width="1000" height="900" fill="white"/><ellipse cx="500" cy="420" rx="290" ry="360" fill="black"/></mask></defs>
-      <rect width="1000" height="900" fill="rgba(4,6,4,0.85)" mask="url(#arch)"/>
-      <ellipse cx="500" cy="420" rx="290" ry="360" fill="none" stroke="rgba(180,148,47,0.16)" stroke-width="1.5"/>
-      <ellipse cx="500" cy="420" rx="288" ry="358" fill="none" stroke="rgba(212,196,160,0.05)" stroke-width="5"/>
+      <defs><mask id="a"><rect width="1000" height="900" fill="white"/><ellipse cx="500" cy="420" rx="300" ry="370" fill="black"/></mask></defs>
+      <rect width="1000" height="900" fill="rgba(4,6,4,0.85)" mask="url(#a)"/>
+      <ellipse cx="500" cy="420" rx="300" ry="370" fill="none" stroke="rgba(180,148,47,0.14)" stroke-width="1.5"/>
+      <ellipse cx="500" cy="420" rx="298" ry="368" fill="none" stroke="rgba(212,196,160,0.04)" stroke-width="4"/>
     </svg>
   </div>
-  <div class="hero-vignette"></div>
-  <div class="hero-light"></div>
-  <canvas id="particles"></canvas>
+  <div class="hero-veil"></div>
+  <canvas id="p"></canvas>
 
   <div class="hero-content">
-    <!-- Golden crown — SVG, not emoji -->
-    <svg class="crown-svg float float-slow" viewBox="0 0 48 36">
-      <path d="M4 32 L8 12 L16 24 L24 6 L32 24 L40 12 L44 32 Z" fill="none" stroke="var(--champagne)" stroke-width="1.2" opacity="0.6"/>
-      <circle cx="24" cy="6" r="2" fill="var(--champagne)" opacity="0.4"/>
-      <circle cx="8" cy="12" r="1.5" fill="var(--champagne)" opacity="0.3"/>
-      <circle cx="40" cy="12" r="1.5" fill="var(--champagne)" opacity="0.3"/>
-    </svg>
-
     <p class="title-label reveal" data-es>Te Invitamos a Celebrar</p>
     <p class="title-label reveal" data-en>You Are Invited to Celebrate</p>
-    <h1 class="title-script reveal d1 float float-slow">Samantha</h1>
+    <h1 class="title-script reveal d1 float float-s">Samantha</h1>
     <p class="title-display reveal d2 float float-d1">Quince Años</p>
   </div>
 </div>
@@ -271,48 +223,43 @@ body.en [data-en]{display:block}
   <button id="btn-en" onclick="setLang('en')">EN</button>
 </div>
 
-<!-- ═══════ INVITATION ═══════ -->
-<section class="section">
-  <div class="section-inner" style="text-align:center">
+<!-- ═══ INVITATION ═══ -->
+<section class="block">
+  <div class="block-inner" style="text-align:center">
 
-    <div class="ornament">
-      <svg class="ornament-svg" viewBox="0 0 24 24"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"/></svg>
-    </div>
+    <div class="orn"><span>✦</span></div>
 
     <div data-es>
       <p class="poetic reveal"><em>En un Sueño Esmeralda,</em></p>
       <p class="poetic reveal d1">donde los recuerdos flotan<br>como pétalos en la brisa,</p>
+      <p class="poetic reveal d2">una joven despierta<br>a un nuevo amanecer.</p>
     </div>
     <div data-en>
       <p class="poetic reveal"><em>In an Emerald Dream,</em></p>
       <p class="poetic reveal d1">where memories drift<br>like petals in the breeze,</p>
+      <p class="poetic reveal d2">a young woman awakens<br>to a new dawn.</p>
     </div>
 
-    <div class="ornament reveal d2">
-      <svg class="ornament-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="var(--champagne)" opacity="0.4"/></svg>
-    </div>
+    <div class="orn reveal d2"><span>◇</span></div>
 
     <div data-es>
-      <p class="poetic reveal d2">una joven despierta<br>a un nuevo amanecer.</p>
-      <p class="poetic reveal d3">Con amor y alegría,<br>te invitamos a celebrar<br>los Quince Años de</p>
+      <p class="poetic reveal d3">Con amor y alegría, te invitamos<br>a celebrar los Quince Años de</p>
     </div>
     <div data-en>
-      <p class="poetic reveal d2">a young woman awakens<br>to a new dawn.</p>
-      <p class="poetic reveal d3">With love and joy,<br>we invite you to celebrate<br>the Sweet Fifteen of</p>
+      <p class="poetic reveal d3">With love and joy, we invite you<br>to celebrate the Sweet Fifteen of</p>
     </div>
 
-    <p class="title-script reveal d4 float float-slow float-d2" style="font-size:clamp(3.5rem,9vw,6rem);margin-top:28px">Samantha</p>
+    <p class="title-script reveal d4 float float-s float-d2" style="font-size:clamp(3.2rem,8vw,5.5rem);margin-top:20px">Samantha</p>
 
   </div>
 </section>
 
-<!-- ═══════ DETAILS ═══════ -->
-<section class="section">
-  <div class="section-inner">
+<!-- ═══ DETAILS ═══ -->
+<section class="block">
+  <div class="block-inner">
 
-    <p class="title-display reveal float float-slow" style="text-align:center;margin-bottom:52px">
-      <span data-es>Detalles</span>
-      <span data-en>Details</span>
+    <p class="title-display reveal float float-s" style="text-align:center;margin-bottom:32px">
+      <span data-es>Detalles</span><span data-en>Details</span>
     </p>
 
     <div class="detail reveal">
@@ -337,34 +284,30 @@ body.en [data-en]{display:block}
       <div>
         <p class="detail-label" data-es>Lugar</p><p class="detail-label" data-en>Venue</p>
         <p class="detail-value">Fairwind Baptist Church</p>
-        <p class="detail-value" style="font-size:1rem;color:var(--muted);margin-top:4px">801 Seymour Rd · Bear, DE 19701</p>
+        <p class="detail-value" style="font-size:0.95rem;color:var(--muted);margin-top:2px">801 Seymour Rd · Bear, DE 19701</p>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ═══════ COUNTDOWN ═══════ -->
-<section class="section">
-  <div class="section-inner" style="text-align:center">
+<!-- ═══ COUNTDOWN ═══ -->
+<section class="block">
+  <div class="block-inner" style="text-align:center">
 
-    <p class="title-label reveal float float-slow" style="margin-bottom:40px">
-      <span data-es>Cuenta Regresiva</span>
-      <span data-en>Countdown</span>
+    <p class="title-label reveal float float-s" style="margin-bottom:28px">
+      <span data-es>Cuenta Regresiva</span><span data-en>Countdown</span>
     </p>
 
-    <div class="cd-grid reveal d1">
-      <div class="cd-box float float-slow"><div class="cd-num" id="cd-d">--</div><div class="cd-label" data-es>Días</div><div class="cd-label" data-en>Days</div></div>
-      <div class="cd-box float float-slow float-d1"><div class="cd-num" id="cd-h">--</div><div class="cd-label" data-es>Horas</div><div class="cd-label" data-en>Hours</div></div>
-      <div class="cd-box float float-slow float-d2"><div class="cd-num" id="cd-m">--</div><div class="cd-label" data-es>Min</div><div class="cd-label" data-en>Min</div></div>
-      <div class="cd-box float float-slow float-d3"><div class="cd-num" id="cd-s">--</div><div class="cd-label" data-es>Seg</div><div class="cd-label" data-en>Sec</div></div>
+    <div class="cd reveal d1">
+      <div class="cd-box float float-s"><div class="cd-num" id="cd-d">--</div><div class="cd-label" data-es>Días</div><div class="cd-label" data-en>Days</div></div>
+      <div class="cd-box float float-s float-d1"><div class="cd-num" id="cd-h">--</div><div class="cd-label" data-es>Horas</div><div class="cd-label" data-en>Hours</div></div>
+      <div class="cd-box float float-s float-d2"><div class="cd-num" id="cd-m">--</div><div class="cd-label" data-es>Min</div><div class="cd-label" data-en>Min</div></div>
+      <div class="cd-box float float-s float-d3"><div class="cd-num" id="cd-s">--</div><div class="cd-label" data-es>Seg</div><div class="cd-label" data-en>Sec</div></div>
     </div>
 
-    <div class="ornament reveal d2">
-      <svg class="ornament-svg" viewBox="0 0 24 24"><path d="M12 3 L14 9 L20 11 L14 13 L12 19 L10 13 L4 11 L10 9 Z"/></svg>
-    </div>
-
-    <p class="poetic reveal d3" style="font-size:1.1rem">
+    <div class="orn reveal d2"><span>◆</span></div>
+    <p class="poetic reveal d3" style="font-size:1.05rem">
       <span data-es>Hasta que la magia comience</span>
       <span data-en>Until the magic begins</span>
     </p>
@@ -372,37 +315,33 @@ body.en [data-en]{display:block}
   </div>
 </section>
 
-<!-- ═══════ RSVP ═══════ -->
-<section class="section">
-  <div class="section-inner">
+<!-- ═══ RSVP ═══ -->
+<section class="block">
+  <div class="block-inner">
 
-    <p class="title-display reveal float float-slow" style="text-align:center;margin-bottom:6px">
-      <span data-es>Confirmar Asistencia</span>
-      <span data-en>RSVP</span>
+    <p class="title-display reveal float float-s" style="text-align:center;margin-bottom:6px">
+      <span data-es>Confirmar Asistencia</span><span data-en>RSVP</span>
     </p>
+    <div class="orn reveal d1" style="margin:16px 0 28px"><span>·</span></div>
 
-    <div class="ornament reveal d1" style="margin:20px 0 40px">
-      <svg class="ornament-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5" fill="var(--champagne)" opacity="0.35"/></svg>
-    </div>
-
-    <form id="rsvp">
-      <div class="form-group reveal d2"><label class="form-label" data-es>Nombre Completo</label><label class="form-label" data-en>Full Name</label><input class="form-input" id="n" type="text" placeholder="Tu nombre..." required></div>
-      <div class="form-group reveal d2"><label class="form-label" data-es>Correo o Teléfono</label><label class="form-label" data-en>Email or Phone</label><input class="form-input" id="c" type="text" placeholder="tu@email.com"></div>
-      <div class="form-group reveal d3"><label class="form-label" data-es>Acompañantes</label><label class="form-label" data-en>Guests</label><input class="form-input" id="g" type="number" min="0" max="5" value="0"></div>
-      <div class="form-group reveal d3"><label class="form-label" data-es>Mensaje para Samantha</label><label class="form-label" data-en>Message for Samantha</label><textarea class="form-input" id="m" rows="2" placeholder="Tus deseos..."></textarea></div>
-      <div class="reveal d4" style="text-align:center;margin-top:48px">
+    <form id="f">
+      <div class="fg reveal d2"><label class="fl" data-es>Nombre Completo</label><label class="fl" data-en>Full Name</label><input class="fi" id="n" type="text" placeholder="Tu nombre..." required></div>
+      <div class="fg reveal d2"><label class="fl" data-es>Correo o Teléfono</label><label class="fl" data-en>Email or Phone</label><input class="fi" id="c" type="text" placeholder="tu@email.com"></div>
+      <div class="fg reveal d3"><label class="fl" data-es>Acompañantes</label><label class="fl" data-en>Guests</label><input class="fi" id="g" type="number" min="0" max="5" value="0"></div>
+      <div class="fg reveal d3"><label class="fl" data-es>Mensaje para Samantha</label><label class="fl" data-en>Message for Samantha</label><textarea class="fi" id="m" rows="2" placeholder="Tus deseos..."></textarea></div>
+      <div class="reveal d4" style="text-align:center;margin-top:32px">
         <button type="submit" class="btn"><span data-es>Confirmar Asistencia</span><span data-en>Send RSVP</span></button>
       </div>
     </form>
 
-    <div id="ok" style="display:none;text-align:center;padding:80px 20px">
-      <p class="poetic" style="font-size:1.6rem"><span data-es>Gracias. Te esperamos.</span><span data-en>Thank you. We cannot wait.</span></p>
+    <div id="ok" style="display:none;text-align:center;padding:60px 20px">
+      <p class="poetic" style="font-size:1.4rem"><span data-es>Gracias. Te esperamos.</span><span data-en>Thank you. We cannot wait.</span></p>
     </div>
 
   </div>
 </section>
 
-<div class="footer"><p>Samantha · Quince Años · 2026</p></div>
+<div class="foot"><p>Samantha · Quince Años · 2026</p></div>
 
 
 <script>
@@ -410,46 +349,44 @@ body.en [data-en]{display:block}
   var D=document,W=window;
 
   W.setLang=function(l){
-    D.body.className=l;
-    D.getElementById('btn-es').className=l==='es'?'active':'';
-    D.getElementById('btn-en').className=l==='en'?'active':'';
+    D.body.className=l;D.getElementById('btn-es').className=l=='es'?'active':'';
+    D.getElementById('btn-en').className=l=='en'?'active':'';
     try{localStorage.setItem('sl',l)}catch(e){}
   };
   try{setLang(localStorage.getItem('sl')||'es')}catch(e){setLang('es')}
 
-  var r=D.querySelectorAll('.reveal');
-  function chk(){for(var i=0;i<r.length;i++){var e=r[i];if(!e.classList.contains('visible')&&e.getBoundingClientRect().top<W.innerHeight*0.88)e.classList.add('visible')}}
-  W.addEventListener('scroll',chk,{passive:true});
-  setTimeout(chk,200);setTimeout(chk,600);
+  var rv=D.querySelectorAll('.reveal');
+  function ck(){for(var i=0;i<rv.length;i++){var e=rv[i];if(!e.classList.contains('on')&&e.getBoundingClientRect().top<W.innerHeight*0.9)e.classList.add('on')}}
+  W.addEventListener('scroll',ck,{passive:true});setTimeout(ck,200);setTimeout(ck,500);
 
-  var c=D.getElementById('particles'),ctx=c.getContext('2d'),p=[];
-  function rz(){c.width=W.innerWidth;c.height=W.innerHeight}rz();W.addEventListener('resize',rz);
-  for(var i=0;i<160;i++)p.push({x:Math.random()*9999,y:Math.random()*9999,s:Math.random()*2+0.5,vx:(Math.random()-0.5)*0.12,vy:(Math.random()-0.5)*0.12-0.06,life:Math.random(),ph:Math.random()*Math.PI*2,gd:Math.random()>0.5});
+  var cv=D.getElementById('p'),ctx=cv.getContext('2d'),pt=[];
+  function rz(){cv.width=W.innerWidth;cv.height=W.innerHeight}rz();W.addEventListener('resize',rz);
+  for(var i=0;i<140;i++)pt.push({x:Math.random()*9999,y:Math.random()*9999,s:Math.random()*2+0.5,vx:(Math.random()-0.5)*0.1,vy:(Math.random()-0.5)*0.1-0.05,lf:Math.random(),ph:Math.random()*Math.PI*2,gd:Math.random()>0.5});
   function dr(){
-    ctx.clearRect(0,0,c.width,c.height);
-    for(var i=0;i<p.length;i++){var o=p[i];o.x+=o.vx;o.y+=o.vy;o.life+=0.003;o.ph+=0.014;
-      if(o.life>1){o.life=0;o.x=Math.random()*c.width;o.y=c.height+20}
-      if(o.y<-20){o.y=c.height+20;o.x=Math.random()*c.width}
-      var a=(0.25+Math.sin(o.ph)*0.35)*(o.gd?0.45:0.25);
+    ctx.clearRect(0,0,cv.width,cv.height);
+    for(var i=0;i<pt.length;i++){var o=pt[i];o.x+=o.vx;o.y+=o.vy;o.lf+=0.003;o.ph+=0.012;
+      if(o.lf>1){o.lf=0;o.x=Math.random()*cv.width;o.y=cv.height+20}
+      if(o.y<-20){o.y=cv.height+20;o.x=Math.random()*cv.width}
+      var a=(0.22+Math.sin(o.ph)*0.32)*(o.gd?0.4:0.22);
       var cl=o.gd?'rgba(212,196,160,'+a.toFixed(2)+')':'rgba(0,168,107,'+a.toFixed(2)+')';
       ctx.beginPath();ctx.arc(o.x,o.y,o.s,0,Math.PI*2);ctx.fillStyle=cl;ctx.fill();
-      if(o.s>1.5){ctx.beginPath();ctx.arc(o.x,o.y,o.s*3,0,Math.PI*2);ctx.fillStyle=cl.replace(/[\d.]+\)$/,(a*0.07).toFixed(2)+')');ctx.fill()}
+      if(o.s>1.5){ctx.beginPath();ctx.arc(o.x,o.y,o.s*3,0,Math.PI*2);ctx.fillStyle=cl.replace(/[\d.]+\)$/,(a*0.06).toFixed(2)+')');ctx.fill()}
     }requestAnimationFrame(dr);
   }dr();
 
-  var t=new Date('2026-10-03T15:00:00');
-  function tk(){var df=t-new Date();if(df<=0){D.getElementById('cd-d').textContent='00';D.getElementById('cd-h').textContent='00';D.getElementById('cd-m').textContent='00';D.getElementById('cd-s').textContent='00';return}
+  var tg=new Date('2026-10-03T15:00:00');
+  function tk(){var df=tg-new Date();if(df<=0){D.getElementById('cd-d').textContent='00';D.getElementById('cd-h').textContent='00';D.getElementById('cd-m').textContent='00';D.getElementById('cd-s').textContent='00';return}
     D.getElementById('cd-d').textContent=String(Math.floor(df/86400000)).padStart(2,'0');
     D.getElementById('cd-h').textContent=String(Math.floor((df%86400000)/3600000)).padStart(2,'0');
     D.getElementById('cd-m').textContent=String(Math.floor((df%3600000)/60000)).padStart(2,'0');
     D.getElementById('cd-s').textContent=String(Math.floor((df%60000)/1000)).padStart(2,'0');
   }tk();setInterval(tk,1000);
 
-  D.getElementById('rsvp').addEventListener('submit',function(e){
+  D.getElementById('f').addEventListener('submit',function(e){
     e.preventDefault();var nm=D.getElementById('n').value.trim();if(!nm)return;
     var d={name:nm,contact:D.getElementById('c').value.trim(),guests:D.getElementById('g').value,message:D.getElementById('m').value.trim(),date:new Date().toISOString()};
     try{var l=JSON.parse(localStorage.getItem('sr')||'[]');l.push(d);localStorage.setItem('sr',JSON.stringify(l))}catch(er){}
-    D.getElementById('rsvp').style.display='none';D.getElementById('ok').style.display='block';
+    D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
   });
 })();
 </script>
