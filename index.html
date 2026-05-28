@@ -58,11 +58,11 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 .frame{
   position:fixed;inset:16px;z-index:1;pointer-events:none;
 }
-.frame .line{position:absolute;background:#d4a843;opacity:0.45}
-.frame .line.top{top:0;left:0;right:0;height:1px}
-.frame .line.bottom{bottom:0;left:0;right:0;height:1px}
-.frame .line.left{top:0;left:0;bottom:0;width:1px}
-.frame .line.right{top:0;right:0;bottom:0;width:1px}
+.frame .line{position:absolute;background:linear-gradient(90deg,transparent,#d4a843,#f0d060,#d4a843,transparent);opacity:0.7}
+.frame .line.top{top:0;left:0;right:0;height:2px}
+.frame .line.bottom{bottom:0;left:0;right:0;height:2px}
+.frame .line.left{top:0;left:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,#d4a843,#f0d060,#d4a843,transparent)}
+.frame .line.right{top:0;right:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,#d4a843,#f0d060,#d4a843,transparent)}
 .frame .corner{
   position:absolute;width:24px;height:24px;
   border:2px solid #d4a843;opacity:0.6;
@@ -126,7 +126,35 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
   50%{opacity:1;filter:drop-shadow(0 0 12px rgba(0,168,107,0.7))}
 }
 
-/* ── CROWN ── */
+/* ── SAMANTHA PHOTO ── */
+.photo-wrap{
+  text-align:center;
+  margin:20px 0 8px;
+}
+.photo-frame{
+  display:inline-block;
+  position:relative;
+  padding:8px;
+  background:linear-gradient(135deg,#d4a843,#f0d060,#d4a843);
+  border-radius:50%;
+  box-shadow:0 0 40px rgba(212,168,67,0.3),0 0 80px rgba(212,168,67,0.1);
+  animation:photoGlow 3s ease-in-out infinite;
+}
+@keyframes photoGlow{
+  0%,100%{box-shadow:0 0 30px rgba(212,168,67,0.3),0 0 60px rgba(212,168,67,0.1)}
+  50%{box-shadow:0 0 50px rgba(212,168,67,0.5),0 0 100px rgba(212,168,67,0.2)}
+}
+.photo-frame img{
+  display:block;
+  width:180px;height:180px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid #001a0d;
+}
+@media(max-width:500px){
+  .photo-frame img{width:140px;height:140px}
+  .photo-frame{padding:5px}
+}
 .crown-wrap{text-align:center;margin:16px 0 0}
 .crown{
   display:inline-block;font-size:3.5rem;
@@ -334,6 +362,14 @@ h1.name{
   </div>
 
   <div class="crown-wrap"><span class="crown" onclick="burstSparks(event)">👑</span></div>
+
+  <!-- PHOTO -->
+  <div class="photo-wrap">
+    <div class="photo-frame">
+      <img src="img_50e2c63a0ecd.jpg" alt="Samantha" onerror="this.style.display='none';this.parentElement.style.display='none'">
+    </div>
+  </div>
+
   <h1 class="name">Samantha</h1>
 
   <div class="divider">
@@ -366,7 +402,7 @@ h1.name{
 
   <div class="divider"><span class="gem">💚</span></div>
 
-  <div class="lang-es"><p class="poetic">Acompáñanos en una tarde inolvidable llena de belleza, amor, y recuerdos inolvidables.</p></div>
+  <div class="lang-es"><p class="poetic">Acompáñanos en una tarde inolvidable llena de belleza, amor, y recuerdos para siempre.</p></div>
   <div class="lang-en"><p class="poetic">Join us for an unforgettable evening filled with beauty, love, and lasting memories.</p></div>
 
   <div class="roses">🌹 ✨ 🌹</div>
@@ -417,7 +453,7 @@ h1.name{
     this.s=Math.random()*2+0.5;
     this.v=Math.random()*0.3+0.08;
     this.o=Math.random()*0.5+0.2;
-    this.t=Math.random()>0.65?'g':'e';
+    this.t=Math.random()>0.3?'g':'e';
     this.dx=(Math.random()-0.5)*0.3;
   }
   P.prototype.up=function(){
@@ -463,6 +499,16 @@ try{setLang(localStorage.getItem('slang')||'es')}catch(e){setLang('es')}
 })();
 
 // ═══ INTERACTIVE ═══
+// Mouse sparkle trail
+var mt=0;
+document.addEventListener('mousemove',function(e){
+  mt++;if(mt%3!==0)return;
+  var s=document.createElement('div');
+  s.style.cssText='position:fixed;z-index:199;pointer-events:none;left:'+(e.clientX-3)+'px;top:'+(e.clientY-3)+'px;width:6px;height:6px;border-radius:50%;background:#f0d060;box-shadow:0 0 8px #f0d060;opacity:0.8;transition:all 0.6s ease-out';
+  document.body.appendChild(s);
+  requestAnimationFrame(function(){s.style.transform='scale(0)';s.style.opacity='0'});
+  setTimeout(function(){s.remove()},700);
+});
 function burstSparks(e){
   var el=e.target,r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
   for(var i=0;i<14;i++){
