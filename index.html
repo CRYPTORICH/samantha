@@ -9,37 +9,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Great+Vibes&family=Cinzel:wght@400;500;600;700;800&family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════
-   SAMANTHA — SURREAL EMERALD DREAMSCAPE
-   Scroll-driven video · Dream-materializing text
+   SAMANTHA — SURREAL EMERALD DREAMSCAPE v3
+   Proximity-glow · 3D tilt · Per-char reveal · SVG filters
    ═══════════════════════════════════════════════ */
 :root{
-  --emerald:#005c3f;
-  --emerald-glow:#00a86b;
-  --gold:#d4a843;
-  --gold-bright:#f0d060;
-  --gold-pale:#e8cc7a;
-  --deep:#000d06;
-  --deep2:#001a0d;
-  --surface:rgba(0,20,10,0.55);
-  --glass:rgba(0,16,8,0.45);
-  --text:#fdf8f0;
-  --text-dim:rgba(253,248,240,0.7);
-  --scroll:0;
+  --emerald:#005c3f;--emerald-glow:#00a86b;
+  --gold:#d4a843;--gold-bright:#f0d060;--gold-pale:#e8cc7a;
+  --deep:#000d06;--deep2:#001a0d;
+  --surface:rgba(0,20,10,0.55);--glass:rgba(0,16,8,0.45);
+  --text:#fdf8f0;--text-dim:rgba(253,248,240,0.7);
+  --mx:0.5;--my:0.5;--scroll:0;
+}
+@property --grad-shift{
+  syntax:'<number>';initial-value:0;inherits:false;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--deep);overflow-x:hidden}
 body{
   font-family:'Cormorant Garamond',Georgia,serif;
   color:var(--text);background:var(--deep);
-  overflow-x:hidden;cursor:none;
+  overflow-x:hidden;
+}
+
+/* ═══ SVG FILTERS ═══ */
+.filter-mist{
+  filter:url(#dreamMist);
+}
+.filter-glint{
+  filter:url(#goldGlint);
 }
 
 /* ═══ CUSTOM CURSOR ═══ */
 #cursor{
   position:fixed;z-index:9999;pointer-events:none;
   width:20px;height:20px;
-  border:1.5px solid var(--gold);
-  border-radius:50%;
+  border:1.5px solid var(--gold);border-radius:50%;
   transform:translate(-50%,-50%);
   transition:width 0.25s,height 0.25s,border-color 0.3s,background 0.3s;
   mix-blend-mode:screen;
@@ -50,14 +54,25 @@ body{
   border-radius:50%;transform:translate(-50%,-50%);
   box-shadow:0 0 14px var(--gold-bright),0 0 28px var(--gold);
 }
-#cursor.hover{width:44px;height:44px;border-color:var(--gold-bright);background:rgba(240,208,96,0.06)}
-#cursor.clicked{width:12px;height:12px;border-color:#fff}
+#cursor.hover{width:48px;height:48px;border-color:var(--gold-bright);background:rgba(240,208,96,0.06)}
+#cursor.clicked{width:10px;height:10px;border-color:#fff}
 #cursor-dot.hidden{opacity:0}
 
 /* ═══ CURSOR TRAIL ═══ */
 #trail{position:fixed;inset:0;z-index:9998;pointer-events:none}
 
-/* ═══ VIDEO — SCROLL DRIVEN ═══ */
+/* ═══ PROXIMITY GLOW ═══ */
+.proximity-glow{
+  transition:box-shadow 0.2s ease-out,border-color 0.3s,transform 0.3s;
+}
+
+/* ═══ 3D TILT ═══ */
+.tilt-card{
+  transform-style:preserve-3d;
+  transition:transform 0.15s ease-out;
+}
+
+/* ═══ VIDEO ═══ */
 #video-layer{
   position:fixed;inset:0;z-index:0;overflow:hidden;
 }
@@ -84,16 +99,15 @@ body{
   box-shadow:inset 0 0 250px 100px rgba(0,13,6,0.85);
 }
 
-/* ═══ ATMOSPHERIC ORBS ═══ */
+/* ═══ ORBS ═══ */
 #orbs{position:fixed;inset:0;z-index:1;pointer-events:none}
 .orb{
   position:absolute;border-radius:50%;
-  filter:blur(70px);opacity:0.35;
-  will-change:transform;
+  filter:blur(80px);opacity:0.35;will-change:transform;
 }
-.orb.em{background:rgba(0,168,107,0.22);width:350px;height:350px}
-.orb.gd{background:rgba(212,168,67,0.12);width:220px;height:220px}
-.orb.dk{background:rgba(0,92,63,0.18);width:450px;height:450px}
+.orb.em{background:rgba(0,168,107,0.18);width:350px;height:350px}
+.orb.gd{background:rgba(212,168,67,0.1);width:220px;height:220px}
+.orb.dk{background:rgba(0,92,63,0.15);width:450px;height:450px}
 .orb:nth-child(1){top:5%;left:15%}
 .orb:nth-child(2){top:55%;left:75%}
 .orb:nth-child(3){top:28%;left:55%}
@@ -103,14 +117,14 @@ body{
 /* ═══ PARTICLES ═══ */
 #particles{position:fixed;inset:0;z-index:2;pointer-events:none}
 
-/* ═══ SCROLL PROGRESS ═══ */
+/* ═══ SCROLL BAR ═══ */
 #scroll-bar{
   position:fixed;top:0;left:0;height:2px;z-index:101;
   background:linear-gradient(90deg,var(--emerald-glow),var(--gold-bright),var(--emerald-glow));
   box-shadow:0 0 8px var(--gold),0 0 20px var(--emerald-glow);
 }
 
-/* ═══ LANGUAGE TOGGLE ═══ */
+/* ═══ LANGUAGE ═══ */
 .toggle{
   position:fixed;top:24px;right:24px;z-index:100;
   display:flex;gap:0;
@@ -132,15 +146,13 @@ body{
   color:var(--deep);font-weight:600;
   box-shadow:0 0 20px rgba(212,168,67,0.3);
 }
-
-/* ═══ LANGUAGE DISPLAY ═══ */
 .lang-es,.lang-en{display:none}
 body.es .lang-es{display:block}
 body.en .lang-en{display:block}
 body.es .lang-es-i,body.en .lang-en-i{display:inline}
 .lang-es-i,.lang-en-i{display:none}
 
-/* ═══ SECTIONS — DREAM SCENES ═══ */
+/* ═══ SCENES ═══ */
 .scene{
   position:relative;z-index:3;
   min-height:100vh;
@@ -149,28 +161,50 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 }
 .scene-inner{
   max-width:560px;width:100%;
-  transform-style:preserve-3d;
   perspective:1200px;
 }
 
-/* ═══ DREAM TEXT — materializes from mist ═══ */
-.dream-word{
+/* ═══ PER-CHARACTER DREAM TEXT ═══ */
+.dream-char{
   display:inline-block;
   opacity:0;
-  filter:blur(12px);
-  transform:translateY(30px);
+  filter:blur(10px);
+  transform:translateY(24px) scale(0.92);
   transition:
-    opacity 0.6s cubic-bezier(0.16,1,0.3,1),
-    filter 0.8s cubic-bezier(0.16,1,0.3,1),
-    transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    opacity 0.55s cubic-bezier(0.16,1,0.3,1),
+    filter 0.7s cubic-bezier(0.16,1,0.3,1),
+    transform 0.65s cubic-bezier(0.16,1,0.3,1);
 }
-.dream-word.visible{
-  opacity:1;
-  filter:blur(0px);
-  transform:translateY(0);
+.dream-char.visible{
+  opacity:1;filter:blur(0px);transform:translateY(0) scale(1);
+}
+/* Space characters don't animate */
+.dream-char.space{transition-delay:0s!important}
+
+/* ═══ TEXT SHIMMER ON HOVER ═══ */
+.shimmer-text{
+  position:relative;display:inline-block;cursor:default;
+  transition:color 0.4s;
+}
+.shimmer-text::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,
+    transparent 40%,
+    rgba(255,255,255,0.08) 45%,
+    rgba(255,255,255,0.18) 50%,
+    rgba(255,255,255,0.08) 55%,
+    transparent 60%
+  );
+  background-size:200% 100%;
+  background-position:150% 0;
+  transition:background-position 0.8s;
+  pointer-events:none;
+}
+.shimmer-text:hover::after{
+  background-position:-50% 0;
 }
 
-/* ═══ TITLE ═══ */
+/* ═══ TYPOGRAPHY ═══ */
 .title-script{
   font-family:'Great Vibes',cursive;
   font-size:clamp(4rem,10vw,7rem);
@@ -179,7 +213,6 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;
   filter:drop-shadow(0 0 40px rgba(212,168,67,0.35));
-  transition:filter 0.6s,transform 0.6s;
 }
 .title-display{
   font-family:'Playfair Display',Georgia,serif;
@@ -245,13 +278,7 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
   border:1px solid rgba(212,168,67,0.1);
   border-radius:28px;padding:44px 36px;
   box-shadow:0 8px 40px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.03);
-  transition:all 0.6s cubic-bezier(0.16,1,0.3,1);
   transform-style:preserve-3d;
-}
-.glass-card:hover{
-  border-color:rgba(212,168,67,0.28);
-  box-shadow:0 20px 56px rgba(0,0,0,0.45),0 0 48px rgba(0,168,107,0.1);
-  transform:translateY(-4px);
 }
 
 /* ═══ DIVIDER ═══ */
@@ -277,13 +304,7 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
   border:1px solid rgba(212,168,67,0.12);
   border-radius:18px;padding:20px 18px;
   min-width:74px;text-align:center;
-  transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
   transform-style:preserve-3d;
-}
-.cd-box:hover{
-  border-color:rgba(212,168,67,0.45);
-  transform:translateY(-6px) scale(1.05);
-  box-shadow:0 16px 40px rgba(0,0,0,0.45),0 0 24px rgba(212,168,67,0.15);
 }
 .cd-num{
   font-family:'Playfair Display',Georgia,serif;
@@ -303,12 +324,6 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border:1px solid rgba(212,168,67,0.07);
   border-radius:18px;
-  transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
-}
-.detail-row:hover{
-  border-color:rgba(212,168,67,0.28);
-  transform:translateX(6px);
-  box-shadow:0 10px 30px rgba(0,0,0,0.35);
 }
 .detail-icon{font-size:1.7rem;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(212,168,67,0.4))}
 .detail-info{flex:1}
@@ -319,9 +334,8 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 }
 .detail-value{font-size:1.05rem;color:var(--text);font-family:'Playfair Display',Georgia,serif}
 
-/* ═══ RSVP FORM ═══ */
+/* ═══ RSVP ═══ */
 .rsvp-form{display:flex;flex-direction:column;gap:16px}
-.form-group{display:flex;flex-direction:column;gap:6px}
 .form-label{
   font-family:'Montserrat',sans-serif;font-size:0.52rem;
   text-transform:uppercase;letter-spacing:4px;color:var(--gold-pale);
@@ -384,9 +398,6 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
   100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(0.3) rotate(var(--br))}
 }
 
-/* ═══ MOUSE PARALLAX ═══ */
-.mouse-parallax{will-change:transform}
-
 /* ═══ FOOTER ═══ */
 .footer{
   position:relative;z-index:3;
@@ -413,11 +424,38 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 </head>
 <body class="es">
 
-<!-- ═══════════ CURSOR ═══════════ -->
+<!-- ═══════ SVG FILTERS ═══════ -->
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+  <defs>
+    <!-- Dream mist: turbulence + displacement -->
+    <filter id="dreamMist" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" result="displaced">
+        <animate attributeName="scale" values="0;8;0;6;0" dur="12s" repeatCount="indefinite"/>
+      </feDisplacementMap>
+      <feGaussianBlur in="displaced" stdDeviation="0" result="blurred">
+        <animate attributeName="stdDeviation" values="0;1.5;0;1;0" dur="10s" repeatCount="indefinite"/>
+      </feGaussianBlur>
+    </filter>
+    <!-- Gold glint -->
+    <filter id="goldGlint">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.8" specularExponent="20" result="spec">
+        <fePointLight x="50%" y="50%" z="200">
+          <animate attributeName="x" values="0%;100%;0%" dur="8s" repeatCount="indefinite"/>
+        </fePointLight>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceGraphic" operator="in" result="specOut"/>
+      <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="0.3" k4="0"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- ═══════ CURSOR ═══════ -->
 <div id="cursor"></div><div id="cursor-dot"></div>
 <canvas id="trail"></canvas>
 
-<!-- ═══════════ SCROLL-DRIVEN VIDEO ═══════════ -->
+<!-- ═══════ VIDEO ═══════ -->
 <div id="video-layer">
   <video id="hero-video" autoplay muted playsinline preload="auto">
     <source src="hero-video.mp4" type="video/mp4">
@@ -426,20 +464,17 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 <div id="video-veil"></div>
 <div id="video-vignette"></div>
 
-<!-- ═══════════ ORBS ═══════════ -->
+<!-- ═══════ ORBS ═══════ -->
 <div id="orbs">
   <div class="orb em"></div><div class="orb gd"></div>
   <div class="orb dk"></div><div class="orb em"></div>
   <div class="orb gd"></div>
 </div>
 
-<!-- ═══════════ PARTICLES ═══════════ -->
+<!-- ═══════ PARTICLES ═══════ -->
 <canvas id="particles"></canvas>
-
-<!-- ═══════════ PROGRESS ═══════════ -->
 <div id="scroll-bar"></div>
 
-<!-- ═══════════ LANGUAGE ═══════════ -->
 <div class="toggle">
   <button id="btn-es" class="on" onclick="setLang('es')">ES</button>
   <button id="btn-en" onclick="setLang('en')">EN</button>
@@ -451,53 +486,43 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 <section class="scene" id="s1">
   <div class="scene-inner" style="text-align:center">
 
-    <div class="mouse-parallax" data-speed="0.04" style="margin-bottom:12px">
+    <div style="margin-bottom:12px" class="tilt-card" data-tilt="12">
       <span class="butterfly" onclick="burst('🦋',event)">🦋</span>
     </div>
 
-    <!-- Spanish invocation — words materialize individually -->
     <div class="lang-es">
-      <p class="poetic" style="margin-bottom:6px"><em><span class="dream-word">EN</span> <span class="dream-word">UN</span> <span class="dream-word">SUEÑO</span> <span class="dream-word">ESMERALDA</span></em></p>
-      <p class="poetic">
-        <span class="dream-word">donde</span> <span class="dream-word">los</span> <span class="dream-word">sueños</span> <span class="dream-word">brillan</span><br>
-        <span class="dream-word">y</span> <span class="dream-word">los</span> <span class="dream-word">recuerdos</span> <span class="dream-word">florecen,</span><br>
-        <span class="dream-word">una</span> <span class="dream-word">hermosa</span> <span class="dream-word">joven</span><br>
-        <span class="dream-word">comienza</span> <span class="dream-word">un</span> <span class="dream-word">nuevo</span> <span class="dream-word">capítulo.</span>
-      </p>
+      <p class="poetic" style="margin-bottom:6px"><em data-chars="EN UN SUEÑO ESMERALDA"></em></p>
+      <p class="poetic" data-chars="donde los sueños brillan"></p>
+      <p class="poetic" data-chars="y los recuerdos florecen,"></p>
+      <p class="poetic" data-chars="una hermosa joven"></p>
+      <p class="poetic" data-chars="comienza un nuevo capítulo."></p>
       <div class="divider"><span class="icon">💚</span></div>
-      <p class="poetic">
-        <span class="dream-word">Con</span> <span class="dream-word">amor</span> <span class="dream-word">y</span> <span class="dream-word">alegría,</span><br>
-        <span class="dream-word">te</span> <span class="dream-word">invitamos</span> <span class="dream-word">a</span> <span class="dream-word">celebrar</span><br>
-        <span class="dream-word">los</span> <span class="dream-word">Quince</span> <span class="dream-word">Años</span> <span class="dream-word">de</span>
-      </p>
+      <p class="poetic" data-chars="Con amor y alegría,"></p>
+      <p class="poetic" data-chars="te invitamos a celebrar"></p>
+      <p class="poetic" data-chars="los Quince Años de"></p>
     </div>
 
-    <!-- English -->
     <div class="lang-en">
-      <p class="poetic" style="margin-bottom:6px"><em><span class="dream-word">IN</span> <span class="dream-word">AN</span> <span class="dream-word">EMERALD</span> <span class="dream-word">DREAM</span></em></p>
-      <p class="poetic">
-        <span class="dream-word">where</span> <span class="dream-word">dreams</span> <span class="dream-word">sparkle</span><br>
-        <span class="dream-word">and</span> <span class="dream-word">memories</span> <span class="dream-word">bloom,</span><br>
-        <span class="dream-word">a</span> <span class="dream-word">beautiful</span> <span class="dream-word">young</span> <span class="dream-word">woman</span><br>
-        <span class="dream-word">begins</span> <span class="dream-word">a</span> <span class="dream-word">new</span> <span class="dream-word">chapter.</span>
-      </p>
+      <p class="poetic" style="margin-bottom:6px"><em data-chars="IN AN EMERALD DREAM"></em></p>
+      <p class="poetic" data-chars="where dreams sparkle"></p>
+      <p class="poetic" data-chars="and memories bloom,"></p>
+      <p class="poetic" data-chars="a beautiful young woman"></p>
+      <p class="poetic" data-chars="begins a new chapter."></p>
       <div class="divider"><span class="icon">💚</span></div>
-      <p class="poetic">
-        <span class="dream-word">With</span> <span class="dream-word">love</span> <span class="dream-word">and</span> <span class="dream-word">joy,</span><br>
-        <span class="dream-word">we</span> <span class="dream-word">invite</span> <span class="dream-word">you</span> <span class="dream-word">to</span> <span class="dream-word">celebrate</span><br>
-        <span class="dream-word">the</span> <span class="dream-word">Sweet</span> <span class="dream-word">Fifteen</span> <span class="dream-word">of</span>
-      </p>
+      <p class="poetic" data-chars="With love and joy,"></p>
+      <p class="poetic" data-chars="we invite you to celebrate"></p>
+      <p class="poetic" data-chars="the Sweet Fifteen of"></p>
     </div>
 
-    <div class="mouse-parallax" data-speed="0.06" style="margin-top:12px">
+    <div style="margin-top:12px" class="tilt-card" data-tilt="15">
       <span class="crown" onclick="burst('✨',event)">👑</span>
     </div>
 
-    <div class="mouse-parallax" data-speed="0.02" style="margin-top:6px">
-      <h1 class="title-script dream-word">Samantha</h1>
+    <div style="margin-top:6px" class="tilt-card" data-tilt="8">
+      <h1 class="title-script" data-chars="Samantha"></h1>
     </div>
-    <p class="title-display dream-word" style="margin-top:16px">Quince Años</p>
-    <p class="title-emerald dream-word" style="margin-top:10px">◆ ◆ ◆</p>
+    <p class="title-display" data-chars="Quince Años" style="margin-top:16px"></p>
+    <p class="title-emerald" data-chars="◆ ◆ ◆" style="margin-top:10px"></p>
 
   </div>
 </section>
@@ -507,25 +532,25 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
      ═══════════════════════════════════════ -->
 <section class="scene" id="s2">
   <div class="scene-inner">
-    <div class="glass-card mouse-parallax" data-speed="0.03" style="text-align:center">
+    <div class="glass-card tilt-card proximity-glow" data-tilt="8" style="text-align:center">
 
-      <p class="title-emerald dream-word" style="margin-bottom:10px">
-        <span class="lang-es">CUENTA REGRESIVA</span>
-        <span class="lang-en">COUNTDOWN</span>
+      <p class="title-emerald" style="margin-bottom:10px">
+        <span class="lang-es" data-chars="CUENTA REGRESIVA"></span>
+        <span class="lang-en" data-chars="COUNTDOWN"></span>
       </p>
 
       <div class="cd-grid">
-        <div class="cd-box mouse-parallax" data-speed="0.05"><div class="cd-num" id="cd-d">--</div><div class="cd-label lang-es">Días</div><div class="cd-label lang-en">Days</div></div>
-        <div class="cd-box mouse-parallax" data-speed="0.06"><div class="cd-num" id="cd-h">--</div><div class="cd-label lang-es">Horas</div><div class="cd-label lang-en">Hours</div></div>
-        <div class="cd-box mouse-parallax" data-speed="0.07"><div class="cd-num" id="cd-m">--</div><div class="cd-label lang-es">Min</div><div class="cd-label lang-en">Min</div></div>
-        <div class="cd-box mouse-parallax" data-speed="0.08"><div class="cd-num" id="cd-s">--</div><div class="cd-label lang-es">Seg</div><div class="cd-label lang-en">Sec</div></div>
+        <div class="cd-box tilt-card proximity-glow" data-tilt="15"><div class="cd-num" id="cd-d">--</div><div class="cd-label lang-es">Días</div><div class="cd-label lang-en">Days</div></div>
+        <div class="cd-box tilt-card proximity-glow" data-tilt="16"><div class="cd-num" id="cd-h">--</div><div class="cd-label lang-es">Horas</div><div class="cd-label lang-en">Hours</div></div>
+        <div class="cd-box tilt-card proximity-glow" data-tilt="17"><div class="cd-num" id="cd-m">--</div><div class="cd-label lang-es">Min</div><div class="cd-label lang-en">Min</div></div>
+        <div class="cd-box tilt-card proximity-glow" data-tilt="18"><div class="cd-num" id="cd-s">--</div><div class="cd-label lang-es">Seg</div><div class="cd-label lang-en">Sec</div></div>
       </div>
 
       <div class="divider"><span class="icon">💎</span></div>
 
-      <p class="poetic dream-word" style="font-size:0.95rem">
-        <span class="lang-es">Hasta que la magia comience</span>
-        <span class="lang-en">Until the magic begins</span>
+      <p class="poetic" style="font-size:0.95rem">
+        <span class="lang-es" data-chars="Hasta que la magia comience"></span>
+        <span class="lang-en" data-chars="Until the magic begins"></span>
       </p>
 
     </div>
@@ -537,17 +562,17 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
      ═══════════════════════════════════════ -->
 <section class="scene" id="s3">
   <div class="scene-inner">
-    <div class="glass-card mouse-parallax" data-speed="0.03">
+    <div class="glass-card tilt-card proximity-glow" data-tilt="8">
 
-      <p class="title-display dream-word" style="margin-bottom:24px;text-align:center">
-        <span class="lang-es">Detalles del Evento</span>
-        <span class="lang-en">Event Details</span>
+      <p class="title-display" style="margin-bottom:24px;text-align:center">
+        <span class="lang-es shimmer-text" data-chars="Detalles del Evento"></span>
+        <span class="lang-en shimmer-text" data-chars="Event Details"></span>
       </p>
 
-      <div class="detail-row dream-word"><span class="detail-icon">📅</span><div class="detail-info"><div class="detail-label lang-es">Fecha</div><div class="detail-label lang-en">Date</div><div class="detail-value">Sábado, 15 de Noviembre 2025</div></div></div>
-      <div class="detail-row dream-word"><span class="detail-icon">🕐</span><div class="detail-info"><div class="detail-label lang-es">Hora</div><div class="detail-label lang-en">Time</div><div class="detail-value">6:00 PM — 12:00 AM</div></div></div>
-      <div class="detail-row dream-word"><span class="detail-icon">📍</span><div class="detail-info"><div class="detail-label lang-es">Lugar</div><div class="detail-label lang-en">Venue</div><div class="detail-value lang-es">Salón de Eventos La Esmeralda</div><div class="detail-value lang-en">La Esmeralda Event Hall</div></div></div>
-      <div class="detail-row dream-word"><span class="detail-icon">👗</span><div class="detail-info"><div class="detail-label lang-es">Código de Vestimenta</div><div class="detail-label lang-en">Dress Code</div><div class="detail-value lang-es">Formal — Tonos Esmeralda y Dorado</div><div class="detail-value lang-en">Formal — Emerald &amp; Gold Tones</div></div></div>
+      <div class="detail-row proximity-glow"><span class="detail-icon">📅</span><div class="detail-info"><div class="detail-label lang-es">Fecha</div><div class="detail-label lang-en">Date</div><div class="detail-value shimmer-text">Sábado, 15 de Noviembre 2025</div></div></div>
+      <div class="detail-row proximity-glow"><span class="detail-icon">🕐</span><div class="detail-info"><div class="detail-label lang-es">Hora</div><div class="detail-label lang-en">Time</div><div class="detail-value shimmer-text">6:00 PM — 12:00 AM</div></div></div>
+      <div class="detail-row proximity-glow"><span class="detail-icon">📍</span><div class="detail-info"><div class="detail-label lang-es">Lugar</div><div class="detail-label lang-en">Venue</div><div class="detail-value lang-es shimmer-text">Salón de Eventos La Esmeralda</div><div class="detail-value lang-en shimmer-text">La Esmeralda Event Hall</div></div></div>
+      <div class="detail-row proximity-glow"><span class="detail-icon">👗</span><div class="detail-info"><div class="detail-label lang-es">Código de Vestimenta</div><div class="detail-label lang-en">Dress Code</div><div class="detail-value lang-es shimmer-text">Formal — Tonos Esmeralda y Dorado</div><div class="detail-value lang-en shimmer-text">Formal — Emerald &amp; Gold Tones</div></div></div>
 
     </div>
   </div>
@@ -558,20 +583,20 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
      ═══════════════════════════════════════ -->
 <section class="scene" id="s4">
   <div class="scene-inner">
-    <div class="glass-card mouse-parallax" data-speed="0.03">
+    <div class="glass-card tilt-card proximity-glow" data-tilt="6">
 
-      <p class="title-display dream-word" style="margin-bottom:6px;text-align:center">
-        <span class="lang-es">Confirma tu Asistencia</span>
-        <span class="lang-en">RSVP</span>
+      <p class="title-display" style="margin-bottom:6px;text-align:center">
+        <span class="lang-es shimmer-text" data-chars="Confirma tu Asistencia"></span>
+        <span class="lang-en shimmer-text" data-chars="RSVP"></span>
       </p>
-      <p class="title-emerald dream-word" style="margin-bottom:24px">✦</p>
+      <p class="title-emerald" data-chars="✦" style="margin-bottom:24px"></p>
 
       <form id="rsvp-form-el" class="rsvp-form">
-        <div class="form-group dream-word"><label class="form-label lang-es">Nombre Completo</label><label class="form-label lang-en">Full Name</label><input class="form-input" id="rsvp-name" type="text" placeholder="Tu nombre..." required></div>
-        <div class="form-group dream-word"><label class="form-label lang-es">Correo o Teléfono</label><label class="form-label lang-en">Email or Phone</label><input class="form-input" id="rsvp-contact" type="text" placeholder="tu@email.com"></div>
-        <div class="form-group dream-word"><label class="form-label lang-es">Acompañantes</label><label class="form-label lang-en">Guests</label><input class="form-input" id="rsvp-guests" type="number" min="0" max="5" value="0"></div>
-        <div class="form-group dream-word"><label class="form-label lang-es">Mensaje para Samantha</label><label class="form-label lang-en">Message for Samantha</label><textarea class="form-input" id="rsvp-msg" rows="3" placeholder="Tus deseos..."></textarea></div>
-        <div class="dream-word"><button type="submit" class="btn-magical"><span class="lang-es">✦ Confirmar Asistencia ✦</span><span class="lang-en">✦ Send RSVP ✦</span></button></div>
+        <div class="form-group"><label class="form-label lang-es">Nombre Completo</label><label class="form-label lang-en">Full Name</label><input class="form-input proximity-glow" id="rsvp-name" type="text" placeholder="Tu nombre..." required></div>
+        <div class="form-group"><label class="form-label lang-es">Correo o Teléfono</label><label class="form-label lang-en">Email or Phone</label><input class="form-input proximity-glow" id="rsvp-contact" type="text" placeholder="tu@email.com"></div>
+        <div class="form-group"><label class="form-label lang-es">Acompañantes</label><label class="form-label lang-en">Guests</label><input class="form-input proximity-glow" id="rsvp-guests" type="number" min="0" max="5" value="0"></div>
+        <div class="form-group"><label class="form-label lang-es">Mensaje para Samantha</label><label class="form-label lang-en">Message for Samantha</label><textarea class="form-input proximity-glow" id="rsvp-msg" rows="3" placeholder="Tus deseos..."></textarea></div>
+        <div><button type="submit" class="btn-magical proximity-glow"><span class="lang-es">✦ Confirmar Asistencia ✦</span><span class="lang-en">✦ Send RSVP ✦</span></button></div>
       </form>
 
       <div id="rsvp-success" class="success-msg" style="display:none">
@@ -591,118 +616,153 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 
 
 <!-- ═══════════════════════════════════════
-     JAVASCRIPT — THE DREAM ENGINE
+     JAVASCRIPT — THE DREAM ENGINE v3
      ═══════════════════════════════════════ -->
 <script>
 (function(){
-  var D = document;
-  var W = window;
-  var body = D.body;
-  var video = D.getElementById('hero-video');
-  var scrollBar = D.getElementById('scroll-bar');
-  var cursor = D.getElementById('cursor');
-  var cursorDot = D.getElementById('cursor-dot');
-  var trailC = D.getElementById('trail');
-  var trailX = trailC.getContext('2d');
-  var particlesC = D.getElementById('particles');
-  var pX = particlesC.getContext('2d');
+  var D=document,W=window,body=D.body;
+  var video=D.getElementById('hero-video');
+  var cursor=D.getElementById('cursor'),cDot=D.getElementById('cursor-dot');
+  var trailC=D.getElementById('trail'),tX=trailC.getContext('2d');
+  var pC=D.getElementById('particles'),pX=pC.getContext('2d');
+  var scrollBar=D.getElementById('scroll-bar');
 
-  var mouseX = -100, mouseY = -100;
-  var cX = -100, cY = -100;
-  var trailPts = [];
-  var isTouch = false;
-  var scrollY = 0;
-  var totalH = 1;
-  var videoReady = false;
+  var mx=-100,my=-100,cx=-100,cy=-100;
+  var trailPts=[];
+  var isTouch=false,scrollY=0,totalH=1,vReady=false;
 
-  /* ═══ RESIZE ═══ */
   function resize(){
-    trailC.width = W.innerWidth;
-    trailC.height = W.innerHeight;
-    particlesC.width = W.innerWidth;
-    particlesC.height = W.innerHeight;
-    totalH = Math.max(D.documentElement.scrollHeight - W.innerHeight, 1);
+    trailC.width=W.innerWidth;trailC.height=W.innerHeight;
+    pC.width=W.innerWidth;pC.height=W.innerHeight;
+    totalH=Math.max(D.documentElement.scrollHeight-W.innerHeight,1);
   }
-  resize();
-  W.addEventListener('resize',resize);
+  resize();W.addEventListener('resize',resize);
 
-  /* ═══ SCROLL ═══ */
+  /* ═══ SCROLL — drives video + reveals chars ═══ */
   W.addEventListener('scroll',function(){
-    scrollY = W.scrollY || W.pageYOffset;
-    totalH = Math.max(D.documentElement.scrollHeight - W.innerHeight, 1);
-    var pct = Math.min(scrollY/totalH, 1);
-
-    // Scroll bar
-    scrollBar.style.width = (pct*100)+'%';
-
-    // Video scrubbing — scroll drives the video
-    if(videoReady && video.duration && video.duration>0){
-      video.currentTime = pct * video.duration;
-    }
-
-    // Animate dream words based on their position
-    var words = D.querySelectorAll('.dream-word:not(.visible)');
-    for(var i=0;i<words.length;i++){
-      var rect = words[i].getBoundingClientRect();
-      var triggerPoint = W.innerHeight * 0.85;
-      if(rect.top < triggerPoint){
-        words[i].style.transitionDelay = (Math.random()*0.3).toFixed(2)+'s';
-        words[i].classList.add('visible');
-      }
-    }
+    scrollY=W.scrollY||W.pageYOffset;
+    totalH=Math.max(D.documentElement.scrollHeight-W.innerHeight,1);
+    var pct=Math.min(scrollY/totalH,1);
+    scrollBar.style.width=(pct*100)+'%';
+    // Video scrubbing
+    if(vReady&&video.duration>0) video.currentTime=pct*video.duration;
+    // Reveal chars
+    revealChars();
   },{passive:true});
 
   /* ═══ VIDEO READY ═══ */
-  video.addEventListener('loadedmetadata',function(){
-    videoReady = true;
-    video.pause(); // We control playback via scroll
-  });
-  // Also set ready if metadata already loaded
-  if(video.readyState >= 1){
-    videoReady = true;
-    video.pause();
-  }
+  video.addEventListener('loadedmetadata',function(){vReady=true;video.pause()});
+  if(video.readyState>=1){vReady=true;video.pause()}
 
-  /* ═══ MOUSE ═══ */
-  D.addEventListener('mousemove',function(e){
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
+  /* ═══ PER-CHARACTER TEXT BUILDER ═══ */
+  function buildChars(el){
+    var text = el.getAttribute('data-chars');
+    if(!text)return;
+    var html='';
+    for(var i=0;i<text.length;i++){
+      var c=text[i];
+      var cls='dream-char';
+      if(c===' ')cls+=' space';
+      var isEm = el.tagName==='EM';
+      html+='<span class="'+cls+'" style="transition-delay:'+(i*0.025).toFixed(3)+'s">'+c+'</span>';
+    }
+    el.innerHTML=html;
+    if(el.tagName==='EM'){
+      // Wrap in shimmer-text too
+      el.classList.add('shimmer-text');
+    }
+  }
+  var charEls = D.querySelectorAll('[data-chars]');
+  for(var i=0;i<charEls.length;i++) buildChars(charEls[i]);
+
+  function revealChars(){
+    var chars = D.querySelectorAll('.dream-char:not(.visible)');
+    for(var i=0;i<chars.length;i++){
+      var rect=chars[i].getBoundingClientRect();
+      if(rect.top<W.innerHeight*0.82) chars[i].classList.add('visible');
+    }
+  }
+  setTimeout(revealChars,300);
+  setTimeout(revealChars,800);
+
+  /* ═══ MOUSE + CURSOR ═══ */
+  D.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY});
   D.addEventListener('touchstart',function(){isTouch=true});
   D.addEventListener('mousemove',function(){isTouch=false});
 
   D.addEventListener('mouseover',function(e){
-    var t = e.target;
-    if(/BUTTON|A|INPUT|TEXTAREA/.test(t.tagName)||t.classList.contains('butterfly')||t.classList.contains('crown')){
-      cursor.classList.add('hover');cursorDot.classList.add('hidden');
-    }
+    var t=e.target;
+    if(/BUTTON|A|INPUT|TEXTAREA/.test(t.tagName)||t.classList.contains('butterfly')||t.classList.contains('crown')){cursor.classList.add('hover');cDot.classList.add('hidden')}
   });
   D.addEventListener('mouseout',function(e){
-    var t = e.target;
-    if(/BUTTON|A|INPUT|TEXTAREA/.test(t.tagName)||t.classList.contains('butterfly')||t.classList.contains('crown')){
-      cursor.classList.remove('hover');cursorDot.classList.remove('hidden');
-    }
+    var t=e.target;
+    if(/BUTTON|A|INPUT|TEXTAREA/.test(t.tagName)||t.classList.contains('butterfly')||t.classList.contains('crown')){cursor.classList.remove('hover');cDot.classList.remove('hidden')}
   });
   D.addEventListener('mousedown',function(){cursor.classList.add('clicked')});
   D.addEventListener('mouseup',function(){cursor.classList.remove('clicked')});
 
+  /* ═══ PROXIMITY GLOW ═══ */
+  var glowEls = D.querySelectorAll('.proximity-glow');
+  D.addEventListener('mousemove',function(e){
+    if(isTouch)return;
+    for(var i=0;i<glowEls.length;i++){
+      var el=glowEls[i];
+      var rect=el.getBoundingClientRect();
+      var cxEl=rect.left+rect.width/2;
+      var cyEl=rect.top+rect.height/2;
+      var dx=e.clientX-cxEl,dy=e.clientY-cyEl;
+      var dist=Math.sqrt(dx*dx+dy*dy);
+      var maxDist=300;
+      if(dist<maxDist){
+        var intensity=(1-dist/maxDist);
+        var glowSize=Math.round(intensity*30);
+        var glowAlpha=(intensity*0.25).toFixed(2);
+        el.style.boxShadow='0 0 '+glowSize+'px rgba(212,168,67,'+glowAlpha+'), 0 0 '+(glowSize*2)+'px rgba(0,168,107,'+(intensity*0.12).toFixed(2)+')';
+        el.style.borderColor='rgba(212,168,67,'+(0.1+intensity*0.3).toFixed(2)+')';
+      }else{
+        el.style.boxShadow='';
+        el.style.borderColor='';
+      }
+    }
+  },{passive:true});
+
+  /* ═══ 3D TILT ═══ */
+  var tiltEls = D.querySelectorAll('.tilt-card');
+  D.addEventListener('mousemove',function(e){
+    if(isTouch)return;
+    for(var i=0;i<tiltEls.length;i++){
+      var el=tiltEls[i];
+      var rect=el.getBoundingClientRect();
+      var cxEl=rect.left+rect.width/2;
+      var cyEl=rect.top+rect.height/2;
+      var dx=(e.clientX-cxEl)/rect.width;
+      var dy=(e.clientY-cyEl)/rect.height;
+      var maxTilt=parseFloat(el.getAttribute('data-tilt'))||10;
+      var rx=dy*maxTilt;
+      var ry=-dx*maxTilt;
+      // Also proximity lift
+      var dist=Math.sqrt(Math.pow(e.clientX-cxEl,2)+Math.pow(e.clientY-cyEl,2));
+      var maxDist=400;
+      var lift=dist<maxDist?Math.round((1-dist/maxDist)*8):0;
+      el.style.transform='perspective(1200px) rotateX('+rx.toFixed(1)+'deg) rotateY('+ry.toFixed(1)+'deg) translateZ('+lift+'px)';
+    }
+  },{passive:true});
+
+  /* ═══ CURSOR LOOP ═══ */
   function cursorLoop(){
     if(!isTouch){
-      cX += (mouseX-cX)*0.22;
-      cY += (mouseY-cY)*0.22;
-      cursor.style.left = cX+'px';
-      cursor.style.top = cY+'px';
-      cursorDot.style.left = mouseX+'px';
-      cursorDot.style.top = mouseY+'px';
-      trailPts.push({x:mouseX,y:mouseY,life:1});
+      cx+=(mx-cx)*0.2;cy+=(my-cy)*0.2;
+      cursor.style.left=cx+'px';cursor.style.top=cy+'px';
+      cDot.style.left=mx+'px';cDot.style.top=my+'px';
+      trailPts.push({x:mx,y:my,life:1});
       if(trailPts.length>50)trailPts.shift();
     }
-    trailX.clearRect(0,0,trailC.width,trailC.height);
+    tX.clearRect(0,0,trailC.width,trailC.height);
     for(var i=1;i<trailPts.length;i++){
-      var a = trailPts[i], b = trailPts[i-1];
-      trailX.beginPath();trailX.moveTo(b.x,b.y);trailX.lineTo(a.x,a.y);
-      trailX.strokeStyle = 'rgba(240,208,96,'+(i/trailPts.length*0.35)+')';
-      trailX.lineWidth=1.5;trailX.stroke();
+      var a=trailPts[i],b=trailPts[i-1];
+      tX.beginPath();tX.moveTo(b.x,b.y);tX.lineTo(a.x,a.y);
+      tX.strokeStyle='rgba(240,208,96,'+(i/trailPts.length*0.35)+')';
+      tX.lineWidth=1.5;tX.stroke();
     }
     for(var j=trailPts.length-1;j>=0;j--){
       trailPts[j].life-=0.025;
@@ -712,46 +772,28 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
   }
   cursorLoop();
 
-  /* ═══ MOUSE PARALLAX — elements shift with cursor ═══ */
-  var parallaxEls = D.querySelectorAll('.mouse-parallax');
-  D.addEventListener('mousemove',function(e){
-    if(isTouch)return;
-    var cx = e.clientX/W.innerWidth - 0.5;
-    var cy = e.clientY/W.innerHeight - 0.5;
-    for(var i=0;i<parallaxEls.length;i++){
-      var el = parallaxEls[i];
-      var speed = parseFloat(el.getAttribute('data-speed'))||0.03;
-      var tx = cx * speed * 80;
-      var ty = cy * speed * 80;
-      el.style.transform = 'translate3d('+tx+'px,'+ty+'px,0)';
-    }
-  },{passive:true});
-
   /* ═══ PARTICLES ═══ */
-  var parts = [];
-  for(var i=0;i<90;i++){
+  var parts=[];
+  for(var i=0;i<100;i++){
     parts.push({
-      x:Math.random()*particlesC.width,
-      y:Math.random()*particlesC.height,
+      x:Math.random()*pC.width,y:Math.random()*pC.height,
       s:Math.random()*3.5+0.8,
-      sx:(Math.random()-0.5)*0.25,
-      sy:(Math.random()-0.5)*0.25-0.15,
-      life:Math.random(),
-      pulse:Math.random()*Math.PI*2,
+      sx:(Math.random()-0.5)*0.2,sy:(Math.random()-0.5)*0.2-0.12,
+      life:Math.random(),pulse:Math.random()*Math.PI*2,
       gold:Math.random()>0.35
     });
   }
   function partsLoop(){
-    pX.clearRect(0,0,particlesC.width,particlesC.height);
+    pX.clearRect(0,0,pC.width,pC.height);
     for(var i=0;i<parts.length;i++){
-      var p = parts[i];
+      var p=parts[i];
       p.x+=p.sx;p.y+=p.sy;p.life+=0.004;p.pulse+=0.018;
-      if(p.life>1){p.life=0;p.x=Math.random()*particlesC.width;p.y=particlesC.height+30}
-      if(p.y<-30){p.y=particlesC.height+30;p.x=Math.random()*particlesC.width}
-      if(p.x<-20)p.x=particlesC.width+20;
-      if(p.x>particlesC.width+20)p.x=-20;
-      var alpha = (0.45+Math.sin(p.pulse)*0.55)*(p.gold?0.75:0.45);
-      var col = p.gold?'rgba(240,208,96,'+alpha+')':'rgba(0,168,107,'+alpha+')';
+      if(p.life>1){p.life=0;p.x=Math.random()*pC.width;p.y=pC.height+30}
+      if(p.y<-30){p.y=pC.height+30;p.x=Math.random()*pC.width}
+      if(p.x<-20)p.x=pC.width+20;
+      if(p.x>pC.width+20)p.x=-20;
+      var alpha=(0.45+Math.sin(p.pulse)*0.55)*(p.gold?0.75:0.45);
+      var col=p.gold?'rgba(240,208,96,'+alpha+')':'rgba(0,168,107,'+alpha+')';
       pX.beginPath();pX.arc(p.x,p.y,p.s,0,Math.PI*2);pX.fillStyle=col;pX.fill();
       if(p.s>2){
         pX.beginPath();pX.arc(p.x,p.y,p.s*3,0,Math.PI*2);
@@ -763,64 +805,40 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
   partsLoop();
 
   /* ═══ ORB PARALLAX ═══ */
+  var orbs=D.querySelectorAll('.orb');
   W.addEventListener('scroll',function(){
-    var s = scrollY;
-    var orbs = D.querySelectorAll('.orb');
     for(var i=0;i<orbs.length;i++){
-      var sp = 0.02+i*0.025;
-      orbs[i].style.transform = 'translate3d(0,'+(s*sp)+'px,0)';
+      orbs[i].style.transform='translate3d(0,'+(scrollY*(0.02+i*0.025))+'px,0)';
     }
   },{passive:true});
 
-  /* ═══ DREAM WORD REVEAL — also check on load ═══ */
-  function revealWords(){
-    var words = D.querySelectorAll('.dream-word:not(.visible)');
-    for(var i=0;i<words.length;i++){
-      var rect = words[i].getBoundingClientRect();
-      if(rect.top < W.innerHeight*0.85){
-        words[i].style.transitionDelay = (Math.random()*0.35).toFixed(2)+'s';
-        words[i].classList.add('visible');
-      }
-    }
-  }
-  // Check on load + after small delay
-  setTimeout(revealWords,200);
-  setTimeout(revealWords,600);
-
   /* ═══ LANGUAGE ═══ */
-  W.setLang = function(l){
-    body.className = l;
-    D.getElementById('btn-es').className = l==='es'?'on':'';
-    D.getElementById('btn-en').className = l==='en'?'on':'';
+  W.setLang=function(l){
+    body.className=l;
+    D.getElementById('btn-es').className=l==='es'?'on':'';
+    D.getElementById('btn-en').className=l==='en'?'on':'';
     try{localStorage.setItem('samantha-lang',l)}catch(e){}
   };
   try{setLang(localStorage.getItem('samantha-lang')||'es')}catch(e){setLang('es')}
 
   /* ═══ COUNTDOWN ═══ */
-  var target = new Date('2025-11-15T18:00:00');
+  var target=new Date('2025-11-15T18:00:00');
   function tick(){
-    var diff = target - new Date();
-    if(diff<=0){
-      D.getElementById('cd-d').textContent='00';D.getElementById('cd-h').textContent='00';
-      D.getElementById('cd-m').textContent='00';D.getElementById('cd-s').textContent='00';return;
-    }
-    var dd = Math.floor(diff/86400000);
-    var hh = Math.floor((diff%86400000)/3600000);
-    var mm = Math.floor((diff%3600000)/60000);
-    var ss = Math.floor((diff%60000)/1000);
-    D.getElementById('cd-d').textContent=String(dd).padStart(2,'0');
-    D.getElementById('cd-h').textContent=String(hh).padStart(2,'0');
-    D.getElementById('cd-m').textContent=String(mm).padStart(2,'0');
-    D.getElementById('cd-s').textContent=String(ss).padStart(2,'0');
+    var diff=target-new Date();
+    if(diff<=0){D.getElementById('cd-d').textContent='00';D.getElementById('cd-h').textContent='00';D.getElementById('cd-m').textContent='00';D.getElementById('cd-s').textContent='00';return}
+    D.getElementById('cd-d').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+    D.getElementById('cd-h').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+    D.getElementById('cd-m').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    D.getElementById('cd-s').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
   }
   tick();setInterval(tick,1000);
 
   /* ═══ RSVP ═══ */
   D.getElementById('rsvp-form-el').addEventListener('submit',function(e){
     e.preventDefault();
-    var name = D.getElementById('rsvp-name').value.trim();
+    var name=D.getElementById('rsvp-name').value.trim();
     if(!name)return;
-    var r = {name:name,contact:D.getElementById('rsvp-contact').value.trim(),guests:D.getElementById('rsvp-guests').value,message:D.getElementById('rsvp-msg').value.trim(),date:new Date().toISOString()};
+    var r={name:name,contact:D.getElementById('rsvp-contact').value.trim(),guests:D.getElementById('rsvp-guests').value,message:D.getElementById('rsvp-msg').value.trim(),date:new Date().toISOString()};
     try{var list=JSON.parse(localStorage.getItem('samantha-rsvp')||'[]');list.push(r);localStorage.setItem('samantha-rsvp',JSON.stringify(list))}catch(err){}
     D.getElementById('rsvp-form-el').style.display='none';
     D.getElementById('rsvp-success').style.display='block';
@@ -828,26 +846,25 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
   });
 
   /* ═══ BURST ═══ */
-  W.burst = function(emoji,evt){
-    var cx = evt?evt.clientX:W.innerWidth/2;
-    var cy = evt?evt.clientY:W.innerHeight/2;
-    var count = emoji==='🦋'?10:14;
-    var icons = emoji==='🦋'?['🦋','🦋','🦋','🦋','🦋','🦋','🦋','🦋','🦋','🦋']:null;
+  W.burst=function(emoji,evt){
+    var cx=evt?evt.clientX:W.innerWidth/2;
+    var cy=evt?evt.clientY:W.innerHeight/2;
+    var count=emoji==='🦋'?12:16;
+    var icons=emoji==='🦋'?['🦋','🦋','🦋','🦋','🦋','🦋','🦋','🦋','🦋','🦋','🦋','🦋']:null;
     for(var i=0;i<count;i++){
-      var el = D.createElement('span');el.className='burst-p';
-      el.textContent = icons?icons[i]:emoji;
+      var el=D.createElement('span');el.className='burst-p';
+      el.textContent=icons?icons[i]:emoji;
       el.style.left=cx+'px';el.style.top=cy+'px';
-      el.style.setProperty('--bx',((Math.random()-0.5)*240)+'px');
-      el.style.setProperty('--by',((Math.random()-0.5)*240-100)+'px');
+      el.style.setProperty('--bx',((Math.random()-0.5)*260)+'px');
+      el.style.setProperty('--by',((Math.random()-0.5)*260-110)+'px');
       el.style.setProperty('--br',(Math.random()*720-360)+'deg');
       el.style.animationDuration=(0.8+Math.random()*1)+'s';
       D.body.appendChild(el);
-      setTimeout(function(){el.remove()},1800);
+      setTimeout(function(){el.remove()},1900);
     }
   };
 
-  // Relayout after font load
-  D.fonts.ready.then(function(){resize();revealWords()});
+  D.fonts.ready.then(function(){resize();revealChars()});
 
 })();
 </script>
