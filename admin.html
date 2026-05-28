@@ -4,95 +4,95 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Samantha — Guest Registry</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Cinzel:wght@400;600;700&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html{background:#001a0d}
+html{background:#000d06}
 body{
-  background:#001a0d;
-  color:#fdf8f0;
-  font-family:'Cormorant Garamond',Georgia,serif;
-  min-height:100vh;
+  background:radial-gradient(ellipse at 50% 0%,#003d26 0%,#001a0d 60%,#000d06 100%);
+  color:#fdf8f0;font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;
 }
-.container{max-width:900px;margin:0 auto;padding:50px 24px 80px}
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.5}
+.container{position:relative;z-index:2;max-width:960px;margin:0 auto;padding:50px 28px 80px}
 
-/* Language toggle */
-.toggle{text-align:right;padding:0 24px 12px}
+.toggle{text-align:right;padding:0 28px 12px}
 .toggle button{
-  font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:2px;
-  padding:8px 16px;border:1px solid #d4a843;background:transparent;
-  color:#d4a843;cursor:pointer;margin-left:4px;text-transform:uppercase;
+  font-family:'Montserrat',sans-serif;font-size:0.62rem;letter-spacing:2px;
+  padding:10px 18px;border:1px solid rgba(212,168,67,0.3);background:rgba(0,0,0,0.4);
+  color:rgba(253,248,240,0.5);cursor:pointer;margin-left:3px;text-transform:uppercase;font-weight:600;
+  transition:all 0.3s;
 }
-.toggle button.on{background:#d4a843;color:#001a0d}
-
+.toggle button.on{background:linear-gradient(135deg,#d4a843,#f0d060);color:#001a0d;border-color:#d4a843}
 .lang-es,.lang-en{display:none}
 body.es .lang-es{display:block}
 body.en .lang-en{display:block}
 body.es .lang-es-i,body.en .lang-en-i{display:inline}
 .lang-es-i,.lang-en-i{display:none}
 
-/* Header */
-.header{
-  text-align:center;margin-bottom:36px;padding-bottom:24px;
-  border-bottom:1px solid rgba(212,168,67,0.15);
-}
+.header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1px solid rgba(212,168,67,0.12)}
 .header h1{
-  font-family:'Great Vibes',cursive;font-size:3rem;
-  color:#f0d060;font-weight:400;margin-bottom:4px;
+  font-family:'Great Vibes',cursive;font-size:3.2rem;font-weight:400;
+  background:linear-gradient(180deg,#f0d060,#d4a843,#e8cc7a);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 16px rgba(212,168,67,0.3));margin-bottom:4px;
 }
-.header p{
-  font-family:'Montserrat',sans-serif;font-size:0.65rem;
-  letter-spacing:3px;color:#d4a843;text-transform:uppercase;
-}
+.header p{font-family:'Montserrat',sans-serif;font-size:0.6rem;letter-spacing:4px;color:#d4a843;text-transform:uppercase}
 
-/* Stats */
-.stats{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+.stats{display:flex;gap:14px;margin-bottom:32px;flex-wrap:wrap}
 .stat{
-  flex:1;min-width:130px;background:rgba(0,0,0,0.4);
-  border:1px solid rgba(212,168,67,0.15);padding:22px 14px;text-align:center;
+  flex:1;min-width:140px;background:rgba(0,0,0,0.45);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(212,168,67,0.15);padding:24px 16px;text-align:center;
+  transition:all 0.3s;
 }
-.stat-num{font-family:'Montserrat',sans-serif;font-size:2.2rem;font-weight:700;color:#f0d060;line-height:1}
-.stat-label{font-family:'Montserrat',sans-serif;font-size:0.55rem;letter-spacing:2px;color:#d4a843;text-transform:uppercase;margin-top:6px}
+.stat:hover{border-color:rgba(212,168,67,0.4);transform:translateY(-3px)}
+.stat-num{font-family:'Cinzel',serif;font-size:2.4rem;font-weight:700;color:#f0d060;line-height:1}
+.stat-label{font-family:'Montserrat',sans-serif;font-size:0.55rem;letter-spacing:3px;color:#d4a843;text-transform:uppercase;margin-top:8px}
 
-/* Actions */
-.actions{display:flex;gap:10px;justify-content:center;margin-bottom:32px;flex-wrap:wrap}
+.actions{display:flex;gap:10px;justify-content:center;margin-bottom:36px;flex-wrap:wrap}
 .btn{
-  font-family:'Montserrat',sans-serif;font-size:0.6rem;letter-spacing:2px;
-  text-transform:uppercase;font-weight:600;padding:10px 22px;
-  border:1px solid rgba(212,168,67,0.25);background:rgba(0,0,0,0.4);
-  color:#d4a843;cursor:pointer;
+  font-family:'Montserrat',sans-serif;font-size:0.58rem;letter-spacing:3px;
+  text-transform:uppercase;font-weight:600;padding:12px 26px;
+  border:1px solid rgba(212,168,67,0.2);background:rgba(0,0,0,0.4);
+  color:#d4a843;cursor:pointer;transition:all 0.3s;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
 }
-.btn.gold{background:#d4a843;color:#001a0d;border-color:#d4a843}
-.btn.red{border-color:rgba(248,113,113,0.3);color:#f87171}
+.btn:hover{background:rgba(212,168,67,0.08);border-color:rgba(212,168,67,0.5)}
+.btn.gold{background:linear-gradient(135deg,#d4a843,#f0d060);color:#001a0d;border-color:transparent;box-shadow:0 4px 16px rgba(212,168,67,0.2)}
+.btn.gold:hover{box-shadow:0 6px 24px rgba(212,168,67,0.35);transform:translateY(-2px)}
+.btn.gold:active{transform:scale(0.97)}
+.btn.red{border-color:rgba(248,113,113,0.2);color:#f87171}
+.btn.red:hover{background:rgba(248,113,113,0.08)}
 
-/* Entries */
 .entry{
-  background:rgba(0,0,0,0.35);border:1px solid rgba(212,168,67,0.1);
-  padding:20px 24px;margin-bottom:10px;
+  background:rgba(0,0,0,0.38);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(212,168,67,0.1);padding:22px 28px;margin-bottom:10px;
+  transition:all 0.3s;
 }
+.entry:hover{border-color:rgba(212,168,67,0.25);background:rgba(0,0,0,0.45);transform:translateX(4px)}
 .entry-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px}
-.entry-name{font-size:1.2rem;color:#e8cc7a;font-weight:600}
+.entry-name{font-size:1.25rem;color:#e8cc7a;font-weight:600}
 .badge{
   font-family:'Montserrat',sans-serif;font-size:0.5rem;letter-spacing:2px;
-  text-transform:uppercase;padding:4px 12px;font-weight:600;
+  text-transform:uppercase;padding:5px 14px;font-weight:600;
 }
-.b-yes{background:rgba(0,180,100,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.15)}
-.b-no{background:rgba(200,80,80,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.15)}
-.b-maybe{background:rgba(200,160,40,0.15);color:#facc15;border:1px solid rgba(250,204,21,0.15)}
-.entry-info{margin-top:8px;font-size:0.9rem;color:rgba(253,248,240,0.6);display:flex;gap:20px;flex-wrap:wrap}
-.entry-msg{margin-top:8px;font-style:italic;color:rgba(253,248,240,0.4);font-size:0.9rem;padding:8px 0 0;border-top:1px solid rgba(212,168,67,0.06)}
-.entry-time{font-family:'Montserrat',sans-serif;font-size:0.5rem;color:rgba(253,248,240,0.25);margin-top:8px}
-
-.empty{text-align:center;padding:80px 20px;opacity:0.5}
-.empty .icon{font-size:3rem;margin-bottom:12px;display:block}
-
-.back{text-align:center;margin-top:36px;padding-top:20px;border-top:1px solid rgba(212,168,67,0.08);font-size:0.7rem;opacity:0.35}
-.back a{color:#f5e6c8}
-
+.b-yes{background:rgba(0,180,100,0.12);color:#4ade80;border:1px solid rgba(74,222,128,0.15)}
+.b-no{background:rgba(200,80,80,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.15)}
+.b-maybe{background:rgba(200,160,40,0.12);color:#facc15;border:1px solid rgba(250,204,21,0.15)}
+.entry-info{margin-top:8px;font-size:0.9rem;color:rgba(253,248,240,0.55);display:flex;gap:24px;flex-wrap:wrap}
+.entry-msg{margin-top:8px;font-style:italic;color:rgba(253,248,240,0.35);font-size:0.9rem;padding:8px 0 0;border-top:1px solid rgba(212,168,67,0.06)}
+.entry-time{font-family:'Montserrat',sans-serif;font-size:0.5rem;color:rgba(253,248,240,0.2);margin-top:10px;letter-spacing:1px}
+.empty{text-align:center;padding:80px 20px;opacity:0.4}
+.empty .icon{font-size:3.5rem;margin-bottom:14px;display:block}
+.back{text-align:center;margin-top:40px;padding-top:24px;border-top:1px solid rgba(212,168,67,0.08);font-size:0.7rem;opacity:0.3;transition:opacity 0.3s}
+.back:hover{opacity:0.6}
+.back a{color:#f5e6c8;text-decoration:none}
 @media(max-width:600px){.stats{flex-direction:column}.entry-top{flex-direction:column}}
 </style>
 </head>
 <body class="es">
+
+<canvas id="particles"></canvas>
 
 <div class="toggle">
   <button id="btn-es" class="on" onclick="setLang('es')">ES</button>
@@ -102,22 +102,31 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 <div class="container">
   <div class="header">
     <h1>Samantha</h1>
-    <p><span class="lang-es">Registro de Invitados — Quince Años</span><span class="lang-en">Guest Registry — Sweet Fifteen</span></p>
+    <p><span class="lang-es">Registro de Invitados</span><span class="lang-en">Guest Registry</span></p>
   </div>
-
   <div class="stats" id="stats"></div>
-
   <div class="actions">
-    <button class="btn gold" onclick="exportCSV()">📥 <span class="lang-es-i">Exportar CSV</span><span class="lang-en-i">Export CSV</span></button>
-    <button class="btn" onclick="refresh()">🔄 <span class="lang-es-i">Actualizar</span><span class="lang-en-i">Refresh</span></button>
+    <button class="btn gold" onclick="csv()">📥 <span class="lang-es-i">Exportar CSV</span><span class="lang-en-i">Export CSV</span></button>
+    <button class="btn" onclick="rf()">🔄 <span class="lang-es-i">Actualizar</span><span class="lang-en-i">Refresh</span></button>
     <button class="btn red" onclick="wipe()">🗑️ <span class="lang-es-i">Limpiar</span><span class="lang-en-i">Clear</span></button>
   </div>
-
   <div id="entries"></div>
   <div class="back"><a href=".">← <span class="lang-es-i">Volver</span><span class="lang-en-i">Back</span></a></div>
 </div>
 
 <script>
+// Particles
+(function(){
+  var c=document.getElementById('particles'),x=c.getContext('2d'),w,h,p=[];
+  function R(){w=c.width=innerWidth;h=c.height=innerHeight}
+  R();window.addEventListener('resize',R);
+  function P(){this.x=Math.random()*w;this.y=Math.random()*h;this.s=Math.random()*1.8+0.4;this.v=Math.random()*0.25+0.06;this.o=Math.random()*0.4+0.15;this.t=Math.random()>0.6?'g':'e';this.dx=(Math.random()-0.5)*0.25}
+  P.prototype.up=function(){this.y-=this.v;this.x+=this.dx+Math.sin(this.y*0.005)*0.15;if(this.y<-10){this.y=h+10;this.x=Math.random()*w}};
+  P.prototype.dr=function(){x.beginPath();x.fillStyle=this.t==='g'?'rgba(232,204,122,'+this.o+')':'rgba(0,168,107,'+(this.o*0.45)+')';x.shadowBlur=this.t==='g'?6:3;x.shadowColor=this.t==='g'?'rgba(212,168,67,0.4)':'rgba(0,168,107,0.25)';x.arc(this.x,this.y,this.s,0,2*Math.PI);x.fill()};
+  for(var i=0;i<50;i++)p.push(new P());
+  (function A(){x.clearRect(0,0,w,h);for(var i=0;i<p.length;i++){p[i].up();p[i].dr()}requestAnimationFrame(A)})();
+})();
+
 function setLang(l){
   document.body.className=l;
   document.getElementById('btn-es').className=l==='es'?'on':'';
@@ -129,69 +138,50 @@ try{setLang(localStorage.getItem('alang')||'es')}catch(e){setLang('es')}
 function G(){try{return JSON.parse(localStorage.getItem('srsvp')||'[]')}catch(e){return[]}}
 function esc(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML}
 
-function refresh(){
+function rf(){
   var E=G(),es=document.body.className==='es';
   var L={
-    t:es?'Total Invitados':'Total Guests',
-    y:es?'Confirmados':'Confirmed',
-    n:es?'No Asisten':'Declined',
-    m:es?'Tal Vez':'Maybe',
+    t:es?'Total':'Total Guests',y:es?'Confirmados':'Confirmed',
+    n:es?'No Asisten':'Declined',m:es?'Tal Vez':'Maybe',
     p:es?'Personas (est.)':'Est. Headcount',
-    a:es?'Asistirá':'Attending',
-    d:es?'No Asiste':'Declined',
-    h:es?'Tal Vez':'Maybe'
+    a:es?'Asistirá':'Attending',d:es?'No Asiste':'Declined',h:es?'Tal Vez':'Maybe'
   };
   var ye=E.filter(function(e){return e.attending==='yes'}).length;
   var no=E.filter(function(e){return e.attending==='no'}).length;
   var mb=E.filter(function(e){return e.attending==='maybe'}).length;
   var tg=E.filter(function(e){return e.attending==='yes'}).reduce(function(s,e){return s+(e.guests||0)},0);
-
   document.getElementById('stats').innerHTML=
     '<div class="stat"><div class="stat-num">'+E.length+'</div><div class="stat-label">'+L.t+'</div></div>'+
     '<div class="stat"><div class="stat-num" style="color:#4ade80">'+ye+'</div><div class="stat-label">'+L.y+'</div></div>'+
     '<div class="stat"><div class="stat-num" style="color:#f87171">'+no+'</div><div class="stat-label">'+L.n+'</div></div>'+
     '<div class="stat"><div class="stat-num" style="color:#facc15">'+mb+'</div><div class="stat-label">'+L.m+'</div></div>'+
     '<div class="stat"><div class="stat-num">'+(tg+ye)+'</div><div class="stat-label">'+L.p+'</div></div>';
-
-  var bc={yes:'b-yes',no:'b-no',maybe:'b-maybe'};
-  var bt={yes:L.a,no:L.d,maybe:L.h};
-
   if(!E.length){
     document.getElementById('entries').innerHTML='<div class="empty"><span class="icon">🦋</span><p>'+(es?'Aún no hay confirmaciones.':'No RSVPs yet.')+'</p></div>';
     return;
   }
+  var bc={yes:'b-yes',no:'b-no',maybe:'b-maybe'},bt={yes:L.a,no:L.d,maybe:L.h};
   document.getElementById('entries').innerHTML=E.sort(function(a,b){return new Date(b.ts)-new Date(a.ts)}).map(function(e){
-    return '<div class="entry">'+
-      '<div class="entry-top"><span class="entry-name">'+esc(e.name)+'</span><span class="badge '+(bc[e.attending]||'')+'">'+(bt[e.attending]||e.attending)+'</span></div>'+
-      '<div class="entry-info">'+
-        (e.email?'<span>📧 '+esc(e.email)+'</span>':'')+
-        (e.phone?'<span>📞 '+esc(e.phone)+'</span>':'')+
-        (e.guests>0?'<span>👥 +'+e.guests+' '+(es?'acomp.':'guest(s)')+'</span>':'')+
-      '</div>'+
+    return '<div class="entry"><div class="entry-top"><span class="entry-name">'+esc(e.name)+'</span><span class="badge '+(bc[e.attending]||'')+'">'+(bt[e.attending]||e.attending)+'</span></div>'+
+      '<div class="entry-info">'+(e.email?'<span>📧 '+esc(e.email)+'</span>':'')+(e.phone?'<span>📞 '+esc(e.phone)+'</span>':'')+(e.guests>0?'<span>👥 +'+e.guests+'</span>':'')+'</div>'+
       (e.message?'<div class="entry-msg">"'+esc(e.message)+'"</div>':'')+
-      '<div class="entry-time">'+new Date(e.ts).toLocaleString(es?'es-US':'en-US',{dateStyle:'long',timeStyle:'short'})+'</div>'+
-    '</div>';
+      '<div class="entry-time">'+new Date(e.ts).toLocaleString(es?'es-US':'en-US',{dateStyle:'long',timeStyle:'short'})+'</div></div>';
   }).join('');
 }
-
-function exportCSV(){
+function csv(){
   var E=G();if(!E.length)return;
   var r=[['Name','Email','Phone','Attending','Guests','Message','Date']];
   E.forEach(function(e){r.push([e.name,e.email||'',e.phone||'',e.attending,e.guests||0,e.message||'',new Date(e.ts).toLocaleString()])});
-  var csv=r.map(function(r){return r.map(function(c){return'"'+(c+'').replace(/"/g,'""')+'"'}).join(',')}).join('\n');
-  var b=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
-  var u=URL.createObjectURL(b),a=document.createElement('a');
+  var c=r.map(function(r){return r.map(function(c){return'"'+(c+'').replace(/"/g,'""')+'"'}).join(',')}).join('\n');
+  var b=new Blob(['\uFEFF'+c],{type:'text/csv'}),u=URL.createObjectURL(b),a=document.createElement('a');
   a.href=u;a.download='samantha-rsvp.csv';a.click();URL.revokeObjectURL(u);
 }
-
 function wipe(){
   if(!confirm(document.body.className==='es'?'¿Borrar TODAS las confirmaciones?':'Delete ALL RSVPs?'))return;
   if(!confirm(document.body.className==='es'?'¿Completamente seguro?':'Are you sure?'))return;
-  try{localStorage.removeItem('srsvp')}catch(e){}
-  refresh();
+  try{localStorage.removeItem('srsvp')}catch(e){}rf();
 }
-refresh();
-setInterval(refresh,30000);
+rf();setInterval(rf,30000);
 </script>
 </body>
 </html>

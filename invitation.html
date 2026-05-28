@@ -3,304 +3,347 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Samantha — Quince Años / Sweet Fifteen</title>
+<title>Samantha — Quince Años</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Great+Vibes&family=Cinzel:wght@400;600;700&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html{background:#001a0d}
+html{background:#000d06;scroll-behavior:smooth}
 body{
-  background:#001a0d;
+  background:radial-gradient(ellipse at 50% 0%,#003d26 0%,#001a0d 50%,#000d06 100%);
   color:#fdf8f0;
   font-family:'Cormorant Garamond',Georgia,serif;
   min-height:100vh;
-}
-.page{
-  max-width:640px;
-  margin:0 auto;
-  padding:60px 24px 80px;
+  overflow-x:hidden;
 }
 
-/* Language */
+/* ── PARTICLES CANVAS ── */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.7}
+
+/* ── SCROLL PROGRESS ── */
+#progress{
+  position:fixed;top:0;left:0;height:2px;
+  background:linear-gradient(90deg,#00a86b,#f0d060,#00a86b);
+  z-index:100;transition:width 0.15s linear;
+  box-shadow:0 0 8px rgba(0,168,107,0.5);
+}
+
+/* ── LANGUAGE TOGGLE ── */
+.toggle{
+  position:fixed;top:20px;right:20px;z-index:50;
+  display:flex;gap:2px;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(212,168,67,0.25);border-radius:8px;
+  overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.4);
+}
+.toggle button{
+  font-family:'Montserrat',sans-serif;font-size:0.62rem;letter-spacing:2px;
+  padding:10px 18px;border:none;background:transparent;
+  color:rgba(253,248,240,0.5);cursor:pointer;text-transform:uppercase;font-weight:600;
+  transition:all 0.3s;
+}
+.toggle button.on{background:linear-gradient(135deg,#d4a843,#f0d060);color:#001a0d;box-shadow:inset 0 0 12px rgba(0,0,0,0.1)}
+.toggle button:hover:not(.on){color:#e8cc7a}
+
+/* ── LANGUAGE CONTENT ── */
 .lang-es,.lang-en{display:none}
 body.es .lang-es{display:block}
 body.en .lang-en{display:block}
 body.es .lang-es-i,body.en .lang-en-i{display:inline}
 .lang-es-i,.lang-en-i{display:none}
 
-/* Toggle */
-.toggle{
-  text-align:right;
-  padding:12px 24px 0;
-}
-.toggle button{
-  font-family:'Montserrat',sans-serif;
-  font-size:0.65rem;
-  letter-spacing:2px;
-  padding:8px 16px;
-  border:1px solid #d4a843;
-  background:transparent;
-  color:#d4a843;
-  cursor:pointer;
-  margin-left:4px;
-  text-transform:uppercase;
-}
-.toggle button.on{
-  background:#d4a843;
-  color:#001a0d;
-}
-
-/* Frame */
+/* ── ORNATE GOLD FRAME ── */
 .frame{
-  position:fixed;
-  inset:12px;
-  border:2px solid rgba(212,168,67,0.5);
-  pointer-events:none;
-  z-index:0;
+  position:fixed;inset:16px;z-index:1;pointer-events:none;
 }
-.frame::after{
-  content:'';
-  position:absolute;
-  inset:6px;
-  border:1px solid rgba(212,168,67,0.2);
+.frame .line{position:absolute;background:#d4a843;opacity:0.45}
+.frame .line.top{top:0;left:0;right:0;height:1px}
+.frame .line.bottom{bottom:0;left:0;right:0;height:1px}
+.frame .line.left{top:0;left:0;bottom:0;width:1px}
+.frame .line.right{top:0;right:0;bottom:0;width:1px}
+.frame .corner{
+  position:absolute;width:24px;height:24px;
+  border:2px solid #d4a843;opacity:0.6;
+}
+.frame .corner.tl{top:0;left:0;border-right:none;border-bottom:none}
+.frame .corner.tr{top:0;right:0;border-left:none;border-bottom:none}
+.frame .corner.bl{bottom:0;left:0;border-right:none;border-top:none}
+.frame .corner.br{bottom:0;right:0;border-left:none;border-top:none}
+.frame .gem{
+  position:absolute;font-size:10px;color:#f0d060;
+  filter:drop-shadow(0 0 4px rgba(240,208,96,0.6))
+}
+.frame .gem.tl-g{top:-5px;left:-5px}
+.frame .gem.tr-g{top:-5px;right:-5px}
+.frame .gem.bl-g{bottom:-5px;left:-5px}
+.frame .gem.br-g{bottom:-5px;right:-5px}
+
+/* ── PAGE ── */
+.page{position:relative;z-index:2;max-width:680px;margin:0 auto;padding:80px 28px 100px}
+
+/* ── BUTTERFLY ── */
+.bfly{
+  display:inline-block;font-size:2.6rem;margin-bottom:20px;
+  filter:drop-shadow(0 0 12px rgba(212,168,67,0.4));
+  animation:bflyFloat 7s ease-in-out infinite;
+  cursor:pointer;transition:transform 0.2s;
+}
+.bfly:hover{transform:scale(1.15)}
+@keyframes bflyFloat{
+  0%,100%{transform:translateY(0) rotate(-4deg)}
+  33%{transform:translateY(-14px) rotate(2deg)}
+  66%{transform:translateY(-6px) rotate(-1deg) scale(1.04)}
 }
 
-/* Typography */
+/* ── POETIC ── */
 .poetic{
-  font-style:italic;
-  font-size:1.15rem;
-  text-align:center;
-  line-height:1.8;
-  margin-bottom:12px;
-  opacity:0.9;
+  font-style:italic;font-size:1.2rem;text-align:center;
+  line-height:1.85;margin-bottom:10px;opacity:0.92;
 }
 .poetic em{
-  color:#f0d060;
-  font-size:1.25rem;
-  letter-spacing:2px;
+  color:#f0d060;font-size:1.3rem;letter-spacing:3px;
+  text-shadow:0 0 20px rgba(212,168,67,0.3);
 }
 
+/* ── DIVIDERS ── */
 .divider{
-  text-align:center;
-  margin:24px 0;
-  color:#d4a843;
-  font-size:1.1rem;
-  letter-spacing:8px;
+  display:flex;align-items:center;justify-content:center;
+  gap:20px;margin:28px 0;color:#d4a843;
 }
-.divider span{opacity:0.6}
+.divider::before,.divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,#d4a843,transparent);
+}
+.divider .gem{
+  font-size:1.1rem;opacity:0.7;
+  filter:drop-shadow(0 0 6px rgba(0,168,107,0.5));
+  animation:gemGlow 2.5s ease-in-out infinite;
+}
+@keyframes gemGlow{
+  0%,100%{opacity:0.5;filter:drop-shadow(0 0 4px rgba(0,168,107,0.3))}
+  50%{opacity:1;filter:drop-shadow(0 0 12px rgba(0,168,107,0.7))}
+}
 
-.butterfly{
-  text-align:left;
-  font-size:2.4rem;
-  margin-bottom:16px;
-}
+/* ── CROWN ── */
+.crown-wrap{text-align:center;margin:16px 0 0}
 .crown{
-  text-align:center;
-  font-size:3rem;
-  margin:12px 0 4px;
+  display:inline-block;font-size:3.5rem;
+  filter:drop-shadow(0 0 20px rgba(212,168,67,0.5));
+  animation:crownFloat 4s ease-in-out infinite;
+  cursor:pointer;transition:transform 0.3s;
+}
+.crown:hover{transform:scale(1.12) rotate(4deg)}
+@keyframes crownFloat{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%{transform:translateY(-10px) rotate(4deg)}
 }
 
+/* ── NAME ── */
 h1.name{
-  font-family:'Great Vibes',cursive;
-  font-size:5rem;
-  text-align:center;
-  color:#f0d060;
-  text-shadow:0 0 30px rgba(212,168,67,0.5);
-  line-height:1;
-  margin:0 0 16px;
-  font-weight:400;
+  font-family:'Great Vibes',cursive;font-size:5.5rem;
+  text-align:center;line-height:1;margin:0 0 20px;font-weight:400;
+  background:linear-gradient(180deg,#f0d060 0%,#d4a843 40%,#c49a3c 60%,#e8cc7a 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+  animation:nameShimmer 4s ease-in-out infinite;
+}
+@keyframes nameShimmer{
+  0%,100%{filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4)) brightness(1)}
+  50%{filter:drop-shadow(0 4px 20px rgba(212,168,67,0.4)) brightness(1.08)}
 }
 
-/* Details */
-.details{
-  background:rgba(0,0,0,0.4);
-  border:1px solid rgba(212,168,67,0.2);
-  padding:32px 24px;
-  text-align:center;
-  margin:24px 0;
-}
-.detail-label{
-  font-family:'Montserrat',sans-serif;
-  font-size:0.65rem;
-  letter-spacing:4px;
-  color:#d4a843;
-  text-transform:uppercase;
-  margin-bottom:6px;
-}
-.detail-value{
-  font-size:1.3rem;
-  line-height:1.6;
-}
-.detail-value.big{
-  font-size:1.9rem;
-  font-weight:600;
-  color:#e8cc7a;
-}
-.spacer{height:18px}
-
-/* Countdown */
-.countdown{
-  display:flex;
-  justify-content:center;
-  gap:16px;
-  margin:24px 0;
-  flex-wrap:wrap;
-}
+/* ── COUNTDOWN ── */
+.cd-wrap{display:flex;justify-content:center;gap:20px;margin:28px 0;flex-wrap:wrap}
 .cd-item{
-  background:rgba(0,0,0,0.4);
-  border:1px solid rgba(212,168,67,0.15);
-  padding:18px 22px;
-  min-width:72px;
-  text-align:center;
+  background:rgba(0,10,5,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(212,168,67,0.2);padding:20px 24px;min-width:80px;text-align:center;
+  transition:all 0.3s;
 }
+.cd-item:hover{border-color:rgba(212,168,67,0.5);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
 .cd-num{
-  font-family:'Montserrat',sans-serif;
-  font-size:2rem;
-  font-weight:700;
-  color:#f0d060;
-  line-height:1;
+  font-family:'Cinzel',serif;font-size:2.4rem;font-weight:700;
+  color:#f0d060;line-height:1;
+  text-shadow:0 0 15px rgba(240,208,96,0.3);
 }
 .cd-label{
-  font-family:'Montserrat',sans-serif;
-  font-size:0.55rem;
-  letter-spacing:2px;
-  color:#d4a843;
-  text-transform:uppercase;
-  margin-top:6px;
+  font-family:'Montserrat',sans-serif;font-size:0.55rem;letter-spacing:3px;
+  color:#d4a843;text-transform:uppercase;margin-top:8px;font-weight:600;
 }
 
-/* Form */
-.rsvp{
-  margin-top:40px;
-  padding-top:28px;
-  border-top:1px solid rgba(212,168,67,0.2);
+/* ── DETAILS CARD ── */
+.details{
+  position:relative;overflow:hidden;
+  background:rgba(0,0,0,0.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(212,168,67,0.2);padding:36px 28px;text-align:center;margin:28px 0;
 }
+.details::before{
+  content:'';position:absolute;inset:-1px;
+  background:linear-gradient(135deg,transparent 30%,rgba(212,168,67,0.08) 50%,transparent 70%);
+  animation:shimmer 5s ease-in-out infinite;pointer-events:none;
+}
+@keyframes shimmer{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+.detail-label{
+  font-family:'Montserrat',sans-serif;font-size:0.6rem;letter-spacing:5px;
+  color:#d4a843;text-transform:uppercase;margin-bottom:6px;font-weight:600;
+}
+.detail-value{font-size:1.3rem;line-height:1.6}
+.detail-value.big{
+  font-size:2rem;font-weight:600;color:#e8cc7a;
+  text-shadow:0 0 12px rgba(212,168,67,0.15);
+}
+.spc{height:20px}
+
+/* ── RSVP ── */
+.rsvp{margin-top:44px;padding-top:32px;border-top:1px solid rgba(212,168,67,0.2)}
 .rsvp h2{
-  font-family:'Great Vibes',cursive;
-  font-size:2.4rem;
-  color:#e8cc7a;
-  text-align:center;
-  margin-bottom:24px;
-  font-weight:400;
+  font-family:'Great Vibes',cursive;font-size:2.6rem;
+  color:#e8cc7a;text-align:center;margin-bottom:28px;font-weight:400;
 }
-.fg{
-  margin-bottom:16px;
-}
+.fg{margin-bottom:18px}
 .fg label{
-  display:block;
-  font-family:'Montserrat',sans-serif;
-  font-size:0.6rem;
-  letter-spacing:3px;
-  color:#d4a843;
-  text-transform:uppercase;
-  margin-bottom:6px;
-  font-weight:600;
+  display:block;font-family:'Montserrat',sans-serif;font-size:0.6rem;
+  letter-spacing:4px;color:#d4a843;text-transform:uppercase;
+  margin-bottom:8px;font-weight:600;
 }
 .fg input,.fg select,.fg textarea{
-  width:100%;
-  padding:14px 16px;
-  background:rgba(0,0,0,0.4);
-  border:1px solid rgba(212,168,67,0.25);
-  color:#fdf8f0;
-  font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:1.05rem;
-  outline:none;
+  width:100%;padding:15px 18px;
+  background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(212,168,67,0.25);color:#fdf8f0;
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:1.05rem;
+  outline:none;transition:all 0.35s;
 }
 .fg input:focus,.fg select:focus,.fg textarea:focus{
   border-color:#f0d060;
+  box-shadow:0 0 20px rgba(212,168,67,0.15),inset 0 0 12px rgba(212,168,67,0.05);
+  background:rgba(0,0,0,0.55);
 }
 .fg select{
-  appearance:none;
+  appearance:none;cursor:pointer;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23d4a843' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:right 16px center;
+  background-repeat:no-repeat;background-position:right 18px center;
 }
-.fg select option{background:#003d26;color:#fdf8f0}
+.fg select option{background:#001a0d;color:#fdf8f0}
 
 .btn{
-  width:100%;
-  padding:16px;
-  background:#d4a843;
-  border:none;
-  color:#001a0d;
-  font-family:'Montserrat',sans-serif;
-  font-size:0.75rem;
-  letter-spacing:4px;
-  text-transform:uppercase;
-  font-weight:700;
-  cursor:pointer;
-  margin-top:8px;
+  width:100%;padding:18px;
+  background:linear-gradient(135deg,#d4a843,#f0d060);
+  border:none;color:#001a0d;
+  font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:5px;
+  text-transform:uppercase;font-weight:700;cursor:pointer;
+  position:relative;overflow:hidden;
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:0 4px 20px rgba(212,168,67,0.2);
 }
-.btn:active{opacity:0.8}
-.btn:disabled{opacity:0.5}
-
-.success{
-  display:none;
-  text-align:center;
-  padding:40px 20px;
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,168,67,0.35)}
+.btn:active{transform:scale(0.98);transition:transform 0.1s}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent,rgba(255,255,255,0.25),transparent);
+  transform:translateX(-100%);transition:transform 0.6s;
 }
-.success.show{display:block}
-.success .icon{font-size:3rem;margin-bottom:12px}
+.btn:hover::after{transform:translateX(100%)}
 
+/* ── SUCCESS ── */
+.success{display:none;text-align:center;padding:48px 20px}
+.success.show{display:block;animation:popIn 0.5s cubic-bezier(0.16,1,0.3,1)}
+.success .icon{font-size:4rem;margin-bottom:16px;display:block}
+@keyframes popIn{
+  0%{opacity:0;transform:scale(0.85)}
+  60%{transform:scale(1.05)}
+  100%{opacity:1;transform:scale(1)}
+}
+
+/* ── ADMIN LINK ── */
 .admin-link{
-  text-align:center;
-  margin-top:40px;
-  padding-top:20px;
-  border-top:1px solid rgba(212,168,67,0.1);
-  font-size:0.7rem;
-  opacity:0.4;
+  text-align:center;margin-top:44px;padding-top:24px;
+  border-top:1px solid rgba(212,168,67,0.08);
+  font-size:0.7rem;opacity:0.35;transition:opacity 0.3s;
 }
-.admin-link a{color:#f5e6c8}
+.admin-link:hover{opacity:0.7}
+.admin-link a{color:#f5e6c8;text-decoration:none}
 
-/* Mobile */
+/* ── ROSE ACCENT ── */
+.roses{
+  text-align:center;font-size:1.8rem;margin:8px 0;
+  opacity:0.5;filter:drop-shadow(0 0 6px rgba(212,168,67,0.3))
+}
+
+/* ── RESPONSIVE ── */
 @media(max-width:500px){
-  h1.name{font-size:3rem}
-  .page{padding:32px 14px 60px}
-  .frame{inset:8px}
-  .cd-item{padding:12px 14px;min-width:60px}
-  .cd-num{font-size:1.5rem}
+  h1.name{font-size:3.2rem}
+  .page{padding:50px 16px 80px}
+  .frame{inset:10px}
+  .toggle{top:10px;right:10px}
+  .toggle button{padding:8px 12px;font-size:0.55rem}
+  .cd-wrap{gap:10px}
+  .cd-item{padding:14px 16px;min-width:60px}
+  .cd-num{font-size:1.6rem}
 }
 </style>
 </head>
 <body class="es">
 
-<div class="frame"></div>
+<!-- Particles -->
+<canvas id="particles"></canvas>
 
+<!-- Scroll progress -->
+<div id="progress"></div>
+
+<!-- Gold frame -->
+<div class="frame">
+  <div class="line top"></div><div class="line bottom"></div>
+  <div class="line left"></div><div class="line right"></div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <span class="gem tl-g">◆</span><span class="gem tr-g">◆</span>
+  <span class="gem bl-g">◆</span><span class="gem br-g">◆</span>
+</div>
+
+<!-- Language toggle -->
 <div class="toggle">
   <button id="btn-es" class="on" onclick="setLang('es')">ES</button>
   <button id="btn-en" onclick="setLang('en')">EN</button>
 </div>
 
+<!-- ── CONTENT ── -->
 <div class="page">
 
-  <!-- BUTTERFLY -->
-  <div class="butterfly">🦋</div>
+  <span class="bfly" onclick="burstButterflies()">🦋</span>
 
-  <!-- SPANISH POETRY -->
+  <!-- SPANISH -->
   <div class="lang-es">
     <p class="poetic"><em>EN UN SUEÑO ESMERALDA,</em></p>
     <p class="poetic">donde los sueños brillan y los recuerdos florecen, una hermosa joven comienza un nuevo capítulo.</p>
-    <div class="divider"><span>💚</span></div>
+    <div class="divider"><span class="gem">💚</span></div>
     <p class="poetic">Con amor y alegría, te invitamos a celebrar los Quince Años de</p>
   </div>
 
-  <!-- ENGLISH POETRY -->
+  <!-- ENGLISH -->
   <div class="lang-en">
     <p class="poetic"><em>IN AN EMERALD DREAM,</em></p>
     <p class="poetic">where dreams sparkle and memories bloom, a beautiful young woman begins a new chapter.</p>
-    <div class="divider"><span>💚</span></div>
+    <div class="divider"><span class="gem">💚</span></div>
     <p class="poetic">With love and joy, we invite you to celebrate the Sweet Fifteen of</p>
   </div>
 
-  <!-- CROWN + NAME -->
-  <div class="crown">👑</div>
+  <div class="crown-wrap"><span class="crown" onclick="burstSparks(event)">👑</span></div>
   <h1 class="name">Samantha</h1>
 
-  <div class="divider">💎 <span style="font-size:1.4rem;opacity:0.9">✦</span> 💎</div>
+  <div class="divider">
+    <span class="gem">💎</span>
+    <span class="gem" style="font-size:1.7rem;animation-delay:0.5s">✦</span>
+    <span class="gem">💎</span>
+  </div>
 
   <!-- COUNTDOWN -->
-  <div class="countdown" id="countdown">
+  <div class="cd-wrap" id="countdown">
     <div class="cd-item"><div class="cd-num" id="cd-d">--</div><div class="cd-label"><span class="lang-es-i">Días</span><span class="lang-en-i">Days</span></div></div>
     <div class="cd-item"><div class="cd-num" id="cd-h">--</div><div class="cd-label"><span class="lang-es-i">Horas</span><span class="lang-en-i">Hours</span></div></div>
     <div class="cd-item"><div class="cd-num" id="cd-m">--</div><div class="cd-label"><span class="lang-es-i">Minutos</span><span class="lang-en-i">Minutes</span></div></div>
@@ -311,50 +354,36 @@ h1.name{
   <div class="details">
     <p class="detail-label"><span class="lang-es-i">Fecha</span><span class="lang-en-i">Date</span></p>
     <p class="detail-value big">SÁBADO · SATURDAY</p>
-    <p class="detail-value" style="font-size:1.5rem">3 OCTUBRE · OCTOBER 3, 2026</p>
-    <div class="spacer"></div>
+    <p class="detail-value" style="font-size:1.5rem">3 DE OCTUBRE · OCTOBER 3, 2026</p>
+    <div class="spc"></div>
     <p class="detail-label"><span class="lang-es-i">Hora</span><span class="lang-en-i">Time</span></p>
     <p class="detail-value big">3:00 PM</p>
-    <div class="spacer"></div>
+    <div class="spc"></div>
     <p class="detail-label"><span class="lang-es-i">Lugar</span><span class="lang-en-i">Venue</span></p>
     <p class="detail-value big">FAIRWIND BAPTIST CHURCH</p>
     <p class="detail-value">801 SEYMOUR RD · BEAR, DE 19701</p>
   </div>
 
-  <div class="divider"><span>💚</span></div>
+  <div class="divider"><span class="gem">💚</span></div>
 
-  <!-- CLOSING -->
-  <div class="lang-es">
-    <p class="poetic">Acompáñanos en una tarde inolvidable llena de belleza, amor, y recuerdos inolvidables.</p>
-  </div>
-  <div class="lang-en">
-    <p class="poetic">Join us for an unforgettable evening filled with beauty, love, and lasting memories.</p>
-  </div>
+  <div class="lang-es"><p class="poetic">Acompáñanos en una tarde inolvidable llena de belleza, amor, y recuerdos inolvidables.</p></div>
+  <div class="lang-en"><p class="poetic">Join us for an unforgettable evening filled with beauty, love, and lasting memories.</p></div>
 
-  <p style="text-align:center;font-size:1.5rem;margin:12px 0;opacity:0.6">🌹 ✨ 🌹</p>
+  <div class="roses">🌹 ✨ 🌹</div>
 
-  <!-- RSVP FORM -->
+  <!-- RSVP -->
   <div class="rsvp" id="rsvp-wrap">
     <h2><span class="lang-es">Confirmar Asistencia</span><span class="lang-en">RSVP</span></h2>
     <form id="rsvp-form" onsubmit="return submitRSVP(event)">
-      <div class="fg">
-        <label><span class="lang-es-i">Nombre Completo</span><span class="lang-en-i">Full Name</span></label>
-        <input type="text" name="name" required>
-      </div>
-      <div class="fg">
-        <label><span class="lang-es-i">Correo Electrónico</span><span class="lang-en-i">Email</span></label>
-        <input type="email" name="email">
-      </div>
-      <div class="fg">
-        <label><span class="lang-es-i">Teléfono</span><span class="lang-en-i">Phone</span></label>
-        <input type="tel" name="phone">
-      </div>
+      <div class="fg"><label><span class="lang-es-i">Nombre Completo</span><span class="lang-en-i">Full Name</span></label><input type="text" name="name" required></div>
+      <div class="fg"><label><span class="lang-es-i">Correo Electrónico</span><span class="lang-en-i">Email</span></label><input type="email" name="email"></div>
+      <div class="fg"><label><span class="lang-es-i">Teléfono</span><span class="lang-en-i">Phone</span></label><input type="tel" name="phone"></div>
       <div class="fg">
         <label><span class="lang-es-i">¿Asistirás?</span><span class="lang-en-i">Will you attend?</span></label>
         <select name="attending" required>
           <option value="">—</option>
-          <option value="yes">✨ <span class="lang-es-i">Sí, con gusto</span><span class="lang-en-i">Yes!</span></option>
-          <option value="no">💚 <span class="lang-es-i">No podré</span><span class="lang-en-i">Can't make it</span></option>
+          <option value="yes">✨ <span class="lang-es-i">Sí, con mucho gusto</span><span class="lang-en-i">Yes, with joy</span></option>
+          <option value="no">💚 <span class="lang-es-i">No podré asistir</span><span class="lang-en-i">Unable to attend</span></option>
           <option value="maybe">🦋 <span class="lang-es-i">Tal vez</span><span class="lang-en-i">Maybe</span></option>
         </select>
       </div>
@@ -365,15 +394,12 @@ h1.name{
           <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5+</option>
         </select>
       </div>
-      <div class="fg">
-        <label><span class="lang-es-i">Mensaje para Samantha</span><span class="lang-en-i">Message for Samantha</span></label>
-        <textarea name="message" rows="3"></textarea>
-      </div>
+      <div class="fg"><label><span class="lang-es-i">Mensaje para Samantha</span><span class="lang-en-i">Message for Samantha</span></label><textarea name="message" rows="3"></textarea></div>
       <button type="submit" class="btn" id="submit-btn"><span class="lang-es">Enviar Confirmación</span><span class="lang-en">Send RSVP</span></button>
     </form>
     <div class="success" id="success-msg">
-      <div class="icon">💎</div>
-      <p class="poetic" style="font-size:1.3rem"><span class="lang-es">¡Gracias! Te esperamos en este Sueño Esmeralda ✨</span><span class="lang-en">Thank you! We'll see you at the Emerald Dream ✨</span></p>
+      <span class="icon">💎</span>
+      <p class="poetic" style="font-size:1.35rem"><span class="lang-es">¡Gracias! Te esperamos en este Sueño Esmeralda ✨</span><span class="lang-en">Thank you! We'll see you at the Emerald Dream ✨</span></p>
     </div>
   </div>
 
@@ -381,6 +407,42 @@ h1.name{
 </div>
 
 <script>
+// ═══ PARTICLES ═══
+(function(){
+  var c=document.getElementById('particles'),x=c.getContext('2d'),w,h,p=[];
+  function R(){w=c.width=innerWidth;h=c.height=innerHeight}
+  R();window.addEventListener('resize',R);
+  function P(){
+    this.x=Math.random()*w;this.y=Math.random()*h;
+    this.s=Math.random()*2+0.5;
+    this.v=Math.random()*0.3+0.08;
+    this.o=Math.random()*0.5+0.2;
+    this.t=Math.random()>0.65?'g':'e';
+    this.dx=(Math.random()-0.5)*0.3;
+  }
+  P.prototype.up=function(){
+    this.y-=this.v;this.x+=this.dx+Math.sin(this.y*0.005)*0.2;
+    if(this.y<-10){this.y=h+10;this.x=Math.random()*w}
+  };
+  P.prototype.dr=function(){
+    x.beginPath();
+    x.fillStyle=this.t==='g'?'rgba(232,204,122,'+this.o+')':'rgba(0,168,107,'+(this.o*0.5)+')';
+    x.shadowBlur=this.t==='g'?8:4;
+    x.shadowColor=this.t==='g'?'rgba(212,168,67,0.5)':'rgba(0,168,107,0.3)';
+    x.arc(this.x,this.y,this.s,0,2*Math.PI);x.fill();
+  };
+  for(var i=0;i<70;i++)p.push(new P());
+  (function A(){x.clearRect(0,0,w,h);for(var i=0;i<p.length;i++){p[i].up();p[i].dr()}requestAnimationFrame(A)})();
+})();
+
+// ═══ SCROLL PROGRESS ═══
+window.addEventListener('scroll',function(){
+  var st=document.documentElement.scrollTop;
+  var sh=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  document.getElementById('progress').style.width=(st/sh*100)+'%';
+});
+
+// ═══ LANGUAGE ═══
 function setLang(l){
   document.body.className=l;
   document.getElementById('btn-es').className=l==='es'?'on':'';
@@ -389,45 +451,60 @@ function setLang(l){
 }
 try{setLang(localStorage.getItem('slang')||'es')}catch(e){setLang('es')}
 
-// Countdown
-(function tick(){
+// ═══ COUNTDOWN ═══
+(function T(){
   var d=new Date('2026-10-03T15:00:00-04:00')-new Date();
-  if(d<=0){document.getElementById('cd-d').textContent='00';document.getElementById('cd-h').textContent='00';document.getElementById('cd-m').textContent='00';document.getElementById('cd-s').textContent='00';return}
+  if(d<=0){['d','h','m','s'].forEach(function(k){document.getElementById('cd-'+k).textContent='00'});return}
   document.getElementById('cd-d').textContent=String(Math.floor(d/864e5)).padStart(2,'0');
   document.getElementById('cd-h').textContent=String(Math.floor((d%864e5)/36e5)).padStart(2,'0');
   document.getElementById('cd-m').textContent=String(Math.floor((d%36e5)/6e4)).padStart(2,'0');
   document.getElementById('cd-s').textContent=String(Math.floor((d%6e4)/1e3)).padStart(2,'0');
-  setTimeout(tick,1000);
+  setTimeout(T,1000);
 })();
 
-// RSVP
+// ═══ INTERACTIVE ═══
+function burstSparks(e){
+  var el=e.target,r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  for(var i=0;i<14;i++){
+    var s=document.createElement('div');
+    s.style.cssText='position:fixed;z-index:200;pointer-events:none;left:'+cx+'px;top:'+cy+'px;width:6px;height:6px;border-radius:50%;background:'+(i%2?'#f0d060':'#00a86b')+';box-shadow:0 0 10px '+(i%2?'#f0d060':'#00a86b')+';transition:all 0.7s ease-out;opacity:1';
+    document.body.appendChild(s);
+    requestAnimationFrame(function(){
+      var a=i/14*Math.PI*2,d=30+Math.random()*50;
+      s.style.transform='translate('+Math.cos(a)*d+'px,'+Math.sin(a)*d+'px) scale(0)';s.style.opacity='0';
+    });
+    setTimeout(function(){s.remove()},800);
+  }
+}
+function burstButterflies(){
+  for(var i=0;i<6;i++){
+    setTimeout(function(){
+      var b=document.createElement('div');
+      b.textContent='🦋';
+      b.style.cssText='position:fixed;z-index:200;pointer-events:none;left:'+(Math.random()*70+15)+'%;top:'+(Math.random()*50+25)+'%;font-size:'+(1.5+Math.random()*2)+'rem;opacity:0;transition:all '+(2+Math.random()*2)+'s ease';
+      document.body.appendChild(b);
+      requestAnimationFrame(function(){
+        b.style.transform='translate('+(Math.random()*80-40)+'px,-'+(60+Math.random()*60)+'px) rotate('+(Math.random()*30-15)+'deg)';b.style.opacity='0.7';
+      });
+      setTimeout(function(){b.remove()},3500);
+    },i*150);
+  }
+}
+
+// ═══ RSVP ═══
 function submitRSVP(e){
   e.preventDefault();
   var f=e.target,b=document.getElementById('submit-btn');
   b.disabled=true;
   b.textContent=document.body.className==='es'?'Enviando...':'Sending...';
   var d={
-    name:f.name.value.trim(),
-    email:f.email.value.trim(),
-    phone:f.phone.value.trim(),
-    attending:f.attending.value,
-    guests:parseInt(f.guests.value)||0,
-    message:f.message.value.trim(),
-    ts:new Date().toISOString()
+    name:f.name.value.trim(),email:f.email.value.trim(),phone:f.phone.value.trim(),
+    attending:f.attending.value,guests:parseInt(f.guests.value)||0,
+    message:f.message.value.trim(),ts:new Date().toISOString()
   };
-  try{
-    var x=new XMLHttpRequest();
-    x.open('POST','/api/rsvp');
-    x.setRequestHeader('Content-Type','application/json');
-    x.send(JSON.stringify(d));
-  }catch(_){}
-  try{
-    var a=JSON.parse(localStorage.getItem('srsvp')||'[]');
-    a.push(d);
-    localStorage.setItem('srsvp',JSON.stringify(a));
-  }catch(_){}
-  f.style.display='none';
-  document.getElementById('success-msg').className='success show';
+  try{var x=new XMLHttpRequest();x.open('POST','/api/rsvp');x.setRequestHeader('Content-Type','application/json');x.send(JSON.stringify(d))}catch(_){}
+  try{var a=JSON.parse(localStorage.getItem('srsvp')||'[]');a.push(d);localStorage.setItem('srsvp',JSON.stringify(a))}catch(_){}
+  f.style.display='none';document.getElementById('success-msg').className='success show';
   return false;
 }
 </script>
