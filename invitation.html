@@ -4,678 +4,376 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Samantha — Quince Años / Sweet Fifteen</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Great+Vibes&family=Montserrat:wght@200;300;400;600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-
-:root{
-  --emerald-deep:#001a0d;
-  --emerald-dark:#003d26;
-  --emerald:#005c3f;
-  --emerald-glow:#00a86b;
-  --gold:#d4a843;
-  --gold-bright:#f0d060;
-  --gold-light:#e8cc7a;
-  --gold-pale:#f5e6c8;
-  --cream:#fdf8f0;
-}
-
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:#001a0d}
 body{
   background:#001a0d;
-  background:var(--emerald-deep);
-  font-family:'Cormorant Garamond',Georgia,serif;
   color:#fdf8f0;
-  color:var(--cream);
+  font-family:'Cormorant Garamond',Georgia,serif;
   min-height:100vh;
-  overflow-x:hidden;
-  cursor:default;
+}
+.page{
+  max-width:640px;
+  margin:0 auto;
+  padding:60px 24px 80px;
 }
 
-/* Force content visibility */
-.page{opacity:1!important;visibility:visible!important}
-
-/* === CANVAS PARTICLES === */
-#particle-canvas{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-}
-
-/* === SCROLL PROGRESS === */
-.scroll-progress{
-  position:fixed;
-  top:0;left:0;
-  height:3px;
-  background:linear-gradient(90deg,var(--emerald-glow),var(--gold-bright),var(--emerald-glow));
-  z-index:200;
-  transition:width 0.1s linear;
-}
-
-/* === LANGUAGE TOGGLE === */
-.lang-toggle{
-  position:fixed;
-  top:24px;right:28px;
-  z-index:150;
-  display:flex;gap:3px;
-  background:rgba(0,0,0,0.5);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  border:1px solid rgba(212,168,67,0.3);
-  border-radius:6px;
-  overflow:hidden;
-  box-shadow:0 8px 32px rgba(0,0,0,0.4);
-  transition:all 0.3s;
-}
-.lang-toggle:hover{border-color:var(--gold);box-shadow:0 8px 40px rgba(212,168,67,0.15)}
-.lang-toggle button{
-  font-family:'Montserrat',sans-serif;
-  font-size:0.65rem;letter-spacing:2px;
-  padding:12px 20px;
-  border:none;background:transparent;
-  color:rgba(253,248,240,0.45);
-  cursor:pointer;
-  transition:all 0.3s;
-  text-transform:uppercase;
-  font-weight:600;
-}
-.lang-toggle button.active{
-  background:linear-gradient(135deg,var(--gold),var(--gold-bright));
-  color:var(--emerald-deep);
-  box-shadow:0 0 20px rgba(212,168,67,0.3);
-}
-.lang-toggle button:hover:not(.active){color:var(--gold-light)}
-
-/* === LANGUAGE CONTENT === */
+/* Language */
 .lang-es,.lang-en{display:none}
-body.lang-es .lang-es,body.lang-en .lang-en{display:block}
-body.lang-es .lang-es-i,body.lang-en .lang-en-i{display:inline}
+body.es .lang-es{display:block}
+body.en .lang-en{display:block}
+body.es .lang-es-i,body.en .lang-en-i{display:inline}
 .lang-es-i,.lang-en-i{display:none}
 
-/* === GOLD FRAME - ANIMATED === */
-.gold-frame{
+/* Toggle */
+.toggle{
+  text-align:right;
+  padding:12px 24px 0;
+}
+.toggle button{
+  font-family:'Montserrat',sans-serif;
+  font-size:0.65rem;
+  letter-spacing:2px;
+  padding:8px 16px;
+  border:1px solid #d4a843;
+  background:transparent;
+  color:#d4a843;
+  cursor:pointer;
+  margin-left:4px;
+  text-transform:uppercase;
+}
+.toggle button.on{
+  background:#d4a843;
+  color:#001a0d;
+}
+
+/* Frame */
+.frame{
   position:fixed;
   inset:12px;
-  z-index:50;
+  border:2px solid rgba(212,168,67,0.5);
   pointer-events:none;
+  z-index:0;
 }
-.gold-frame .edge{
-  position:absolute;
-  background:var(--gold);
-  opacity:0.6;
-}
-.gold-frame .edge.top{top:0;left:0;height:2px;width:0;animation:drawLine 2s ease forwards 0.5s;box-shadow:0 0 12px rgba(212,168,67,0.5)}
-.gold-frame .edge.right{top:0;right:0;width:2px;height:0;animation:drawLineV 2s ease forwards 1.5s;box-shadow:0 0 12px rgba(212,168,67,0.5)}
-.gold-frame .edge.bottom{bottom:0;right:0;height:2px;width:0;animation:drawLineR 2s ease forwards 2.5s;box-shadow:0 0 12px rgba(212,168,67,0.5)}
-.gold-frame .edge.left{bottom:0;left:0;width:2px;height:0;animation:drawLineVU 2s ease forwards 3.5s;box-shadow:0 0 12px rgba(212,168,67,0.5)}
-@keyframes drawLine{to{width:100%}}
-@keyframes drawLineV{to{height:100%}}
-@keyframes drawLineR{to{width:100%}}
-@keyframes drawLineVU{to{height:100%}}
-
-/* Inner delicate border */
-.gold-frame::after{
+.frame::after{
   content:'';
   position:absolute;
-  inset:8px;
+  inset:6px;
   border:1px solid rgba(212,168,67,0.2);
-  opacity:0;
-  animation:fadeIn 1.5s ease forwards 4s;
 }
 
-/* Corner diamonds */
-.frame-corner{
-  position:fixed;
-  z-index:51;
-  pointer-events:none;
-  opacity:0;
-  animation:fadeIn 1s ease forwards 5s;
-}
-.frame-corner.tl{top:8px;left:8px}
-.frame-corner.tr{top:8px;right:8px}
-.frame-corner.bl{bottom:8px;left:8px}
-.frame-corner.br{bottom:8px;right:8px}
-.frame-corner::before{
-  content:'◆';
-  font-size:14px;
-  color:var(--gold-bright);
-  filter:drop-shadow(0 0 8px rgba(212,168,67,0.8));
-  animation:gemPulse 2s ease-in-out infinite;
-}
-@keyframes gemPulse{
-  0%,100%{filter:drop-shadow(0 0 6px rgba(212,168,67,0.6))}
-  50%{filter:drop-shadow(0 0 16px rgba(240,208,96,1))}
-}
-
-/* === MAIN CONTENT === */
-.page{
-  position:relative;
-  z-index:10;
-  max-width:680px;
-  margin:0 auto;
-  padding:60px 24px 100px;
-}
-
-/* === REVEAL SECTIONS === */
-.reveal{
-  opacity:0;
-  transform:translateY(40px);
-  transition:all 0.8s cubic-bezier(0.16,1,0.3,1);
-}
-.reveal.visible{
-  opacity:1;
-  transform:translateY(0);
-}
-
-/* === BUTTERFLY === */
-.butterfly-wrap{
-  text-align:left;
-  margin-bottom:-10px;
-}
-.butterfly{
-  font-size:2.8rem;
-  display:inline-block;
-  filter:drop-shadow(0 0 12px rgba(212,168,67,0.5));
-  animation:butterflyFloat 8s ease-in-out infinite;
-  cursor:pointer;
-  transition:transform 0.2s;
-}
-.butterfly:hover{transform:scale(1.2)}
-@keyframes butterflyFloat{
-  0%,100%{transform:translateY(0) rotate(-5deg)}
-  25%{transform:translateY(-15px) rotate(3deg)}
-  50%{transform:translateY(-5px) rotate(-2deg) scale(1.05)}
-  75%{transform:translateY(-20px) rotate(5deg)}
-}
-
-/* === POETIC TEXT === */
+/* Typography */
 .poetic{
-  font-family:'Cormorant Garamond',Georgia,serif;
   font-style:italic;
-  font-size:1.2rem;
-  color:#fdf8f0;
-  color:var(--cream);
+  font-size:1.15rem;
   text-align:center;
   line-height:1.8;
-  opacity:1;
+  margin-bottom:12px;
+  opacity:0.9;
 }
 .poetic em{
-  font-style:italic;
-  color:var(--gold-bright);
-  text-shadow:0 0 20px rgba(212,168,67,0.3);
-  font-size:1.3rem;
+  color:#f0d060;
+  font-size:1.25rem;
   letter-spacing:2px;
 }
 
-/* === ORNAMENT DIVIDER === */
-.ornament-divider{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:16px;
-  margin:24px 0;
-  opacity:1;
-}
-.ornament-divider::before,
-.ornament-divider::after{
-  content:'';
-  height:1px;
-  flex:1;
-  background:linear-gradient(90deg,transparent,var(--gold-light),transparent);
-}
-.ornament-divider .gem{
-  font-size:1.1rem;
-  filter:drop-shadow(0 0 8px rgba(0,168,107,0.6));
-  animation:gemPulse 2s ease-in-out infinite;
-}
-
-/* === CROWN === */
-.crown-wrap{
+.divider{
   text-align:center;
-  margin:8px 0 0;
+  margin:24px 0;
+  color:#d4a843;
+  font-size:1.1rem;
+  letter-spacing:8px;
+}
+.divider span{opacity:0.6}
+
+.butterfly{
+  text-align:left;
+  font-size:2.4rem;
+  margin-bottom:16px;
 }
 .crown{
-  font-size:3.5rem;
-  display:inline-block;
-  filter:drop-shadow(0 0 20px rgba(212,168,67,0.6));
-  animation:crownFloat 3s ease-in-out infinite;
-  cursor:pointer;
-  transition:transform 0.3s;
-}
-.crown:hover{
-  transform:scale(1.1) rotate(5deg);
-  filter:drop-shadow(0 0 30px rgba(240,208,96,0.8));
-}
-@keyframes crownFloat{
-  0%,100%{transform:translateY(0) rotate(0deg)}
-  50%{transform:translateY(-8px) rotate(3deg)}
+  text-align:center;
+  font-size:3rem;
+  margin:12px 0 4px;
 }
 
-/* === NAME === */
 h1.name{
   font-family:'Great Vibes',cursive;
   font-size:5rem;
-  color:transparent;
-  background:linear-gradient(180deg,#f0d060 0%,#d4a843 50%,#e8cc7a 100%);
-  -webkit-background-clip:text;
-  background-clip:text;
   text-align:center;
-  filter:drop-shadow(0 0 30px rgba(212,168,67,0.4));
+  color:#f0d060;
+  text-shadow:0 0 30px rgba(212,168,67,0.5);
   line-height:1;
-  margin:4px 0 8px;
+  margin:0 0 16px;
   font-weight:400;
-  opacity:1;
-}
-@keyframes nameReveal{
-  0%{opacity:0;transform:scale(0.8);filter:drop-shadow(0 0 0 rgba(212,168,67,0)) blur(4px)}
-  100%{opacity:1;transform:scale(1);filter:drop-shadow(0 0 30px rgba(212,168,67,0.4)) blur(0)}
 }
 
-/* === EVENT DETAILS CARD === */
-.details-card{
-  background:rgba(0,0,0,0.3);
-  backdrop-filter:blur(30px);
-  -webkit-backdrop-filter:blur(30px);
+/* Details */
+.details{
+  background:rgba(0,0,0,0.4);
   border:1px solid rgba(212,168,67,0.2);
   padding:32px 24px;
   text-align:center;
   margin:24px 0;
-  position:relative;
-  overflow:hidden;
-}
-.details-card::before{
-  content:'';
-  position:absolute;
-  inset:-1px;
-  background:linear-gradient(135deg,transparent 30%,rgba(212,168,67,0.15) 50%,transparent 70%);
-  animation:shimmer 4s ease-in-out infinite;
-  pointer-events:none;
-}
-@keyframes shimmer{
-  0%{transform:translateX(-100%)}
-  100%{transform:translateX(100%)}
 }
 .detail-label{
   font-family:'Montserrat',sans-serif;
   font-size:0.65rem;
-  letter-spacing:5px;
-  color:var(--gold);
+  letter-spacing:4px;
+  color:#d4a843;
   text-transform:uppercase;
   margin-bottom:6px;
-  font-weight:600;
 }
 .detail-value{
-  font-family:'Cormorant Garamond',serif;
   font-size:1.3rem;
-  color:var(--cream);
   line-height:1.6;
 }
-.detail-value.large{
+.detail-value.big{
   font-size:1.9rem;
   font-weight:600;
-  color:var(--gold-light);
-  text-shadow:0 0 15px rgba(212,168,67,0.2);
+  color:#e8cc7a;
 }
+.spacer{height:18px}
 
-/* === COUNTDOWN === */
-.countdown-section{
-  margin:28px 0;
-  text-align:center;
-}
-.countdown-grid{
+/* Countdown */
+.countdown{
   display:flex;
   justify-content:center;
-  gap:24px;
+  gap:16px;
+  margin:24px 0;
   flex-wrap:wrap;
 }
-.countdown-item{
-  background:rgba(0,0,0,0.3);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  border:1px solid rgba(212,168,67,0.2);
-  padding:16px 20px;
-  min-width:70px;
-  transition:all 0.3s;
+.cd-item{
+  background:rgba(0,0,0,0.4);
+  border:1px solid rgba(212,168,67,0.15);
+  padding:18px 22px;
+  min-width:72px;
+  text-align:center;
 }
-.countdown-item:hover{
-  border-color:var(--gold);
-  transform:translateY(-3px);
-  box-shadow:0 8px 30px rgba(212,168,67,0.1);
-}
-.countdown-num{
-  font-family:'Cinzel',serif;
-  font-size:2.2rem;
+.cd-num{
+  font-family:'Montserrat',sans-serif;
+  font-size:2rem;
   font-weight:700;
-  color:var(--gold-bright);
+  color:#f0d060;
   line-height:1;
-  text-shadow:0 0 15px rgba(212,168,67,0.4);
 }
-.countdown-label{
+.cd-label{
   font-family:'Montserrat',sans-serif;
   font-size:0.55rem;
-  letter-spacing:3px;
-  color:var(--gold);
+  letter-spacing:2px;
+  color:#d4a843;
   text-transform:uppercase;
-  margin-top:4px;
+  margin-top:6px;
 }
 
-/* === RSVP SECTION === */
-.rsvp-section{
+/* Form */
+.rsvp{
   margin-top:40px;
   padding-top:28px;
   border-top:1px solid rgba(212,168,67,0.2);
-  opacity:1;
 }
-.rsvp-section h2{
+.rsvp h2{
   font-family:'Great Vibes',cursive;
-  font-size:2.6rem;
-  color:var(--gold-light);
+  font-size:2.4rem;
+  color:#e8cc7a;
   text-align:center;
   margin-bottom:24px;
   font-weight:400;
 }
-.form-group{
-  margin-bottom:18px;
+.fg{
+  margin-bottom:16px;
 }
-.form-group label{
+.fg label{
   display:block;
   font-family:'Montserrat',sans-serif;
   font-size:0.6rem;
-  letter-spacing:4px;
-  color:var(--gold);
+  letter-spacing:3px;
+  color:#d4a843;
   text-transform:uppercase;
-  margin-bottom:8px;
+  margin-bottom:6px;
   font-weight:600;
 }
-.form-group input,
-.form-group select,
-.form-group textarea{
+.fg input,.fg select,.fg textarea{
   width:100%;
-  padding:15px 18px;
-  background:rgba(0,0,0,0.35);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
+  padding:14px 16px;
+  background:rgba(0,0,0,0.4);
   border:1px solid rgba(212,168,67,0.25);
-  color:var(--cream);
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.1rem;
-  transition:all 0.4s;
+  color:#fdf8f0;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.05rem;
   outline:none;
 }
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus{
-  border-color:var(--gold-bright);
-  box-shadow:0 0 25px rgba(212,168,67,0.2),inset 0 0 15px rgba(212,168,67,0.05);
-  background:rgba(0,0,0,0.45);
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  border-color:#f0d060;
 }
-.form-group select{
+.fg select{
   appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23d4a843' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
   background-repeat:no-repeat;
-  background-position:right 18px center;
-  cursor:pointer;
+  background-position:right 16px center;
 }
-.form-group select option{background:var(--emerald-dark);color:var(--cream)}
+.fg select option{background:#003d26;color:#fdf8f0}
 
-/* === SUBMIT BUTTON === */
-.btn-submit{
+.btn{
   width:100%;
-  padding:18px;
-  background:linear-gradient(135deg,var(--gold),var(--gold-bright));
+  padding:16px;
+  background:#d4a843;
   border:none;
-  color:var(--emerald-deep);
+  color:#001a0d;
   font-family:'Montserrat',sans-serif;
   font-size:0.75rem;
-  letter-spacing:5px;
+  letter-spacing:4px;
   text-transform:uppercase;
   font-weight:700;
   cursor:pointer;
-  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
-  margin-top:16px;
-  position:relative;
-  overflow:hidden;
+  margin-top:8px;
 }
-.btn-submit::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(135deg,transparent,rgba(255,255,255,0.3),transparent);
-  transform:translateX(-100%);
-  transition:transform 0.5s;
-}
-.btn-submit:hover{
-  transform:translateY(-2px);
-  box-shadow:0 15px 40px rgba(212,168,67,0.4);
-}
-.btn-submit:hover::after{transform:translateX(100%)}
-.btn-submit:active{transform:scale(0.98)}
-.btn-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.btn:active{opacity:0.8}
+.btn:disabled{opacity:0.5}
 
-/* === SUCCESS === */
-.success-msg{
+.success{
   display:none;
   text-align:center;
   padding:40px 20px;
-  animation:successPop 0.6s cubic-bezier(0.16,1,0.3,1);
 }
-.success-msg.show{display:block}
-.success-msg .checkmark{
-  font-size:4rem;
-  margin-bottom:16px;
-  display:block;
-  animation:checkBounce 0.5s ease 0.2s both;
-}
-@keyframes successPop{
-  0%{opacity:0;transform:scale(0.9)}
-  100%{opacity:1;transform:scale(1)}
-}
-@keyframes checkBounce{
-  0%{transform:scale(0);opacity:0}
-  60%{transform:scale(1.2)}
-  100%{transform:scale(1);opacity:1}
-}
+.success.show{display:block}
+.success .icon{font-size:3rem;margin-bottom:12px}
 
-/* === ADMIN LINK === */
 .admin-link{
   text-align:center;
-  margin-top:48px;
-  padding-top:24px;
-  border-top:1px solid rgba(212,168,67,0.12);
+  margin-top:40px;
+  padding-top:20px;
+  border-top:1px solid rgba(212,168,67,0.1);
   font-size:0.7rem;
-  opacity:0.35;
-  transition:opacity 0.3s;
+  opacity:0.4;
 }
-.admin-link:hover{opacity:0.7}
-.admin-link a{color:var(--gold-pale);text-decoration:none}
+.admin-link a{color:#f5e6c8}
 
-/* === MOUSE GLOW === */
-.mouse-glow{
-  position:fixed;
-  pointer-events:none;
-  z-index:1;
-  width:300px;height:300px;
-  background:radial-gradient(circle,rgba(0,168,107,0.08) 0%,transparent 70%);
-  border-radius:50%;
-  transform:translate(-50%,-50%);
-  transition:opacity 0.3s;
-}
-
-/* === SPINNER === */
-.spinner{
-  display:inline-block;
-  width:16px;height:16px;
-  border:2px solid var(--emerald-deep);
-  border-top-color:transparent;
-  border-radius:50%;
-  animation:spinner 0.6s linear infinite;
-  vertical-align:middle;
-  margin-right:8px;
-}
-@keyframes spinner{to{transform:rotate(360deg)}}
-
-/* === KEYFRAMES === */
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
-}
-
-/* === RESPONSIVE === */
+/* Mobile */
 @media(max-width:500px){
-  h1.name{font-size:3.2rem}
-  .page{padding:40px 16px 80px}
-  .gold-frame{inset:8px}
-  .lang-toggle{top:12px;right:12px}
-  .lang-toggle button{padding:10px 14px;font-size:0.6rem}
-  .countdown-grid{gap:12px}
-  .countdown-item{padding:12px 14px;min-width:60px}
-  .countdown-num{font-size:1.6rem}
+  h1.name{font-size:3rem}
+  .page{padding:32px 14px 60px}
+  .frame{inset:8px}
+  .cd-item{padding:12px 14px;min-width:60px}
+  .cd-num{font-size:1.5rem}
 }
 </style>
 </head>
-<body class="lang-es">
+<body class="es">
 
-<!-- Scroll progress bar -->
-<div class="scroll-progress" id="scroll-progress"></div>
+<div class="frame"></div>
 
-<!-- Canvas particles -->
-<canvas id="particle-canvas"></canvas>
-
-<!-- Mouse glow -->
-<div class="mouse-glow" id="mouse-glow"></div>
-
-<!-- Gold frame -->
-<div class="gold-frame">
-  <div class="edge top"></div>
-  <div class="edge right"></div>
-  <div class="edge bottom"></div>
-  <div class="edge left"></div>
-</div>
-<div class="frame-corner tl"></div>
-<div class="frame-corner tr"></div>
-<div class="frame-corner bl"></div>
-<div class="frame-corner br"></div>
-
-<!-- Language toggle -->
-<div class="lang-toggle">
-  <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+<div class="toggle">
+  <button id="btn-es" class="on" onclick="setLang('es')">ES</button>
   <button id="btn-en" onclick="setLang('en')">EN</button>
 </div>
 
 <div class="page">
-  <!-- Butterfly -->
-  <div class="butterfly-wrap reveal"><span class="butterfly" onclick="spawnButterflies()">🦋</span></div>
+
+  <!-- BUTTERFLY -->
+  <div class="butterfly">🦋</div>
 
   <!-- SPANISH POETRY -->
   <div class="lang-es">
-    <p class="poetic" style="--delay:0.8s"><em>EN UN SUEÑO ESMERALDA,</em></p>
-    <p class="poetic" style="--delay:1.3s">donde los sueños brillan y<br>los recuerdos florecen,<br>una hermosa joven comienza<br>un nuevo capítulo.</p>
-    <div class="ornament-divider" style="--delay:1.8s"><span class="gem">💚</span></div>
-    <p class="poetic" style="--delay:2.3s">Con amor y alegría, te invitamos<br>a celebrar los Quince Años de</p>
+    <p class="poetic"><em>EN UN SUEÑO ESMERALDA,</em></p>
+    <p class="poetic">donde los sueños brillan y los recuerdos florecen, una hermosa joven comienza un nuevo capítulo.</p>
+    <div class="divider"><span>💚</span></div>
+    <p class="poetic">Con amor y alegría, te invitamos a celebrar los Quince Años de</p>
   </div>
 
   <!-- ENGLISH POETRY -->
   <div class="lang-en">
-    <p class="poetic" style="--delay:0.8s"><em>IN AN EMERALD DREAM,</em></p>
-    <p class="poetic" style="--delay:1.3s">where dreams sparkle and<br>memories bloom,<br>a beautiful young woman begins<br>a new chapter.</p>
-    <div class="ornament-divider" style="--delay:1.8s"><span class="gem">💚</span></div>
-    <p class="poetic" style="--delay:2.3s">With love and joy, we invite you<br>to celebrate the Sweet Fifteen of</p>
+    <p class="poetic"><em>IN AN EMERALD DREAM,</em></p>
+    <p class="poetic">where dreams sparkle and memories bloom, a beautiful young woman begins a new chapter.</p>
+    <div class="divider"><span>💚</span></div>
+    <p class="poetic">With love and joy, we invite you to celebrate the Sweet Fifteen of</p>
   </div>
 
-  <!-- Crown -->
-  <div class="crown-wrap reveal"><span class="crown" onclick="spawnSparkles(event)">👑</span></div>
-
-  <!-- Name -->
+  <!-- CROWN + NAME -->
+  <div class="crown">👑</div>
   <h1 class="name">Samantha</h1>
 
-  <div class="ornament-divider" style="--delay:7s">
-    <span class="gem">💎</span>
-    <span class="gem" style="font-size:1.7rem;filter:drop-shadow(0 0 12px rgba(240,208,96,0.8))">✦</span>
-    <span class="gem">💎</span>
-  </div>
+  <div class="divider">💎 <span style="font-size:1.4rem;opacity:0.9">✦</span> 💎</div>
 
   <!-- COUNTDOWN -->
-  <div class="countdown-section reveal">
-    <div class="countdown-grid" id="countdown">
-      <div class="countdown-item"><div class="countdown-num" id="cd-days">--</div><div class="countdown-label"><span class="lang-es">Días</span><span class="lang-en">Days</span></div></div>
-      <div class="countdown-item"><div class="countdown-num" id="cd-hours">--</div><div class="countdown-label"><span class="lang-es">Horas</span><span class="lang-en">Hours</span></div></div>
-      <div class="countdown-item"><div class="countdown-num" id="cd-mins">--</div><div class="countdown-label"><span class="lang-es">Minutos</span><span class="lang-en">Minutes</span></div></div>
-      <div class="countdown-item"><div class="countdown-num" id="cd-secs">--</div><div class="countdown-label"><span class="lang-es">Segundos</span><span class="lang-en">Seconds</span></div></div>
-    </div>
+  <div class="countdown" id="countdown">
+    <div class="cd-item"><div class="cd-num" id="cd-d">--</div><div class="cd-label"><span class="lang-es-i">Días</span><span class="lang-en-i">Days</span></div></div>
+    <div class="cd-item"><div class="cd-num" id="cd-h">--</div><div class="cd-label"><span class="lang-es-i">Horas</span><span class="lang-en-i">Hours</span></div></div>
+    <div class="cd-item"><div class="cd-num" id="cd-m">--</div><div class="cd-label"><span class="lang-es-i">Minutos</span><span class="lang-en-i">Minutes</span></div></div>
+    <div class="cd-item"><div class="cd-num" id="cd-s">--</div><div class="cd-label"><span class="lang-es-i">Segundos</span><span class="lang-en-i">Seconds</span></div></div>
   </div>
 
-  <!-- EVENT DETAILS -->
-  <div class="details-card reveal">
+  <!-- DETAILS -->
+  <div class="details">
     <p class="detail-label"><span class="lang-es-i">Fecha</span><span class="lang-en-i">Date</span></p>
-    <p class="detail-value large">SÁBADO · SATURDAY</p>
-    <p class="detail-value" style="font-size:1.5rem">3 DE OCTUBRE DE 2026 · OCTOBER 3, 2026</p>
-    <div style="margin:18px 0"></div>
+    <p class="detail-value big">SÁBADO · SATURDAY</p>
+    <p class="detail-value" style="font-size:1.5rem">3 OCTUBRE · OCTOBER 3, 2026</p>
+    <div class="spacer"></div>
     <p class="detail-label"><span class="lang-es-i">Hora</span><span class="lang-en-i">Time</span></p>
-    <p class="detail-value large">3:00 PM · A las 3 de la tarde</p>
-    <div style="margin:18px 0"></div>
+    <p class="detail-value big">3:00 PM</p>
+    <div class="spacer"></div>
     <p class="detail-label"><span class="lang-es-i">Lugar</span><span class="lang-en-i">Venue</span></p>
-    <p class="detail-value large">FAIRWIND BAPTIST CHURCH</p>
+    <p class="detail-value big">FAIRWIND BAPTIST CHURCH</p>
     <p class="detail-value">801 SEYMOUR RD · BEAR, DE 19701</p>
   </div>
 
-  <div class="ornament-divider" style="--delay:0s"><span class="gem">💚</span></div>
+  <div class="divider"><span>💚</span></div>
 
   <!-- CLOSING -->
-  <div class="lang-es reveal">
-    <p class="poetic" style="--delay:0s">Acompáñanos en una tarde inolvidable<br>llena de belleza, amor,<br>y recuerdos inolvidables.</p>
+  <div class="lang-es">
+    <p class="poetic">Acompáñanos en una tarde inolvidable llena de belleza, amor, y recuerdos inolvidables.</p>
   </div>
-  <div class="lang-en reveal">
-    <p class="poetic" style="--delay:0s">Join us for an unforgettable evening<br>filled with beauty, love,<br>and lasting memories.</p>
+  <div class="lang-en">
+    <p class="poetic">Join us for an unforgettable evening filled with beauty, love, and lasting memories.</p>
   </div>
 
-  <div style="text-align:center;font-size:2rem;opacity:0.6;margin:8px 0;filter:drop-shadow(0 0 8px rgba(212,168,67,0.3))">🌹 ✨ 🌹</div>
+  <p style="text-align:center;font-size:1.5rem;margin:12px 0;opacity:0.6">🌹 ✨ 🌹</p>
 
-  <!-- === RSVP === -->
-  <div class="rsvp-section" id="rsvp-form-wrap">
+  <!-- RSVP FORM -->
+  <div class="rsvp" id="rsvp-wrap">
     <h2><span class="lang-es">Confirmar Asistencia</span><span class="lang-en">RSVP</span></h2>
-    <form id="rsvp-form">
-      <div class="form-group">
+    <form id="rsvp-form" onsubmit="return submitRSVP(event)">
+      <div class="fg">
         <label><span class="lang-es-i">Nombre Completo</span><span class="lang-en-i">Full Name</span></label>
         <input type="text" name="name" required>
       </div>
-      <div class="form-group">
+      <div class="fg">
         <label><span class="lang-es-i">Correo Electrónico</span><span class="lang-en-i">Email</span></label>
         <input type="email" name="email">
       </div>
-      <div class="form-group">
+      <div class="fg">
         <label><span class="lang-es-i">Teléfono</span><span class="lang-en-i">Phone</span></label>
         <input type="tel" name="phone">
       </div>
-      <div class="form-group">
+      <div class="fg">
         <label><span class="lang-es-i">¿Asistirás?</span><span class="lang-en-i">Will you attend?</span></label>
         <select name="attending" required>
-          <option value="">— <span class="lang-es-i">Selecciona</span><span class="lang-en-i">Select</span> —</option>
-          <option value="yes">✨ <span class="lang-es-i">Sí, con mucho gusto</span><span class="lang-en-i">Yes, with joy</span></option>
-          <option value="no">💚 <span class="lang-es-i">No podré asistir</span><span class="lang-en-i">Unable to attend</span></option>
+          <option value="">—</option>
+          <option value="yes">✨ <span class="lang-es-i">Sí, con gusto</span><span class="lang-en-i">Yes!</span></option>
+          <option value="no">💚 <span class="lang-es-i">No podré</span><span class="lang-en-i">Can't make it</span></option>
           <option value="maybe">🦋 <span class="lang-es-i">Tal vez</span><span class="lang-en-i">Maybe</span></option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="fg">
         <label><span class="lang-es-i">Acompañantes</span><span class="lang-en-i">Guests</span></label>
         <select name="guests">
           <option value="0"><span class="lang-es-i">Solo yo</span><span class="lang-en-i">Just me</span></option>
           <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5+</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="fg">
         <label><span class="lang-es-i">Mensaje para Samantha</span><span class="lang-en-i">Message for Samantha</span></label>
         <textarea name="message" rows="3"></textarea>
       </div>
-      <button type="submit" class="btn-submit" id="submit-btn">
-        <span class="lang-es">Enviar Confirmación</span><span class="lang-en">Send RSVP</span>
-      </button>
+      <button type="submit" class="btn" id="submit-btn"><span class="lang-es">Enviar Confirmación</span><span class="lang-en">Send RSVP</span></button>
     </form>
-    <div class="success-msg" id="success-msg">
-      <span class="checkmark">💎</span>
-      <p class="poetic" style="font-size:1.4rem;--delay:0s">
-        <span class="lang-es">¡Gracias! Te esperamos en este Sueño Esmeralda ✨</span>
-        <span class="lang-en">Thank you! We'll see you at the Emerald Dream ✨</span>
-      </p>
+    <div class="success" id="success-msg">
+      <div class="icon">💎</div>
+      <p class="poetic" style="font-size:1.3rem"><span class="lang-es">¡Gracias! Te esperamos en este Sueño Esmeralda ✨</span><span class="lang-en">Thank you! We'll see you at the Emerald Dream ✨</span></p>
     </div>
   </div>
 
@@ -683,213 +381,55 @@ h1.name{
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-// PARTICLE SYSTEM
-// ═══════════════════════════════════════════
-const canvas = document.getElementById('particle-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-let w, h;
-
-function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight}
-resize();window.addEventListener('resize',resize);
-
-class Particle{
-  constructor(){
-    this.reset();
-    this.y=Math.random()*h;
-  }
-  reset(){
-    this.x=Math.random()*w;
-    this.y=-10;
-    this.size=Math.random()*2.5+0.5;
-    this.speed=Math.random()*0.4+0.1;
-    this.opacity=Math.random()*0.5+0.2;
-    this.wind=Math.random()*0.5-0.25;
-    this.type=Math.random()>0.7?'gold':'emerald';
-  }
-  update(){
-    this.y+=this.speed;
-    this.x+=Math.sin(this.y*0.01)*0.3+this.wind;
-    if(this.y>h+10)this.reset();
-  }
-  draw(){
-    ctx.beginPath();
-    const color=this.type==='gold'?`rgba(232,204,122,${this.opacity})`:`rgba(0,168,107,${this.opacity*0.6})`;
-    ctx.fillStyle=color;
-    ctx.shadowBlur=this.type==='gold'?8:4;
-    ctx.shadowColor=this.type==='gold'?'rgba(212,168,67,0.6)':'rgba(0,168,107,0.4)';
-    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-    ctx.fill();
-  }
+function setLang(l){
+  document.body.className=l;
+  document.getElementById('btn-es').className=l==='es'?'on':'';
+  document.getElementById('btn-en').className=l==='en'?'on':'';
+  try{localStorage.setItem('slang',l)}catch(e){}
 }
+try{setLang(localStorage.getItem('slang')||'es')}catch(e){setLang('es')}
 
-for(let i=0;i<80;i++)particles.push(new Particle());
+// Countdown
+(function tick(){
+  var d=new Date('2026-10-03T15:00:00-04:00')-new Date();
+  if(d<=0){document.getElementById('cd-d').textContent='00';document.getElementById('cd-h').textContent='00';document.getElementById('cd-m').textContent='00';document.getElementById('cd-s').textContent='00';return}
+  document.getElementById('cd-d').textContent=String(Math.floor(d/864e5)).padStart(2,'0');
+  document.getElementById('cd-h').textContent=String(Math.floor((d%864e5)/36e5)).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(Math.floor((d%36e5)/6e4)).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(Math.floor((d%6e4)/1e3)).padStart(2,'0');
+  setTimeout(tick,1000);
+})();
 
-function animate(){
-  ctx.clearRect(0,0,w,h);
-  particles.forEach(p=>{p.update();p.draw()});
-  requestAnimationFrame(animate);
-}
-animate();
-
-// ═══════════════════════════════════════════
-// MOUSE GLOW
-// ═══════════════════════════════════════════
-const glow=document.getElementById('mouse-glow');
-document.addEventListener('mousemove',e=>{
-  glow.style.left=e.clientX+'px';
-  glow.style.top=e.clientY+'px';
-  glow.style.opacity='1';
-});
-document.addEventListener('mouseleave',()=>{glow.style.opacity='0'});
-
-// ═══════════════════════════════════════════
-// SCROLL REVEAL
-// ═══════════════════════════════════════════
-const reveals=document.querySelectorAll('.reveal');
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})
-},{threshold:0.15});
-reveals.forEach(r=>observer.observe(r));
-
-// scroll progress
-window.addEventListener('scroll',()=>{
-  const scrollTop=document.documentElement.scrollTop;
-  const scrollHeight=document.documentElement.scrollHeight-document.documentElement.clientHeight;
-  document.getElementById('scroll-progress').style.width=(scrollTop/scrollHeight*100)+'%';
-});
-
-// ═══════════════════════════════════════════
-// INTERACTIVE SPARKLES
-// ═══════════════════════════════════════════
-function spawnSparkles(e){
-  const el=e.target;
-  const rect=el.getBoundingClientRect();
-  const cx=rect.left+rect.width/2;
-  const cy=rect.top+rect.height/2;
-  for(let i=0;i<12;i++){
-    const spark=document.createElement('div');
-    spark.style.cssText=`
-      position:fixed;pointer-events:none;z-index:200;
-      left:${cx}px;top:${cy}px;
-      width:6px;height:6px;
-      background:${i%2?'#f0d060':'#00a86b'};
-      border-radius:50%;
-      box-shadow:0 0 8px ${i%2?'#f0d060':'#00a86b'};
-      transition:all 0.8s cubic-bezier(0.16,1,0.3,1);
-      opacity:1;
-    `;
-    document.body.appendChild(spark);
-    requestAnimationFrame(()=>{
-      const angle=(i/12)*Math.PI*2;
-      const dist=40+Math.random()*40;
-      spark.style.transform=`translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px) scale(0)`;
-      spark.style.opacity='0';
-    });
-    setTimeout(()=>spark.remove(),900);
-  }
-}
-
-function spawnButterflies(){
-  for(let i=0;i<5;i++){
-    setTimeout(()=>{
-      const b=document.createElement('div');
-      b.textContent='🦋';
-      b.style.cssText=`
-        position:fixed;pointer-events:none;z-index:200;
-        left:${Math.random()*80+10}%;top:${Math.random()*60+20}%;
-        font-size:${1.5+Math.random()*2}rem;
-        opacity:0;
-        transition:all ${2+Math.random()*2}s ease;
-      `;
-      document.body.appendChild(b);
-      requestAnimationFrame(()=>{
-        b.style.transform=`translate(${Math.random()*100-50}px,${-80-Math.random()*60}px) rotate(${Math.random()*40-20}deg)`;
-        b.style.opacity='0.8';
-      });
-      setTimeout(()=>b.remove(),3000);
-    },i*200);
-  }
-}
-
-// ═══════════════════════════════════════════
-// LANGUAGE
-// ═══════════════════════════════════════════
-function setLang(lang){
-  document.body.className='lang-'+lang;
-  document.getElementById('btn-es').classList.toggle('active',lang==='es');
-  document.getElementById('btn-en').classList.toggle('active',lang==='en');
-  localStorage.setItem('samantha_lang',lang);
-}
-setLang(localStorage.getItem('samantha_lang')||'es');
-
-// ═══════════════════════════════════════════
-// COUNTDOWN
-// ═══════════════════════════════════════════
-const eventDate=new Date('2026-10-03T15:00:00-04:00');
-function updateCountdown(){
-  const now=new Date();
-  const diff=eventDate-now;
-  if(diff<=0){
-    document.getElementById('cd-days').textContent='00';
-    document.getElementById('cd-hours').textContent='00';
-    document.getElementById('cd-mins').textContent='00';
-    document.getElementById('cd-secs').textContent='00';
-    return;
-  }
-  const d=Math.floor(diff/86400000);
-  const h=Math.floor((diff%86400000)/3600000);
-  const m=Math.floor((diff%3600000)/60000);
-  const s=Math.floor((diff%60000)/1000);
-  document.getElementById('cd-days').textContent=String(d).padStart(2,'0');
-  document.getElementById('cd-hours').textContent=String(h).padStart(2,'0');
-  document.getElementById('cd-mins').textContent=String(m).padStart(2,'0');
-  document.getElementById('cd-secs').textContent=String(s).padStart(2,'0');
-}
-updateCountdown();
-setInterval(updateCountdown,1000);
-
-// ═══════════════════════════════════════════
 // RSVP
-// ═══════════════════════════════════════════
-document.getElementById('rsvp-form').addEventListener('submit',async e=>{
+function submitRSVP(e){
   e.preventDefault();
-  const btn=document.getElementById('submit-btn');
-  const form=e.target;
-  const isEs=document.body.classList.contains('lang-es');
-  btn.disabled=true;
-  btn.innerHTML='<span class="spinner"></span> '+(isEs?'Enviando...':'Sending...');
-
-  const data={
-    name:form.name.value.trim(),
-    email:form.email.value.trim(),
-    phone:form.phone.value.trim(),
-    attending:form.attending.value,
-    guests:parseInt(form.guests.value),
-    message:form.message.value.trim(),
-    timestamp:new Date().toISOString()
+  var f=e.target,b=document.getElementById('submit-btn');
+  b.disabled=true;
+  b.textContent=document.body.className==='es'?'Enviando...':'Sending...';
+  var d={
+    name:f.name.value.trim(),
+    email:f.email.value.trim(),
+    phone:f.phone.value.trim(),
+    attending:f.attending.value,
+    guests:parseInt(f.guests.value)||0,
+    message:f.message.value.trim(),
+    ts:new Date().toISOString()
   };
-
-  try{await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}catch(_){}
-  const entries=JSON.parse(localStorage.getItem('samantha_rsvp')||'[]');
-  data._id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-  entries.push(data);
-  localStorage.setItem('samantha_rsvp',JSON.stringify(entries));
-
-  document.getElementById('rsvp-form').style.display='none';
-  document.getElementById('success-msg').classList.add('show');
-});
-
-// ═══════════════════════════════════════════
-// PARALLAX ON SCROLL
-// ═══════════════════════════════════════════
-window.addEventListener('scroll',()=>{
-  const scrolled=window.pageYOffset;
-  document.querySelectorAll('.details-card').forEach(card=>{
-    card.style.transform=`translateY(${scrolled*0.02}px)`;
-  });
-});
+  try{
+    var x=new XMLHttpRequest();
+    x.open('POST','/api/rsvp');
+    x.setRequestHeader('Content-Type','application/json');
+    x.send(JSON.stringify(d));
+  }catch(_){}
+  try{
+    var a=JSON.parse(localStorage.getItem('srsvp')||'[]');
+    a.push(d);
+    localStorage.setItem('srsvp',JSON.stringify(a));
+  }catch(_){}
+  f.style.display='none';
+  document.getElementById('success-msg').className='success show';
+  return false;
+}
 </script>
 </body>
 </html>
