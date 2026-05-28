@@ -171,12 +171,14 @@ body.es .lang-es-i,body.en .lang-en-i{display:inline}
 /* ── NAME ── */
 h1.name{
   font-family:'Great Vibes',cursive;font-size:5.5rem;
-  text-align:center;line-height:1;margin:0 0 20px;font-weight:400;
+  text-align:center;line-height:1.2;margin:0 0 20px;font-weight:400;
+  padding:8px 0;
   background:linear-gradient(180deg,#f0d060 0%,#d4a843 40%,#c49a3c 60%,#e8cc7a 100%);
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;
   filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4));
   animation:nameShimmer 4s ease-in-out infinite;
+  overflow:visible;
 }
 @keyframes nameShimmer{
   0%,100%{filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4)) brightness(1)}
@@ -362,13 +364,6 @@ h1.name{
   </div>
 
   <div class="crown-wrap"><span class="crown" onclick="burstSparks(event)">👑</span></div>
-
-  <!-- PHOTO -->
-  <div class="photo-wrap">
-    <div class="photo-frame">
-      <img src="img_50e2c63a0ecd.jpg" alt="Samantha" onerror="this.style.display='none';this.parentElement.style.display='none'">
-    </div>
-  </div>
 
   <h1 class="name">Samantha</h1>
 
