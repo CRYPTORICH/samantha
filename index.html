@@ -2,337 +2,274 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Samantha — Quince Años</title>
-
-<!-- ═══════ FONTS ═══════ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Great+Vibes&family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-
-<!-- ═══════ CDN LIBRARIES ═══════ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="https://unpkg.com/split-type@0.3.4/umd/index.min.js"></script>
-
 <style>
 /* ═══════════════════════════════════════════════
    SAMANTHA · QUINCE AÑOS
-   Luxury cinematic dream — Timeless elegance
+   Timeless elegance · Pure CSS · No dependencies
    ═══════════════════════════════════════════════ */
 :root{
   --emerald:#005c3f;
-  --emerald-deep:#003d26;
-  --gold:#c4a04a;
-  --gold-soft:#d4b868;
-  --champagne:#e8d5b0;
-  --ivory:#f5efe0;
-  --deep:#000d06;
-  --deep2:#001a0d;
-  --surface:rgba(0,16,8,0.5);
-  --glass:rgba(0,12,6,0.4);
-  --text:#f5efe0;
-  --text-dim:rgba(245,239,224,0.7);
+  --emerald-deep:#003820;
+  --gold:#b8942f;
+  --gold-soft:#c4a04a;
+  --champagne:#e0d0b0;
+  --ivory:#f0ebe0;
+  --deep:#000a05;
+  --glass:rgba(0,6,3,0.45);
 }
-
 *{margin:0;padding:0;box-sizing:border-box}
-
-html{
-  background:var(--deep);
-  overflow-x:hidden;
-}
-
-html.lenis,html.lenis body{height:auto}
-.lenis.lenis-smooth{scroll-behavior:auto}
-.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
-.lenis.lenis-stopped{overflow:hidden}
-.lenis.lenis-scrolling iframe{pointer-events:none}
+html{scroll-behavior:smooth;background:#000a05}
 
 body{
   font-family:'Cormorant Garamond',Georgia,serif;
-  color:var(--text);
-  background:var(--deep);
-  overflow-x:hidden;
+  color:var(--ivory);
+  min-height:100vh;
   -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
 }
 
-/* ═══ VIDEO BACKGROUND ═══ */
-#video-bg{
-  position:fixed;inset:0;z-index:0;overflow:hidden;
-  pointer-events:none;
+/* ═══ ELEGANT GRADIENT BACKGROUND ═══ */
+.bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
 }
-#video-bg video{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  min-width:100%;min-height:100%;object-fit:cover;
-  will-change:transform;
+.bg-layer{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 10%,rgba(0,92,63,0.35) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 70% 30%,rgba(180,148,47,0.08) 0%,transparent 50%),
+    radial-gradient(ellipse 90% 40% at 50% 80%,rgba(0,60,40,0.25) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 30% at 20% 70%,rgba(196,160,74,0.05) 0%,transparent 45%),
+    linear-gradient(180deg,#000a05 0%,#001a0d 40%,#000d08 70%,#000a05 100%);
 }
-#video-veil{
-  position:fixed;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,
-    rgba(0,13,6,0.0) 0%,
-    rgba(0,13,6,0.15) 20%,
-    rgba(0,13,6,0.35) 50%,
-    rgba(0,13,6,0.6) 75%,
-    rgba(0,13,6,0.85) 90%,
-    #000d06 100%
-  );
-}
-#video-vignette{
-  position:fixed;inset:0;z-index:2;pointer-events:none;
-  box-shadow:inset 0 0 300px 120px rgba(0,13,6,0.7);
-}
-
-/* ═══ THREE.JS CANVAS ═══ */
-#three-canvas{
-  position:fixed;inset:0;z-index:3;pointer-events:none;
-}
-
-/* ═══ CUSTOM CURSOR ═══ */
-#cursor{
-  position:fixed;z-index:1000;pointer-events:none;
-  width:16px;height:16px;
-  border:1px solid rgba(212,168,67,0.5);
-  border-radius:50%;
-  transform:translate(-50%,-50%);
-  transition:width 0.3s,height 0.3s,border-color 0.3s;
-  mix-blend-mode:screen;
-}
-#cursor.hover{width:36px;height:36px;border-color:rgba(212,168,67,0.8)}
-#cursor.click{width:10px;height:10px}
-
-/* ═══ CONTENT LAYER ═══ */
-#content{
-  position:relative;z-index:10;
+.bg-vignette{
+  position:absolute;inset:0;
+  box-shadow:inset 0 0 200px 80px rgba(0,10,5,0.7);
 }
 
 /* ═══ SCENES ═══ */
 .scene{
+  position:relative;z-index:2;
   min-height:100vh;
   display:flex;align-items:center;justify-content:center;
-  padding:120px 28px;
-  position:relative;
+  padding:100px 28px;
 }
-.scene-inner{
-  max-width:580px;width:100%;
-}
+.scene-inner{max-width:540px;width:100%}
 
 /* ═══ LANGUAGE TOGGLE ═══ */
 .lang-toggle{
-  position:fixed;top:28px;right:28px;z-index:100;
+  position:fixed;top:24px;right:24px;z-index:100;
   display:flex;gap:0;
   background:var(--glass);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border:1px solid rgba(212,168,67,0.1);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(196,160,74,0.12);
   border-radius:40px;overflow:hidden;
-  box-shadow:0 4px 24px rgba(0,0,0,0.3);
 }
 .lang-toggle button{
   font-family:'Montserrat',sans-serif;font-size:0.55rem;
   letter-spacing:3px;padding:8px 18px;
   border:none;background:transparent;
-  color:var(--text-dim);cursor:pointer;
+  color:rgba(240,235,224,0.5);cursor:pointer;
   text-transform:uppercase;font-weight:500;
-  transition:all 0.5s ease;
+  transition:all 0.4s;
 }
 .lang-toggle button.active{
-  background:linear-gradient(135deg,rgba(196,160,74,0.3),rgba(212,168,67,0.15));
-  color:var(--champagne);font-weight:600;
+  background:rgba(180,148,47,0.25);
+  color:var(--champagne);
 }
 
 /* ═══ LANGUAGE DISPLAY ═══ */
-[data-lang-es],[data-lang-en]{display:none}
-body.es [data-lang-es]{display:block}
-body.en [data-lang-en]{display:block}
-body.es [data-lang-es-i],body.en [data-lang-en-i]{display:inline}
-[data-lang-es-i],[data-lang-en-i]{display:none}
+[data-es],[data-en]{display:none}
+body.es [data-es]{display:block}
+body.en [data-en]{display:block}
+body.es [data-es-i],body.en [data-en-i]{display:inline}
+[data-es-i],[data-en-i]{display:none}
 
 /* ═══ TYPOGRAPHY ═══ */
 .title-script{
-  font-family:'Great Vibes',cursive;
-  font-weight:400;font-size:clamp(4rem,11vw,8rem);
+  font-family:'Great Vibes',cursive;font-weight:400;
+  font-size:clamp(3.8rem,10vw,7.5rem);
   text-align:center;line-height:1.1;
-  background:linear-gradient(180deg,
-    #e8d5b0 0%,
-    #d4b868 30%,
-    #c4a04a 55%,
-    #b8942f 80%,
-    #d4b868 100%
-  );
+  background:linear-gradient(180deg,#e0d0b0 0%,#c4a04a 35%,#b8942f 60%,#c4a04a 100%);
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 .title-display{
   font-family:'Playfair Display',Georgia,serif;
-  font-size:clamp(0.95rem,2.5vw,1.3rem);
+  font-size:clamp(0.95rem,2.5vw,1.25rem);
   text-align:center;color:var(--champagne);
   letter-spacing:8px;text-transform:uppercase;font-weight:400;
 }
 .title-label{
   font-family:'Cinzel',Georgia,serif;
   font-size:clamp(0.6rem,1.8vw,0.75rem);
-  text-align:center;color:var(--emerald);
+  text-align:center;color:rgba(0,168,107,0.6);
   letter-spacing:10px;text-transform:uppercase;font-weight:500;
 }
 .poetic{
   font-style:italic;font-size:clamp(1rem,2.2vw,1.2rem);
   text-align:center;line-height:2.1;
-  color:var(--text-dim);
+  color:rgba(240,235,224,0.75);
 }
-.poetic em{
-  font-style:italic;color:var(--champagne);
-  text-shadow:0 0 40px rgba(212,168,67,0.15);
+.poetic em{font-style:italic;color:var(--champagne)}
+
+/* ═══ BUTTERFLY ═══ */
+.bfly{
+  display:inline-block;font-size:2.4rem;
+  opacity:0.6;cursor:pointer;
+  animation:bflyFloat 8s ease-in-out infinite;
+  transition:opacity 0.4s,transform 0.4s;
+}
+.bfly:hover{opacity:1;transform:scale(1.15)}
+@keyframes bflyFloat{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  33%{transform:translateY(-12px) rotate(2deg)}
+  66%{transform:translateY(-5px) rotate(-1deg)}
 }
 
-/* ═══ GLASS CARD ═══ */
-.glass-card{
-  background:var(--glass);
-  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid rgba(212,168,67,0.08);
-  border-radius:24px;padding:48px 40px;
-  box-shadow:0 4px 32px rgba(0,0,0,0.3),
-             inset 0 1px 0 rgba(255,255,255,0.02);
+/* ═══ CROWN ═══ */
+.crown{
+  display:inline-block;font-size:2.8rem;opacity:0.7;
+  cursor:pointer;animation:crownFloat 6s ease-in-out infinite;
+  transition:opacity 0.4s,transform 0.4s;
 }
-.glass-card-subtle{
-  background:rgba(0,12,6,0.35);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border:1px solid rgba(212,168,67,0.06);
-  border-radius:20px;padding:20px 24px;
+.crown:hover{opacity:1;transform:scale(1.12)}
+@keyframes crownFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
 }
 
 /* ═══ DIVIDER ═══ */
 .divider{
   display:flex;align-items:center;justify-content:center;
-  gap:16px;margin:32px 0;
+  gap:16px;margin:28px 0;
 }
 .divider::before,.divider::after{
   content:'';flex:1;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(196,160,74,0.2),transparent);
+  background:linear-gradient(90deg,transparent,rgba(180,148,47,0.25),transparent);
 }
-.divider .gem{font-size:0.9rem;opacity:0.6}
+.divider .gem{font-size:0.85rem;opacity:0.5}
+
+/* ═══ GLASS CARDS ═══ */
+.card{
+  background:var(--glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(196,160,74,0.08);
+  border-radius:20px;padding:40px 32px;
+}
 
 /* ═══ DETAIL ROWS ═══ */
-.detail-row{
-  display:flex;align-items:center;gap:20px;margin:12px 0;
-  padding:18px 24px;
-  background:rgba(0,12,6,0.3);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(212,168,67,0.06);
-  border-radius:16px;
+.detail{
+  display:flex;align-items:center;gap:16px;
+  margin:10px 0;padding:16px 20px;
+  background:rgba(0,6,3,0.35);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(196,160,74,0.06);
+  border-radius:14px;
 }
-.detail-icon{font-size:1.5rem;flex-shrink:0;opacity:0.8}
+.detail-icon{font-size:1.4rem;opacity:0.7;flex-shrink:0}
 .detail-label{
   font-family:'Montserrat',sans-serif;font-size:0.48rem;
-  text-transform:uppercase;letter-spacing:4px;
-  color:var(--emerald);margin-bottom:4px;
+  text-transform:uppercase;letter-spacing:3px;
+  color:rgba(0,168,107,0.55);margin-bottom:3px;
 }
-.detail-value{font-size:1.05rem;color:var(--text);font-family:'Playfair Display',Georgia,serif}
+.detail-value{font-size:1rem;font-family:'Playfair Display',Georgia,serif}
 
 /* ═══ COUNTDOWN ═══ */
-.cd-grid{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.cd-grid{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 .cd-box{
-  background:rgba(0,12,6,0.4);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(212,168,67,0.1);
-  border-radius:18px;padding:24px 16px;min-width:80px;text-align:center;
+  background:rgba(0,6,3,0.4);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(196,160,74,0.1);
+  border-radius:16px;padding:22px 14px;min-width:76px;text-align:center;
 }
 .cd-num{
   font-family:'Playfair Display',Georgia,serif;
-  font-size:2rem;font-weight:600;color:var(--champagne);line-height:1;
+  font-size:1.8rem;font-weight:600;color:var(--champagne);line-height:1;
 }
 .cd-label{
   font-family:'Montserrat',sans-serif;font-size:0.5rem;
-  text-transform:uppercase;letter-spacing:3px;
-  color:var(--text-dim);margin-top:6px;
+  text-transform:uppercase;letter-spacing:2px;
+  color:rgba(240,235,224,0.5);margin-top:5px;
 }
 
 /* ═══ RSVP ═══ */
-.rsvp-form{display:flex;flex-direction:column;gap:18px}
+.form{display:flex;flex-direction:column;gap:16px}
 .form-label{
   font-family:'Montserrat',sans-serif;font-size:0.5rem;
-  text-transform:uppercase;letter-spacing:4px;color:var(--champagne);
+  text-transform:uppercase;letter-spacing:3px;color:var(--champagne);
 }
 .form-input{
   font-family:'Cormorant Garamond',Georgia,serif;font-size:1rem;
   padding:14px 18px;background:rgba(0,0,0,0.3);
-  border:1px solid rgba(212,168,67,0.08);border-radius:12px;
-  color:var(--text);outline:none;transition:border-color 0.4s;
+  border:1px solid rgba(196,160,74,0.1);
+  border-radius:12px;color:var(--ivory);
+  outline:none;transition:border-color 0.3s;
 }
-.form-input:focus{
-  border-color:rgba(196,160,74,0.4);
-}
-.form-input::placeholder{color:rgba(245,239,224,0.15)}
+.form-input:focus{border-color:rgba(180,148,47,0.35)}
+.form-input::placeholder{color:rgba(240,235,224,0.15)}
 
 .btn{
-  font-family:'Montserrat',sans-serif;font-size:0.65rem;
-  letter-spacing:5px;text-transform:uppercase;
+  font-family:'Montserrat',sans-serif;font-size:0.62rem;
+  letter-spacing:4px;text-transform:uppercase;
   padding:16px 36px;cursor:pointer;
-  background:linear-gradient(135deg,rgba(196,160,74,0.5),rgba(180,148,47,0.3));
-  border:1px solid rgba(212,168,67,0.2);
+  background:rgba(180,148,47,0.2);
+  border:1px solid rgba(196,160,74,0.2);
   border-radius:50px;color:var(--champagne);font-weight:500;
-  transition:all 0.5s cubic-bezier(0.25,0.1,0.25,1);
+  transition:all 0.4s;
 }
 .btn:hover{
-  background:linear-gradient(135deg,rgba(196,160,74,0.7),rgba(180,148,47,0.5));
-  border-color:rgba(212,168,67,0.4);
-  transform:translateY(-2px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.3);
+  background:rgba(180,148,47,0.35);
+  border-color:rgba(196,160,74,0.4);
 }
 
+/* ═══ REVEAL ON SCROLL ═══ */
+.reveal{
+  opacity:0;transform:translateY(30px);
+  transition:opacity 0.8s ease,transform 0.8s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ═══ PER-CHARACTER ═══ */
+.char{
+  display:inline-block;
+  opacity:0;filter:blur(6px);transform:translateY(16px);
+  transition:opacity 0.5s ease,filter 0.6s ease,transform 0.5s ease;
+}
+.char.visible{opacity:1;filter:blur(0);transform:translateY(0)}
+
 /* ═══ SUCCESS ═══ */
-.success-msg{text-align:center;padding:40px 20px}
-.success-msg .s-icon{font-size:3rem;margin-bottom:16px;display:block}
+.success{text-align:center;padding:40px 20px}
+.success-icon{font-size:2.8rem;margin-bottom:16px;display:block}
 
 /* ═══ FOOTER ═══ */
 .footer{
-  position:relative;z-index:10;
+  position:relative;z-index:2;
   text-align:center;padding:80px 24px 60px;
   font-family:'Montserrat',sans-serif;font-size:0.5rem;
-  letter-spacing:4px;text-transform:uppercase;
-  color:var(--text-dim);
-}
-
-/* ═══ SPLIT-TYPE REVEAL ═══ */
-.char{
-  display:inline-block;
-  opacity:0;
-  filter:blur(8px);
-  transform:translateY(20px);
+  letter-spacing:3px;text-transform:uppercase;
+  color:rgba(240,235,224,0.4);
 }
 
 /* ═══ MOBILE ═══ */
 @media(max-width:480px){
   .scene{padding:80px 16px}
-  .glass-card{padding:32px 24px;border-radius:20px}
-  .title-script{font-size:3.5rem}
-  .cd-box{min-width:64px;padding:16px 10px}
-  .cd-num{font-size:1.4rem}
-  .lang-toggle{top:16px;right:16px}
-  .lang-toggle button{padding:7px 14px;font-size:0.5rem;letter-spacing:2px}
-  #cursor{display:none}
-  body{cursor:auto}
+  .card{padding:28px 20px}
+  .title-script{font-size:3.2rem}
+  .cd-box{min-width:62px;padding:16px 8px}
+  .cd-num{font-size:1.3rem}
+  .lang-toggle{top:16px;right:12px}
+  .lang-toggle button{padding:7px 14px;font-size:0.5rem}
 }
 </style>
 </head>
 <body class="es">
 
-<!-- ═══════ VIDEO ═══════ -->
-<div id="video-bg">
-  <video id="hero-video" autoplay muted playsinline preload="auto" loop>
-    <source src="hero-video.mp4" type="video/mp4">
-  </video>
-</div>
-<div id="video-veil"></div>
-<div id="video-vignette"></div>
-
-<!-- ═══════ THREE.JS ATMOSPHERE ═══════ -->
-<canvas id="three-canvas"></canvas>
-
-<!-- ═══════ CURSOR ═══════ -->
-<div id="cursor"></div>
+<!-- ═══════ BACKGROUND ═══════ -->
+<div class="bg"><div class="bg-layer"></div><div class="bg-vignette"></div></div>
 
 <!-- ═══════ LANGUAGE ═══════ -->
 <div class="lang-toggle">
@@ -341,533 +278,180 @@ body.es [data-lang-es-i],body.en [data-lang-en-i]{display:inline}
 </div>
 
 <!-- ═══════════════════════════════════
-     SCENE 1 · EMERALD MIST
+     SCENE 1 · INVITATION
      ═══════════════════════════════════ -->
-<div id="content">
-  <section class="scene" id="scene-mist" style="min-height:110vh">
-    <div class="scene-inner" style="text-align:center">
+<section class="scene">
+  <div class="scene-inner" style="text-align:center">
 
-      <div data-lang-es>
-        <p class="poetic"><em>En un sueño esmeralda,</em></p>
-        <p class="poetic">donde los recuerdos flotan<br>como pétalos en la brisa,</p>
-        <p class="poetic">una joven despierta<br>a un nuevo amanecer.</p>
-      </div>
-      <div data-lang-en>
-        <p class="poetic"><em>In an emerald dream,</em></p>
-        <p class="poetic">where memories drift<br>like petals in the breeze,</p>
-        <p class="poetic">a young woman awakens<br>to a new dawn.</p>
-      </div>
+    <span class="bfly reveal">🦋</span>
 
+    <div data-es>
+      <p class="poetic reveal"><em>En un sueño esmeralda,</em></p>
+      <p class="poetic reveal">donde los recuerdos flotan<br>como pétalos en la brisa,</p>
+      <p class="poetic reveal">una joven despierta<br>a un nuevo amanecer.</p>
     </div>
-  </section>
-
-  <!-- ═══════════════════════════════════
-       SCENE 2 · THE REVELATION
-       ═══════════════════════════════════ -->
-  <section class="scene" id="scene-reveal">
-    <div class="scene-inner" style="text-align:center">
-
-      <div style="margin-bottom:16px">
-        <span style="font-size:2.6rem;opacity:0.7;display:inline-block">👑</span>
-      </div>
-
-      <div class="divider"><span class="gem">✦</span></div>
-
-      <div data-lang-es>
-        <p class="poetic">Con amor y alegría,<br>te invitamos a celebrar<br>los Quince Años de</p>
-      </div>
-      <div data-lang-en>
-        <p class="poetic">With love and joy,<br>we invite you to celebrate<br>the Sweet Fifteen of</p>
-      </div>
-
-      <h1 class="title-script" style="margin-top:12px">Samantha</h1>
-      <p class="title-display" style="margin-top:20px">Quince Años</p>
-      <p class="title-label" style="margin-top:12px">◆ ◆ ◆</p>
-
+    <div data-en>
+      <p class="poetic reveal"><em>In an emerald dream,</em></p>
+      <p class="poetic reveal">where memories drift<br>like petals in the breeze,</p>
+      <p class="poetic reveal">a young woman awakens<br>to a new dawn.</p>
     </div>
-  </section>
 
-  <!-- ═══════════════════════════════════
-       SCENE 3 · EVENT DETAILS
-       ═══════════════════════════════════ -->
-  <section class="scene" id="scene-details">
-    <div class="scene-inner">
-      <div class="glass-card">
+    <div class="divider reveal"><span class="gem">✦</span></div>
 
-        <p class="title-display" style="margin-bottom:28px">
-          <span data-lang-es>Detalles</span>
-          <span data-lang-en>Details</span>
-        </p>
-
-        <div class="detail-row">
-          <span class="detail-icon">📅</span>
-          <div>
-            <div class="detail-label" data-lang-es>Fecha</div>
-            <div class="detail-label" data-lang-en>Date</div>
-            <div class="detail-value">Sábado, 15 de Noviembre 2025</div>
-          </div>
-        </div>
-
-        <div class="detail-row">
-          <span class="detail-icon">🕐</span>
-          <div>
-            <div class="detail-label" data-lang-es>Hora</div>
-            <div class="detail-label" data-lang-en>Time</div>
-            <div class="detail-value">6:00 PM — 12:00 AM</div>
-          </div>
-        </div>
-
-        <div class="detail-row">
-          <span class="detail-icon">📍</span>
-          <div>
-            <div class="detail-label" data-lang-es>Lugar</div>
-            <div class="detail-label" data-lang-en>Venue</div>
-            <div class="detail-value" data-lang-es>Salón de Eventos La Esmeralda</div>
-            <div class="detail-value" data-lang-en>La Esmeralda Event Hall</div>
-          </div>
-        </div>
-
-        <div class="detail-row">
-          <span class="detail-icon">👗</span>
-          <div>
-            <div class="detail-label" data-lang-es>Código de Vestimenta</div>
-            <div class="detail-label" data-lang-en>Dress Code</div>
-            <div class="detail-value" data-lang-es>Formal — Tonos Esmeralda y Dorado</div>
-            <div class="detail-value" data-lang-en>Formal — Emerald &amp; Gold</div>
-          </div>
-        </div>
-
-      </div>
+    <div data-es>
+      <p class="poetic reveal">Con amor y alegría,<br>te invitamos a celebrar<br>los Quince Años de</p>
     </div>
-  </section>
+    <div data-en>
+      <p class="poetic reveal">With love and joy,<br>we invite you to celebrate<br>the Sweet Fifteen of</p>
+    </div>
 
-  <!-- ═══════════════════════════════════
-       SCENE 4 · COUNTDOWN
-       ═══════════════════════════════════ -->
-  <section class="scene" id="scene-countdown">
-    <div class="scene-inner" style="text-align:center">
+    <span class="crown reveal" style="margin-top:12px">👑</span>
+    <h1 class="title-script reveal" style="margin-top:8px">Samantha</h1>
+    <p class="title-display reveal" style="margin-top:16px">Quince Años</p>
+    <p class="title-label reveal" style="margin-top:8px">◆ ◆ ◆</p>
 
-      <p class="title-label" data-lang-es style="margin-bottom:24px">Cuenta Regresiva</p>
-      <p class="title-label" data-lang-en style="margin-bottom:24px">Countdown</p>
+  </div>
+</section>
 
-      <div class="cd-grid">
-        <div class="cd-box"><div class="cd-num" id="cd-d">--</div><div class="cd-label" data-lang-es>Días</div><div class="cd-label" data-lang-en>Days</div></div>
-        <div class="cd-box"><div class="cd-num" id="cd-h">--</div><div class="cd-label" data-lang-es>Horas</div><div class="cd-label" data-lang-en>Hours</div></div>
-        <div class="cd-box"><div class="cd-num" id="cd-m">--</div><div class="cd-label" data-lang-es>Min</div><div class="cd-label" data-lang-en>Min</div></div>
-        <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-label" data-lang-es>Seg</div><div class="cd-label" data-lang-en>Sec</div></div>
-      </div>
+<!-- ═══════════════════════════════════
+     SCENE 2 · DETAILS
+     ═══════════════════════════════════ -->
+<section class="scene">
+  <div class="scene-inner">
+    <div class="card reveal">
 
-      <div class="divider"><span class="gem">💎</span></div>
-
-      <p class="poetic" style="font-size:0.95rem">
-        <span data-lang-es>Hasta que la magia comience</span>
-        <span data-lang-en>Until the magic begins</span>
+      <p class="title-display" style="margin-bottom:24px">
+        <span data-es>Detalles</span>
+        <span data-en>Details</span>
       </p>
 
+      <div class="detail reveal"><span class="detail-icon">📅</span><div><div class="detail-label" data-es>Fecha</div><div class="detail-label" data-en>Date</div><div class="detail-value">Sábado, 15 de Noviembre 2025</div></div></div>
+      <div class="detail reveal"><span class="detail-icon">🕐</span><div><div class="detail-label" data-es>Hora</div><div class="detail-label" data-en>Time</div><div class="detail-value">6:00 PM — 12:00 AM</div></div></div>
+      <div class="detail reveal"><span class="detail-icon">📍</span><div><div class="detail-label" data-es>Lugar</div><div class="detail-label" data-en>Venue</div><div class="detail-value" data-es>Salón de Eventos La Esmeralda</div><div class="detail-value" data-en>La Esmeralda Event Hall</div></div></div>
+      <div class="detail reveal"><span class="detail-icon">👗</span><div><div class="detail-label" data-es>Código de Vestimenta</div><div class="detail-label" data-en>Dress Code</div><div class="detail-value" data-es>Formal — Tonos Esmeralda y Dorado</div><div class="detail-value" data-en>Formal — Emerald &amp; Gold</div></div></div>
+
     </div>
-  </section>
-
-  <!-- ═══════════════════════════════════
-       SCENE 5 · RSVP
-       ═══════════════════════════════════ -->
-  <section class="scene" id="scene-rsvp">
-    <div class="scene-inner">
-      <div class="glass-card">
-
-        <p class="title-display" style="margin-bottom:4px;text-align:center">
-          <span data-lang-es>Confirmar Asistencia</span>
-          <span data-lang-en>RSVP</span>
-        </p>
-        <p class="title-label" style="margin-bottom:28px">✦</p>
-
-        <form id="rsvp-form" class="rsvp-form">
-          <div><label class="form-label" data-lang-es>Nombre Completo</label><label class="form-label" data-lang-en>Full Name</label><input class="form-input" id="rsvp-name" type="text" placeholder="Tu nombre..." required></div>
-          <div><label class="form-label" data-lang-es>Correo o Teléfono</label><label class="form-label" data-lang-en>Email or Phone</label><input class="form-input" id="rsvp-contact" type="text" placeholder="tu@email.com"></div>
-          <div><label class="form-label" data-lang-es>Acompañantes</label><label class="form-label" data-lang-en>Guests</label><input class="form-input" id="rsvp-guests" type="number" min="0" max="5" value="0"></div>
-          <div><label class="form-label" data-lang-es>Mensaje para Samantha</label><label class="form-label" data-lang-en>Message for Samantha</label><textarea class="form-input" id="rsvp-msg" rows="3" placeholder="Tus deseos..."></textarea></div>
-          <button type="submit" class="btn"><span data-lang-es>✦ Confirmar ✦</span><span data-lang-en>✦ Send RSVP ✦</span></button>
-        </form>
-
-        <div id="rsvp-success" class="success-msg" style="display:none">
-          <span class="s-icon">✨</span>
-          <p class="poetic" style="font-size:1.15rem"><span data-lang-es>¡Gracias! Tu asistencia ha sido confirmada.</span><span data-lang-en>Thank you! Your RSVP has been confirmed.</span></p>
-          <p style="opacity:0.5;margin-top:12px"><span data-lang-es>Te esperamos para celebrar juntos esta noche inolvidable.</span><span data-lang-en>We can't wait to celebrate this unforgettable night with you.</span></p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="footer">
-    <p>Samantha · Quince Años · 2025</p>
-    <p style="margin-top:4px;opacity:0.4"><span data-lang-es>hecho con amor</span><span data-lang-en>made with love</span></p>
   </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SCENE 3 · COUNTDOWN
+     ═══════════════════════════════════ -->
+<section class="scene">
+  <div class="scene-inner" style="text-align:center">
+
+    <p class="title-label reveal" style="margin-bottom:20px">
+      <span data-es>Cuenta Regresiva</span>
+      <span data-en>Countdown</span>
+    </p>
+
+    <div class="cd-grid reveal">
+      <div class="cd-box"><div class="cd-num" id="cd-d">--</div><div class="cd-label" data-es>Días</div><div class="cd-label" data-en>Days</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-h">--</div><div class="cd-label" data-es>Horas</div><div class="cd-label" data-en>Hours</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-m">--</div><div class="cd-label" data-es>Min</div><div class="cd-label" data-en>Min</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-label" data-es>Seg</div><div class="cd-label" data-en>Sec</div></div>
+    </div>
+
+    <div class="divider reveal"><span class="gem">💎</span></div>
+    <p class="poetic reveal" style="font-size:0.95rem">
+      <span data-es>Hasta que la magia comience</span>
+      <span data-en>Until the magic begins</span>
+    </p>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SCENE 4 · RSVP
+     ═══════════════════════════════════ -->
+<section class="scene">
+  <div class="scene-inner">
+    <div class="card reveal">
+
+      <p class="title-display" style="margin-bottom:2px;text-align:center">
+        <span data-es>Confirmar Asistencia</span>
+        <span data-en>RSVP</span>
+      </p>
+      <p class="title-label" style="margin-bottom:24px">✦</p>
+
+      <form id="rsvp-form" class="form">
+        <div><label class="form-label" data-es>Nombre Completo</label><label class="form-label" data-en>Full Name</label><input class="form-input" id="rsvp-name" type="text" placeholder="Tu nombre..." required></div>
+        <div><label class="form-label" data-es>Correo o Teléfono</label><label class="form-label" data-en>Email or Phone</label><input class="form-input" id="rsvp-contact" type="text" placeholder="tu@email.com"></div>
+        <div><label class="form-label" data-es>Acompañantes</label><label class="form-label" data-en>Guests</label><input class="form-input" id="rsvp-guests" type="number" min="0" max="5" value="0"></div>
+        <div><label class="form-label" data-es>Mensaje para Samantha</label><label class="form-label" data-en>Message for Samantha</label><textarea class="form-input" id="rsvp-msg" rows="3" placeholder="Tus deseos..."></textarea></div>
+        <button type="submit" class="btn"><span data-es>✦ Confirmar ✦</span><span data-en>✦ Send RSVP ✦</span></button>
+      </form>
+
+      <div id="rsvp-success" class="success" style="display:none">
+        <span class="success-icon">✨</span>
+        <p class="poetic" style="font-size:1.1rem"><span data-es>¡Gracias! Tu asistencia ha sido confirmada.</span><span data-en>Thank you! Your RSVP has been confirmed.</span></p>
+        <p style="opacity:0.5;margin-top:12px"><span data-es>Te esperamos para celebrar juntos.</span><span data-en>We look forward to celebrating with you.</span></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <p>Samantha · Quince Años · 2025</p>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-     JAVASCRIPT — CINEMATIC ENGINE
-     ═══════════════════════════════════════ -->
 <script>
 (function(){
   var D=document,W=window;
-  var video=D.getElementById('hero-video');
-  var canvas=D.getElementById('three-canvas');
-  var cursor=D.getElementById('cursor');
 
-  /* ═══════ LANGUAGE ═══════ */
+  /* ═══ LANGUAGE ═══ */
   W.setLang=function(l){
     D.body.className=l;
     D.getElementById('btn-es').className=l==='es'?'active':'';
     D.getElementById('btn-en').className=l==='en'?'active':'';
     try{localStorage.setItem('samantha-lang',l)}catch(e){}
   };
-  var saved='es';
-  try{saved=localStorage.getItem('samantha-lang')||'es'}catch(e){}
-  setLang(saved);
+  var s='es';
+  try{s=localStorage.getItem('samantha-lang')||'es'}catch(e){}
+  setLang(s);
 
-  /* ═══════ LENIS SMOOTH SCROLL ═══════ */
-  var lenis;
-  if(typeof Lenis!=='undefined'){
-    lenis=new Lenis({
-      duration:1.8,
-      easing:function(t){return 1-Math.pow(1-t,4)},
-      smoothWheel:true,
-      lerp:0.08,
-      wheelMultiplier:0.8,
-      touchMultiplier:1.5,
-    });
-    function raf(time){
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    // Wire scroll events to GSAP ScrollTrigger
-    if(typeof ScrollTrigger!=='undefined'){
-      lenis.on('scroll',ScrollTrigger.update);
-      W.addEventListener('load',function(){ScrollTrigger.refresh()});
-    }
-  }
-
-  /* ═══════ SCROLL-DRIVEN VIDEO ═══════ */
-  var targetTime=0,currentTime=0;
-  var vReady=false;
-  video.addEventListener('loadedmetadata',function(){vReady=true});
-  if(video.readyState>=1)vReady=true;
-
-  // Make video loop by default, we'll control time via scroll
-  video.loop=true;
-
-  function updateVideo(){
-    if(!vReady||!video.duration)return;
-    var scrollY=lenis?lenis.scroll:W.scrollY;
-    var totalH=Math.max(D.documentElement.scrollHeight-W.innerHeight,1);
-    targetTime=(scrollY/totalH)*video.duration;
-    // Smooth lerp — cinematic drift
-    currentTime+=(targetTime-currentTime)*0.08;
-    // Clamp
-    currentTime=Math.max(0,Math.min(currentTime,video.duration));
-    // Slight blur during fast scroll
-    var delta=Math.abs(targetTime-currentTime);
-    var blur=Math.min(delta*3,4);
-    video.style.filter='blur('+blur.toFixed(1)+'px)';
-    video.currentTime=currentTime;
-  }
-
-  /* ═══════ THREE.JS ATMOSPHERE ═══════ */
-  var scene,camera,renderer,particles,dustGeo;
-  var mouseX=0,mouseY=0;
-  var particleCount=W.innerWidth<768?60:180;
-  var clock=new THREE.Clock();
-
-  if(typeof THREE!=='undefined'){
-    scene=new THREE.Scene();
-    camera=new THREE.PerspectiveCamera(60,W.innerWidth/W.innerHeight,0.1,100);
-    camera.position.z=5;
-
-    renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
-    renderer.setSize(W.innerWidth,W.innerHeight);
-    renderer.setPixelRatio(Math.min(W.devicePixelRatio,2));
-    renderer.setClearColor(0x000000,0);
-
-    // Dust particles
-    dustGeo=new THREE.BufferGeometry();
-    var positions=new Float32Array(particleCount*3);
-    var sizes=new Float32Array(particleCount);
-    var opacities=new Float32Array(particleCount);
-    var phases=new Float32Array(particleCount);
-
-    for(var i=0;i<particleCount;i++){
-      positions[i*3]=(Math.random()-0.5)*10;
-      positions[i*3+1]=(Math.random()-0.5)*10;
-      positions[i*3+2]=(Math.random()-0.5)*6;
-      sizes[i]=Math.random()*2.5+0.5;
-      opacities[i]=Math.random()*0.4+0.1;
-      phases[i]=Math.random()*Math.PI*2;
-    }
-    dustGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));
-    dustGeo.setAttribute('size',new THREE.BufferAttribute(sizes,1));
-
-    // Custom shader for soft dust
-    var dustMat=new THREE.ShaderMaterial({
-      transparent:true,depthWrite:false,
-      uniforms:{
-        uTime:{value:0},
-        uColor:{value:new THREE.Color('#d4b868')},
-        uColor2:{value:new THREE.Color('#00a86b')},
-        uOpacities:{value:opacities},
-        uPhases:{value:phases},
-        uMouse:{value:new THREE.Vector2(0,0)}
-      },
-      vertexShader:'\
-        attribute float size;\
-        varying float vSize;\
-        varying vec3 vPos;\
-        void main(){\
-          vec4 mv=modelViewMatrix*vec4(position,1.0);\
-          gl_PointSize=size*(200.0/-mv.z);\
-          gl_Position=projectionMatrix*mv;\
-          vSize=size;\
-          vPos=position;\
-        }',
-      fragmentShader:'\
-        varying float vSize;\
-        varying vec3 vPos;\
-        uniform float uTime;\
-        uniform vec3 uColor;\
-        uniform vec3 uColor2;\
-        uniform float uOpacities['+particleCount+'];\
-        uniform float uPhases['+particleCount+'];\
-        uniform vec2 uMouse;\
-        void main(){\
-          float d=length(gl_PointCoord-vec2(0.5))*2.0;\
-          float alpha=smoothstep(1.0,0.0,d)*0.4;\
-          alpha*=0.05+vSize*0.015;\
-          vec3 col=mix(uColor2,uColor,vSize*0.4);\
-          gl_FragColor=vec4(col,alpha);\
-        }'
-    });
-
-    var dust=new THREE.Points(dustGeo,dustMat);
-    scene.add(dust);
-
-    // Subtle ambient light bloom
-    var bloomGeo=new THREE.SphereGeometry(8,32,32);
-    var bloomMat=new THREE.ShaderMaterial({
-      transparent:true,depthWrite:false,
-      uniforms:{uTime:{value:0}},
-      vertexShader:'\
-        varying vec3 vNormal;\
-        varying vec3 vPos;\
-        void main(){\
-          vNormal=normalize(normalMatrix*normal);\
-          vPos=position;\
-          gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);\
-        }',
-      fragmentShader:'\
-        varying vec3 vNormal;\
-        varying vec3 vPos;\
-        uniform float uTime;\
-        void main(){\
-          float fresnel=pow(1.0-abs(dot(vNormal,vec3(0.0,0.0,1.0))),3.0);\
-          float alpha=fresnel*0.06;\
-          alpha+=sin(vPos.y*0.5+uTime*0.3)*0.02;\
-          vec3 col=mix(vec3(0.0,0.66,0.44),vec3(0.83,0.72,0.31),fresnel);\
-          gl_FragColor=vec4(col,alpha);\
-        }'
-    });
-    var bloom=new THREE.Mesh(bloomGeo,bloomMat);
-    scene.add(bloom);
-  }
-
-  function animate3D(time){
-    if(!scene)return;
-    var t=time*0.001;
-    if(dustMat){
-      dustMat.uniforms.uTime.value=t;
-      dustMat.uniforms.uMouse.value.set(mouseX,mouseY);
-    }
-    if(bloomMat)bloomMat.uniforms.uTime.value=t;
-
-    // Gentle particle drift
-    var pos=dustGeo.attributes.position.array;
-    for(var i=0;i<particleCount;i++){
-      var idx=i*3;
-      // Simplex-like organic motion using sin/cos combinations
-      pos[idx]+=Math.sin(t*0.4+phases[i])*0.0015;
-      pos[idx+1]+=Math.cos(t*0.35+phases[i])*0.0015-0.0008;
-      pos[idx+2]+=Math.sin(t*0.3+phases[i]+1.5)*0.001;
-      // Cursor avoidance
-      var dx=pos[idx]-mouseX*5;
-      var dy=pos[idx+1]-mouseY*5;
-      var dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<2){
-        pos[idx]+=dx/dist*0.003;
-        pos[idx+1]+=dy/dist*0.003;
-      }
-      // Wrap
-      if(pos[idx+1]<-5)pos[idx+1]=5;
-      if(pos[idx+1]>5)pos[idx+1]=-5;
-      if(pos[idx]<-5)pos[idx]=5;
-      if(pos[idx]>5)pos[idx]=-5;
-    }
-    dustGeo.attributes.position.needsUpdate=true;
-
-    renderer.render(scene,camera);
-    requestAnimationFrame(animate3D);
-  }
-  requestAnimationFrame(animate3D);
-
-  /* ═══════ RESIZE ═══════ */
-  W.addEventListener('resize',function(){
-    if(renderer){
-      renderer.setSize(W.innerWidth,W.innerHeight);
-      camera.aspect=W.innerWidth/W.innerHeight;
-      camera.updateProjectionMatrix();
-    }
-  });
-
-  /* ═══════ CURSOR ═══ */
-  var cX=-100,cY=-100,cmX=-100,cmY=-100;
-  var isTouch=false;
-  D.addEventListener('mousemove',function(e){
-    cmX=e.clientX;cmY=e.clientY;
-    mouseX=(e.clientX/W.innerWidth)*2-1;
-    mouseY=-(e.clientY/W.innerHeight)*2+1;
-  });
-  D.addEventListener('touchstart',function(){isTouch=true});
-  D.addEventListener('mousemove',function(){isTouch=false});
-  D.addEventListener('mouseover',function(e){
-    if(/BUTTON|A|INPUT|TEXTAREA/.test(e.target.tagName))cursor.classList.add('hover');
-  });
-  D.addEventListener('mouseout',function(e){
-    if(/BUTTON|A|INPUT|TEXTAREA/.test(e.target.tagName))cursor.classList.remove('hover');
-  });
-  D.addEventListener('mousedown',function(){cursor.classList.add('click')});
-  D.addEventListener('mouseup',function(){cursor.classList.remove('click')});
-
-  /* ═══════ MAIN LOOP ═══════ */
-  function mainLoop(){
-    // Smooth cursor
-    if(!isTouch){
-      cX+=(cmX-cX)*0.15;
-      cY+=(cmY-cY)*0.15;
-      cursor.style.left=cX+'px';
-      cursor.style.top=cY+'px';
-    }
-    // Update video
-    updateVideo();
-    requestAnimationFrame(mainLoop);
-  }
-  requestAnimationFrame(mainLoop);
-
-  /* ═══════ SPLITTYPE TEXT REVEALS ═══════ */
-  function splitAndReveal(){
-    // Split title
-    var titles=D.querySelectorAll('.title-script,.title-display,.title-label');
-    for(var i=0;i<titles.length;i++){
-      try{
-        var st=new SplitType(titles[i],{types:'chars'});
-        if(st.chars){
-          for(var j=0;j<st.chars.length;j++){
-            st.chars[j].style.transitionDelay=(j*0.03)+'s';
-          }
-        }
-      }catch(e){}
-    }
-  }
-  // Wait for fonts then split
-  D.fonts.ready.then(splitAndReveal);
-  setTimeout(splitAndReveal,1000);
-
-  /* ═══════ GSAP SCROLLTRIGGER ═══════ */
-  function setupScrollTriggers(){
-    if(typeof gsap==='undefined'||typeof ScrollTrigger==='undefined')return;
-
-    // Reveal characters as scenes enter view
-    var chars=D.querySelectorAll('.char');
-    if(chars.length>0){
-      gsap.set(chars,{opacity:0,filter:'blur(8px)',y:20});
-    }
-
-    // Scene-based reveals
-    var scenes=[
-      {id:'scene-mist',selector:'.char'},
-      {id:'scene-reveal',selector:'.char'},
-      {id:'scene-details',selector:'.detail-row,.glass-card'},
-      {id:'scene-countdown',selector:'.cd-box'},
-      {id:'scene-rsvp',selector:'.glass-card'}
-    ];
-
-    for(var i=0;i<scenes.length;i++){
-      var section=D.getElementById(scenes[i].id);
-      if(!section)continue;
-      var targets=section.querySelectorAll(scenes[i].selector);
-      if(targets.length===0)continue;
-
-      if(scenes[i].selector==='.char'){
-        // Per-character stagger reveals
-        var charsInScene=section.querySelectorAll('.char');
-        gsap.fromTo(charsInScene,
-          {opacity:0,filter:'blur(8px)',y:20},
-          {
-            opacity:1,filter:'blur(0px)',y:0,
-            duration:1.2,
-            stagger:{each:0.03,from:'start'},
-            ease:'power2.out',
-            scrollTrigger:{
-              trigger:section,
-              start:'top 75%',
-              end:'bottom 25%',
-              toggleActions:'play none none reverse'
-            }
-          }
-        );
-      }else{
-        gsap.fromTo(targets,
-          {opacity:0,y:40},
-          {
-            opacity:1,y:0,
-            duration:1,
-            stagger:0.12,
-            ease:'power2.out',
-            scrollTrigger:{
-              trigger:section,
-              start:'top 80%',
-              end:'bottom 30%',
-              toggleActions:'play none none reverse'
-            }
-          }
-        );
+  /* ═══ SCROLL REVEAL ═══ */
+  var revealEls=D.querySelectorAll('.reveal');
+  function checkReveal(){
+    for(var i=0;i<revealEls.length;i++){
+      var el=revealEls[i];
+      if(el.classList.contains('visible'))continue;
+      var rect=el.getBoundingClientRect();
+      if(rect.top<W.innerHeight*0.85){
+        el.classList.add('visible');
       }
     }
-
-    // Glass cards get subtle scale reveal
-    gsap.utils.toArray('.glass-card').forEach(function(card){
-      gsap.fromTo(card,
-        {opacity:0,scale:0.96,y:30},
-        {
-          opacity:1,scale:1,y:0,
-          duration:1.2,
-          ease:'power2.out',
-          scrollTrigger:{
-            trigger:card,
-            start:'top 85%',
-            toggleActions:'play none none reverse'
-          }
-        }
-      );
-    });
   }
+  W.addEventListener('scroll',checkReveal,{passive:true});
+  setTimeout(checkReveal,300);
+  setTimeout(checkReveal,800);
 
-  // Setup after fonts load
-  D.fonts.ready.then(function(){
-    setTimeout(setupScrollTriggers,500);
-  });
-  setTimeout(setupScrollTriggers,1500);
+  /* ═══ PER-CHARACTER TITLE REVEAL ═══ */
+  function splitTitle(el){
+    var text=el.textContent.trim();
+    var html='';
+    for(var i=0;i<text.length;i++){
+      html+='<span class="char" style="transition-delay:'+(i*0.025).toFixed(3)+'s">'+text[i]+'</span>';
+    }
+    el.innerHTML=html;
+  }
+  var titles=D.querySelectorAll('.title-script,.title-display');
+  for(var i=0;i<titles.length;i++)splitTitle(titles[i]);
 
-  /* ═══════ COUNTDOWN ═══════ */
+  function checkChars(){
+    var chars=D.querySelectorAll('.char:not(.visible)');
+    for(var i=0;i<chars.length;i++){
+      var rect=chars[i].getBoundingClientRect();
+      if(rect.top<W.innerHeight*0.8)chars[i].classList.add('visible');
+    }
+  }
+  W.addEventListener('scroll',checkChars,{passive:true});
+  setTimeout(checkChars,600);
+  setTimeout(checkChars,1200);
+
+  /* ═══ COUNTDOWN ═══ */
   var target=new Date('2025-11-15T18:00:00');
   function tick(){
     var diff=target-new Date();
@@ -875,8 +459,7 @@ body.es [data-lang-es-i],body.en [data-lang-en-i]{display:inline}
       D.getElementById('cd-d').textContent='00';
       D.getElementById('cd-h').textContent='00';
       D.getElementById('cd-m').textContent='00';
-      D.getElementById('cd-s').textContent='00';
-      return;
+      D.getElementById('cd-s').textContent='00';return;
     }
     D.getElementById('cd-d').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
     D.getElementById('cd-h').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
@@ -885,7 +468,7 @@ body.es [data-lang-es-i],body.en [data-lang-en-i]{display:inline}
   }
   tick();setInterval(tick,1000);
 
-  /* ═══════ RSVP ═══════ */
+  /* ═══ RSVP ═══ */
   D.getElementById('rsvp-form').addEventListener('submit',function(e){
     e.preventDefault();
     var name=D.getElementById('rsvp-name').value.trim();
