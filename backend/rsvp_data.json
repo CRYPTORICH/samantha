@@ -1,14 +1,1 @@
-[
-  {
-    "_id": "e2641b2e4b50",
-    "name": "Persistence Test",
-    "phone": "555-0001",
-    "email": "pt@test.com",
-    "address": "",
-    "guests": 1,
-    "message": "",
-    "date": "2026-05-29T11:48:01.798284",
-    "confirmation_sent": false,
-    "followup_stage": 0
-  }
-]
+[]
