@@ -10,5 +10,17 @@
     "date": "2026-05-29T14:54:07.088421",
     "confirmation_sent": false,
     "followup_stage": 0
+  },
+  {
+    "_id": "2d2f2033ff1f",
+    "name": "Hermes Test",
+    "phone": "555-9999",
+    "email": "test@test.com",
+    "address": "",
+    "guests": 0,
+    "message": "testing write path",
+    "date": "2026-05-29T14:55:19.830707",
+    "confirmation_sent": false,
+    "followup_stage": 0
   }
 ]
