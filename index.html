@@ -382,9 +382,19 @@ body.en [data-en]{display:block}
         <input class="fi" id="n" type="text" placeholder="Tu nombre..." required autocomplete="name">
       </div>
       <div class="fg reveal d2">
-        <label class="fl" for="c" data-es>Correo o Teléfono</label>
-        <label class="fl" for="c" data-en>Email or Phone</label>
-        <input class="fi" id="c" type="text" placeholder="tu@email.com" autocomplete="email">
+        <label class="fl" for="p" data-es>Teléfono</label>
+        <label class="fl" for="p" data-en>Phone</label>
+        <input class="fi" id="p" type="tel" placeholder="(302) 555-0123" autocomplete="tel">
+      </div>
+      <div class="fg reveal d2">
+        <label class="fl" for="e" data-es>Correo Electrónico</label>
+        <label class="fl" for="e" data-en>Email</label>
+        <input class="fi" id="e" type="email" placeholder="tu@email.com" autocomplete="email">
+      </div>
+      <div class="fg reveal d3">
+        <label class="fl" for="a" data-es>Dirección</label>
+        <label class="fl" for="a" data-en>Address</label>
+        <input class="fi" id="a" type="text" placeholder="Tu dirección..." autocomplete="street-address">
       </div>
       <div class="fg reveal d3">
         <label class="fl" for="g" data-es>Acompañantes</label>
@@ -464,7 +474,7 @@ body.en [data-en]{display:block}
   D.getElementById('f').addEventListener('submit',function(e){
     e.preventDefault();
     var nm=D.getElementById('n').value.trim();if(!nm)return;
-    var d={name:nm,contact:D.getElementById('c').value.trim(),guests:Number(D.getElementById('g').value)||0,message:D.getElementById('m').value.trim()};
+    var d={name:nm,phone:D.getElementById('p').value.trim(),email:D.getElementById('e').value.trim(),address:D.getElementById('a').value.trim(),guests:Number(D.getElementById('g').value)||0,message:D.getElementById('m').value.trim()};
     // Send to server
     fetch('https://samantha-rsvp.onrender.com/rsvp',{
       method:'POST',headers:{'Content-Type':'application/json'},
