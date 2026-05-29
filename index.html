@@ -464,7 +464,7 @@ body.en [data-en]{display:block}
   /* ═══ RSVP COUNT ═══ */
   function loadCount(){
     // Read count from GitHub Pages — always live
-    fetch('rsvp_data.json')
+    fetch('https://raw.githubusercontent.com/CRYPTORICH/samantha/main/rsvp_data.json')
       .then(function(r){return r.json()})
       .then(function(data){
         D.getElementById('rc').textContent=data.length;
