@@ -23,7 +23,7 @@ def _load_gh_token():
 
 GH_TOKEN = _load_gh_token()
 GH_REPO = "CRYPTORICH/samantha"
-GH_PATH = "backend/rsvp_data.json"
+GH_PATH = "rsvp_data.json"
 GH_API = f"https://api.github.com/repos/{GH_REPO}/contents/{GH_PATH}"
 
 # Fallback: local JSON file (wiped on deploy, survives restarts)

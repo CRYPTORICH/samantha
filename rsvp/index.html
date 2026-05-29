@@ -98,7 +98,7 @@ var allData = [];
 
 function load(){
   // Read directly from GitHub Pages — always live, no Render cold start
-  fetch('../backend/rsvp_data.json')
+  fetch('../rsvp_data.json')
     .then(function(r){return r.json()})
     .then(function(data){
       allData = data;
