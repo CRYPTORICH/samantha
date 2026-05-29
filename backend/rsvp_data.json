@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "_id": "test123xyz",
+    "name": "TEST ENTRY - verify write works",
+    "phone": "555-0000",
+    "email": "test@test.com",
+    "address": "123 Test St",
+    "guests": 1,
+    "message": "Testing",
+    "date": "2026-05-29T12:00:00",
+    "confirmation_sent": false,
+    "followup_stage": 0
+  }
+]
