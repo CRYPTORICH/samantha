@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP List — Samantha Quince Años</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:#0a0c09;color:#ece4d4;
+  font-family:'Segoe UI',system-ui,sans-serif;
+  padding:40px 24px;
+}
+h1{font-size:1.4rem;font-weight:600;margin-bottom:4px;color:#dcc898}
+.sub{font-size:0.75rem;color:rgba(236,228,212,0.4);margin-bottom:28px}
+table{
+  width:100%;max-width:900px;border-collapse:collapse;
+  margin:0 auto;font-size:0.9rem;
+}
+th{
+  text-align:left;padding:10px 14px;
+  font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;
+  color:rgba(0,168,107,0.5);border-bottom:1px solid rgba(196,160,74,0.12);
+  font-weight:500;
+}
+td{
+  padding:12px 14px;border-bottom:1px solid rgba(196,160,74,0.04);
+  vertical-align:top;line-height:1.4;
+}
+tr:hover td{background:rgba(196,160,74,0.03)}
+.name{font-weight:600;color:#dcc898;min-width:140px}
+.contact{color:rgba(236,228,212,0.6);font-size:0.8rem}
+.guests{text-align:center;color:rgba(236,228,212,0.5)}
+.msg{color:rgba(236,228,212,0.45);font-style:italic;max-width:280px;font-size:0.85rem}
+.date{color:rgba(236,228,212,0.25);font-size:0.7rem;white-space:nowrap}
+.empty{text-align:center;padding:60px;color:rgba(236,228,212,0.25)}
+.count{font-size:0.75rem;color:rgba(236,228,212,0.4);margin-bottom:20px}
+.count strong{color:#dcc898}
+.actions{margin-bottom:20px;display:flex;gap:8px}
+.btn{
+  font-size:0.65rem;padding:6px 14px;
+  background:rgba(196,160,74,0.08);
+  border:1px solid rgba(196,160,74,0.15);
+  color:#dcc898;cursor:pointer;border-radius:6px;
+  transition:all 0.2s;
+}
+.btn:hover{background:rgba(196,160,74,0.15)}
+.back{margin-top:32px;padding-top:16px;border-top:1px solid rgba(196,160,74,0.06)}
+.back a{color:rgba(236,228,212,0.25);text-decoration:none;font-size:0.7rem}
+.back a:hover{color:rgba(236,228,212,0.5)}
+</style>
+</head>
+<body>
+
+<h1>Samantha · Quince Años</h1>
+<p class="sub">Guest Registry / Registro de Invitados</p>
+
+<div class="actions">
+  <button class="btn" onclick="refresh()">Refresh</button>
+  <button class="btn" onclick="exportCSV()">Export CSV</button>
+</div>
+
+<p class="count" id="count"></p>
+
+<table id="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Contact</th>
+      <th style="text-align:center">Guests</th>
+      <th>Message</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<div class="back"><a href="../">← Back to invitation</a></div>
+
+<script>
+function load(){
+  var data=[];
+  try{data=JSON.parse(localStorage.getItem('sr')||'[]')}catch(e){}
+  var tbody=document.getElementById('tbody');
+  document.getElementById('count').innerHTML='<strong>'+data.length+'</strong> confirmed guests';
+
+  if(!data.length){
+    tbody.innerHTML='<tr><td colspan="5" class="empty">No RSVPs yet. / Aún no hay confirmaciones.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML=data.sort(function(a,b){return new Date(b.date)-new Date(a.date)}).map(function(r,i){
+    return '<tr>'+
+      '<td class="name">'+(i+1)+'. '+esc(r.name)+'</td>'+
+      '<td class="contact">'+(r.contact?esc(r.contact):'—')+'</td>'+
+      '<td class="guests">'+(r.guests||0)+'</td>'+
+      '<td class="msg">'+(r.message?'"'+esc(r.message)+'"':'—')+'</td>'+
+      '<td class="date">'+fmt(r.date)+'</td>'+
+      '</tr>';
+  }).join('');
+}
+
+function esc(s){
+  var d=document.createElement('div');d.textContent=s;return d.innerHTML;
+}
+
+function fmt(d){
+  try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})}catch(e){return d}
+}
+
+window.refresh=load;
+
+function exportCSV(){
+  var data=[];
+  try{data=JSON.parse(localStorage.getItem('sr')||'[]')}catch(e){}
+  if(!data.length)return;
+  var rows=[['#','Name','Contact','Guests','Message','Date']];
+  data.forEach(function(r,i){
+    rows.push([i+1,r.name,r.contact||'',r.guests||0,r.message||'',new Date(r.date).toLocaleString()]);
+  });
+  var csv=rows.map(function(r){return r.map(function(c){return'"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
+  var b=new Blob(['\uFEFF'+csv],{type:'text/csv'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download='samantha-rsvp.csv';a.click();
+}
+
+load();
+</script>
+</body>
+</html>
