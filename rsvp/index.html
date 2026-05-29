@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,7 +53,7 @@ tr:hover td{background:rgba(196,160,74,0.03)}
 <body>
 
 <h1>Samantha · Quince Años</h1>
-<p class="sub">Guest Registry / Registro de Invitados</p>
+<p class="sub">Guest Registry</p>
 
 <div class="actions">
   <button class="btn" onclick="refresh()">Refresh</button>
@@ -85,7 +85,7 @@ function load(){
   document.getElementById('count').innerHTML='<strong>'+data.length+'</strong> confirmed guests';
 
   if(!data.length){
-    tbody.innerHTML='<tr><td colspan="5" class="empty">No RSVPs yet. / Aún no hay confirmaciones.</td></tr>';
+    tbody.innerHTML='<tr><td colspan="5" class="empty">No RSVPs yet.</td></tr>';
     return;
   }
 
