@@ -79,8 +79,20 @@ tr:hover td{background:rgba(196,160,74,0.03)}
 
 <script>
 function load(){
-  var data=[];
-  try{data=JSON.parse(localStorage.getItem('sr')||'[]')}catch(e){}
+  fetch('https://samantha-rsvp.onrender.com/rsvp')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      render(data);
+    })
+    .catch(function(){
+      // Fallback to localStorage
+      var data=[];
+      try{data=JSON.parse(localStorage.getItem('sr')||'[]')}catch(e){}
+      render(data);
+    });
+}
+
+function render(data){
   var tbody=document.getElementById('tbody');
   document.getElementById('count').innerHTML='<strong>'+data.length+'</strong> confirmed guests';
 

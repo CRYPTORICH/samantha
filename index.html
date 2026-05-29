@@ -447,23 +447,37 @@ body.en [data-en]{display:block}
     D.getElementById('cd-s').textContent=String(Math.floor((df%60000)/1000)).padStart(2,'0');
   }tk();setInterval(tk,1000);
 
-  /* ═══ RSVP ═══ */
-  function loadRSVPs(){
-    try{
-      var list=JSON.parse(localStorage.getItem('sr')||'[]');
-      D.getElementById('rc').textContent=list.length;
-      D.getElementById('rc-en').textContent=list.length;
-    }catch(e){}
+  /* ═══ RSVP COUNT ═══ */
+  function loadCount(){
+    fetch('https://samantha-rsvp.onrender.com/rsvp')
+      .then(function(r){return r.json()})
+      .then(function(data){
+        D.getElementById('rc').textContent=data.length;
+        D.getElementById('rc-en').textContent=data.length;
+      })
+      .catch(function(){
+        try{var list=JSON.parse(localStorage.getItem('sr')||'[]');D.getElementById('rc').textContent=list.length;D.getElementById('rc-en').textContent=list.length}catch(e){}
+      });
   }
-  loadRSVPs();
+  loadCount();
 
   D.getElementById('f').addEventListener('submit',function(e){
     e.preventDefault();
     var nm=D.getElementById('n').value.trim();if(!nm)return;
-    var d={name:nm,contact:D.getElementById('c').value.trim(),guests:D.getElementById('g').value,message:D.getElementById('m').value.trim(),date:new Date().toISOString()};
-    try{var list=JSON.parse(localStorage.getItem('sr')||'[]');list.push(d);localStorage.setItem('sr',JSON.stringify(list))}catch(er){}
-    D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
-    loadRSVPs();
+    var d={name:nm,contact:D.getElementById('c').value.trim(),guests:Number(D.getElementById('g').value)||0,message:D.getElementById('m').value.trim()};
+    // Send to server
+    fetch('https://samantha-rsvp.onrender.com/rsvp',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(d)
+    }).then(function(r){return r.json()}).then(function(){
+      D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
+      loadCount();
+    }).catch(function(){
+      // Fallback to localStorage
+      try{var list=JSON.parse(localStorage.getItem('sr')||'[]');list.push(Object.assign(d,{date:new Date().toISOString()}));localStorage.setItem('sr',JSON.stringify(list))}catch(er){}
+      D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
+      loadCount();
+    });
   });
 
 })();
