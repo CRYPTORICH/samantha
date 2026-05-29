@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os, datetime, json, base64, smtplib
+import os, datetime, json, base64, smtplib, uuid
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import requests as req
@@ -189,6 +189,7 @@ def submit():
         return jsonify({"error": "name required"}), 400
 
     entry = {
+        "_id": uuid.uuid4().hex[:12],
         "name": name,
         "phone": (data.get('phone') or '').strip(),
         "email": (data.get('email') or '').strip(),
@@ -222,6 +223,17 @@ def submit():
 @app.route('/rsvp', methods=['GET'])
 def list_guests():
     return jsonify(read_data())
+
+
+@app.route('/rsvp/<entry_id>', methods=['DELETE'])
+def delete_guest(entry_id):
+    all_data = read_data()
+    before = len(all_data)
+    all_data = [g for g in all_data if g.get('_id') != entry_id]
+    if len(all_data) == before:
+        return jsonify({"error": "not found"}), 404
+    write_data(all_data)
+    return jsonify({"ok": True, "deleted": entry_id})
 
 
 @app.route('/cron/send-followups', methods=['GET', 'POST'])

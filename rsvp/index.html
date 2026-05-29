@@ -14,7 +14,7 @@ body{
 h1{font-size:1.4rem;font-weight:600;margin-bottom:4px;color:#dcc898}
 .sub{font-size:0.75rem;color:rgba(236,228,212,0.4);margin-bottom:28px}
 table{
-  width:100%;max-width:1100px;border-collapse:collapse;
+  width:100%;max-width:1200px;border-collapse:collapse;
   margin:0 auto;font-size:0.85rem;
 }
 th{
@@ -49,6 +49,14 @@ tr:hover td{background:rgba(196,160,74,0.03)}
   transition:all 0.2s;
 }
 .btn:hover{background:rgba(196,160,74,0.15)}
+.btn-del{
+  font-size:0.6rem;padding:4px 10px;
+  background:rgba(220,60,60,0.12);
+  border:1px solid rgba(220,60,60,0.2);
+  color:rgba(220,100,100,0.7);cursor:pointer;border-radius:5px;
+  transition:all 0.2s;
+}
+.btn-del:hover{background:rgba(220,60,60,0.25);color:#f88}
 .back{margin-top:32px;padding-top:16px;border-top:1px solid rgba(196,160,74,0.06)}
 .back a{color:rgba(236,228,212,0.25);text-decoration:none;font-size:0.7rem}
 .back a:hover{color:rgba(236,228,212,0.5)}
@@ -77,6 +85,7 @@ tr:hover td{background:rgba(196,160,74,0.03)}
       <th>Message</th>
       <th>Date</th>
       <th>Email</th>
+      <th style="text-align:center;width:50px"></th>
     </tr>
   </thead>
   <tbody id="tbody"></tbody>
@@ -107,11 +116,12 @@ function render(data){
   document.getElementById('count').innerHTML='<strong>'+data.length+'</strong> confirmed guests';
 
   if(!data.length){
-    tbody.innerHTML='<tr><td colspan="8" class="empty">No RSVPs yet.</td></tr>';
+    tbody.innerHTML='<tr><td colspan="9" class="empty">No RSVPs yet.</td></tr>';
     return;
   }
 
   tbody.innerHTML=data.sort(function(a,b){return new Date(b.date)-new Date(a.date)}).map(function(r,i){
+    var id = r._id||'';
     return '<tr>'+
       '<td class="name">'+(i+1)+'. '+esc(r.name)+'</td>'+
       '<td class="phone">'+(r.phone?esc(r.phone):'—')+'</td>'+
@@ -121,8 +131,20 @@ function render(data){
       '<td class="msg">'+(r.message?'"'+esc(r.message)+'"':'—')+'</td>'+
       '<td class="date">'+fmt(r.date)+'</td>'+
       '<td class="'+(r.confirmation_sent?'confirmed':'pending')+'">'+(r.confirmation_sent?'✓ sent':'—')+'</td>'+
+      '<td style="text-align:center">'+(id?'<button class="btn-del" onclick="del(\''+id+'\',\''+esc(r.name)+'\')" title="Delete">✕</button>':'')+'</td>'+
       '</tr>';
   }).join('');
+}
+
+function del(id, name){
+  if(!confirm('Delete RSVP from '+name+'?')) return;
+  fetch('https://samantha-rsvp.onrender.com/rsvp/'+id, {method:'DELETE'})
+    .then(function(r){return r.json()})
+    .then(function(data){
+      if(data.ok) load();
+      else alert('Failed to delete');
+    })
+    .catch(function(){alert('Delete failed — server may be down')});
 }
 
 function esc(s){
