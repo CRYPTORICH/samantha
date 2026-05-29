@@ -457,37 +457,64 @@ body.en [data-en]{display:block}
     D.getElementById('cd-s').textContent=String(Math.floor((df%60000)/1000)).padStart(2,'0');
   }tk();setInterval(tk,1000);
 
+  /* ═══ WARM RENDER ═══ */
+  // Fire on page load so Render is awake by the time someone submits
+  fetch('https://samantha-rsvp.onrender.com/', {mode:'no-cors'}).catch(function(){});
+
   /* ═══ RSVP COUNT ═══ */
   function loadCount(){
-    fetch('https://samantha-rsvp.onrender.com/rsvp')
+    // Read count from GitHub Pages — always live
+    fetch('backend/rsvp_data.json')
       .then(function(r){return r.json()})
       .then(function(data){
         D.getElementById('rc').textContent=data.length;
         D.getElementById('rc-en').textContent=data.length;
       })
       .catch(function(){
-        try{var list=JSON.parse(localStorage.getItem('sr')||'[]');D.getElementById('rc').textContent=list.length;D.getElementById('rc-en').textContent=list.length}catch(e){}
+        // Fallback: try Render
+        fetch('https://samantha-rsvp.onrender.com/rsvp')
+          .then(function(r){return r.json()})
+          .then(function(data){
+            D.getElementById('rc').textContent=data.length;
+            D.getElementById('rc-en').textContent=data.length;
+          })
+          .catch(function(){});
       });
   }
   loadCount();
 
   D.getElementById('f').addEventListener('submit',function(e){
     e.preventDefault();
-    var nm=D.getElementById('n').value.trim();if(!nm)return;
+    var btn=e.target.querySelector('button[type=submit]');
+    var origText=btn.textContent;
+    btn.textContent='Enviando…';btn.disabled=true;
+    var nm=D.getElementById('n').value.trim();if(!nm){btn.textContent=origText;btn.disabled=false;return;}
     var d={name:nm,phone:D.getElementById('p').value.trim(),email:D.getElementById('e').value.trim(),address:D.getElementById('a').value.trim(),guests:Number(D.getElementById('g').value)||0,message:D.getElementById('m').value.trim()};
-    // Send to server
-    fetch('https://samantha-rsvp.onrender.com/rsvp',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(d)
-    }).then(function(r){return r.json()}).then(function(){
-      D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
-      loadCount();
-    }).catch(function(){
-      // Fallback to localStorage
-      try{var list=JSON.parse(localStorage.getItem('sr')||'[]');list.push(Object.assign(d,{date:new Date().toISOString()}));localStorage.setItem('sr',JSON.stringify(list))}catch(er){}
-      D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
-      loadCount();
-    });
+
+    function trySubmit(attempt){
+      var ctrl=new AbortController();
+      var t=setTimeout(function(){ctrl.abort()}, 25000); // 25s timeout for cold starts
+      fetch('https://samantha-rsvp.onrender.com/rsvp',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(d),signal:ctrl.signal
+      }).then(function(r){clearTimeout(t);return r.json()}).then(function(){
+        D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
+        loadCount();
+      }).catch(function(){
+        clearTimeout(t);
+        if(attempt < 1){
+          // One retry after cold start
+          btn.textContent='Reintentando…';
+          setTimeout(function(){trySubmit(attempt+1)}, 3000);
+          return;
+        }
+        // Fallback to localStorage after retries
+        try{var list=JSON.parse(localStorage.getItem('sr')||'[]');list.push(Object.assign(d,{date:new Date().toISOString()}));localStorage.setItem('sr',JSON.stringify(list))}catch(er){}
+        D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
+        loadCount();
+      });
+    }
+    trySubmit(0);
   });
 
 })();

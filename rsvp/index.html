@@ -97,17 +97,19 @@ tr:hover td{background:rgba(196,160,74,0.03)}
 var allData = [];
 
 function load(){
-  fetch('https://samantha-rsvp.onrender.com/rsvp')
+  // Read directly from GitHub Pages — always live, no Render cold start
+  fetch('../backend/rsvp_data.json')
     .then(function(r){return r.json()})
     .then(function(data){
       allData = data;
       render(data);
     })
     .catch(function(){
-      var data=[];
-      try{data=JSON.parse(localStorage.getItem('sr')||'[]')}catch(e){}
-      allData = data;
-      render(data);
+      // Last resort: try Render (if GitHub Pages hasn't updated yet)
+      fetch('https://samantha-rsvp.onrender.com/rsvp')
+        .then(function(r){return r.json()})
+        .then(function(d2){allData=d2; render(d2);})
+        .catch(function(){render([]);});
     });
 }
 
