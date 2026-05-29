@@ -99,17 +99,21 @@ body{
 
 /* ═══ LANGUAGE ═══ */
 .lang{
-  position:fixed;top:24px;right:24px;z-index:100;
-  display:flex;gap:12px;
+  position:fixed;top:16px;right:16px;z-index:100;
+  display:flex;gap:3px;
+  background:rgba(6,8,5,0.65);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(196,160,74,0.15);
+  border-radius:10px;overflow:hidden;
 }
 .lang button{
-  font-family:'Montserrat',sans-serif;font-size:0.5rem;
-  letter-spacing:0.3em;text-transform:uppercase;
-  padding:6px 0;border:none;background:none;
+  font-family:'Montserrat',sans-serif;font-size:0.7rem;
+  letter-spacing:0.08em;font-weight:500;
+  padding:9px 16px;border:none;background:transparent;
   color:var(--muted);cursor:pointer;
-  border-bottom:1px solid transparent;transition:all 0.4s;
+  transition:all 0.3s;
 }
-.lang button.active{color:var(--champagne);border-bottom-color:var(--gold)}
+.lang button.active{background:rgba(180,148,47,0.2);color:var(--champagne)}
 [data-es],[data-en]{display:none}
 body.es [data-es]{display:block}
 body.en [data-en]{display:block}
@@ -281,8 +285,8 @@ body.en [data-en]{display:block}
 </section>
 
 <div class="lang">
-  <button id="btn-es" class="active" onclick="setLang('es')" aria-label="Español">ES</button>
-  <button id="btn-en" onclick="setLang('en')" aria-label="English">EN</button>
+  <button id="btn-es" class="active" onclick="setLang('es')" aria-label="Español">Español</button>
+  <button id="btn-en" onclick="setLang('en')" aria-label="English">English</button>
 </div>
 
 <!-- ═══ DETAILS ═══ -->
