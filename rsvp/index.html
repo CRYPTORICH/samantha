@@ -121,7 +121,7 @@ function render(data){
   }
 
   tbody.innerHTML=data.sort(function(a,b){return new Date(b.date)-new Date(a.date)}).map(function(r,i){
-    var id = r._id||'';
+    var id = r._id||('idx'+i);
     return '<tr>'+
       '<td class="name">'+(i+1)+'. '+esc(r.name)+'</td>'+
       '<td class="phone">'+(r.phone?esc(r.phone):'—')+'</td>'+
@@ -131,7 +131,7 @@ function render(data){
       '<td class="msg">'+(r.message?'"'+esc(r.message)+'"':'—')+'</td>'+
       '<td class="date">'+fmt(r.date)+'</td>'+
       '<td class="'+(r.confirmation_sent?'confirmed':'pending')+'">'+(r.confirmation_sent?'✓ sent':'—')+'</td>'+
-      '<td style="text-align:center">'+(id?'<button class="btn-del" onclick="del(\''+id+'\',\''+esc(r.name)+'\')" title="Delete">✕</button>':'')+'</td>'+
+      '<td style="text-align:center"><button class="btn-del" onclick="del(\''+id+'\',\''+esc(r.name)+'\')" title="Delete">✕</button></td>'+
       '</tr>';
   }).join('');
 }

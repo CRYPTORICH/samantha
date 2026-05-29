@@ -57,7 +57,9 @@ def send_email(to_email, subject, body_html):
 # Fallback: local JSON file (survives restarts, not deploys)
 
 def read_data():
-    """Read from GitHub API, fall back to local file."""
+    """Read from GitHub API, fall back to local file. Ensures all entries have _id."""
+    data = []
+
     if GH_TOKEN:
         try:
             headers = {
@@ -69,25 +71,32 @@ def read_data():
             if r.status_code == 200:
                 content = base64.b64decode(r.json()["content"]).decode("utf-8")
                 data = json.loads(content)
-                return data
-            print(f"[data] GitHub read: {r.status_code}")
         except Exception as e:
             print(f"[data] GitHub read error: {e}")
 
-    # Fallback
-    if os.path.exists(DATA_FILE):
+    if not data and os.path.exists(DATA_FILE):
         try:
             with open(DATA_FILE, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                data = json.load(f)
         except:
             pass
-    return []
+
+    # Ensure every entry has _id
+    changed = False
+    for entry in data:
+        if '_id' not in entry:
+            entry['_id'] = uuid.uuid4().hex[:12]
+            changed = True
+
+    if changed:
+        _write_internal(data)
+
+    return data
 
 
-def write_data(data):
-    """Write to GitHub API, fall back to local file."""
+def _write_internal(data):
+    """Internal write without re-reading (avoids infinite loop)."""
     content = json.dumps(data, ensure_ascii=False, indent=2)
-
     if GH_TOKEN:
         try:
             headers = {
@@ -95,31 +104,29 @@ def write_data(data):
                 "Accept": "application/vnd.github+json",
                 "X-GitHub-Api-Version": "2022-11-28",
             }
-            # Get current SHA
             r = req.get(GH_API, headers=headers, timeout=10)
             sha = r.json().get("sha", "") if r.status_code == 200 else ""
-
             payload = {
                 "message": f"RSVP update ({len(data)} guests)",
                 "content": base64.b64encode(content.encode("utf-8")).decode("ascii"),
             }
             if sha:
                 payload["sha"] = sha
-
             r = req.put(GH_API, headers=headers, json=payload, timeout=15)
             if r.status_code in (200, 201):
                 print(f"[data] Saved {len(data)} RSVPs to GitHub")
-            else:
-                print(f"[data] GitHub write: {r.status_code} {r.text[:200]}")
         except Exception as e:
             print(f"[data] GitHub write error: {e}")
-
-    # Always write local fallback
     try:
         with open(DATA_FILE, 'w', encoding='utf-8') as f:
             f.write(content)
     except:
         pass
+
+
+def write_data(data):
+    """Write to GitHub API, fall back to local file."""
+    _write_internal(data)
 
 
 # ── Email Templates ────────────────────────────────────────
