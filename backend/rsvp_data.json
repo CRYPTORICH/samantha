@@ -1,14 +1,1 @@
-[
-  {
-    "_id": "1344d7c9f893",
-    "address": "2227 Hayes Street Hollywood Fl 33020",
-    "confirmation_sent": false,
-    "date": "2026-05-29T14:54:07.088421",
-    "email": "dejesusrichard89@gmail.com",
-    "followup_stage": 0,
-    "guests": 1,
-    "message": "Happy Birthday Sabi!",
-    "name": "Richard DeJesus",
-    "phone": "4048409115"
-  }
-]
+[{"_id":"1344d7c9f893","address":"2227 Hayes Street Hollywood Fl 33020","confirmation_sent":false,"date":"2026-05-29T14:54:07.088421","email":"dejesusrichard89@gmail.com","followup_stage":0,"guests":1,"message":"Happy Birthday Sabi!","name":"Richard DeJesus","phone":"4048409115"}]
