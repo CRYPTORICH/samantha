@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech Summit 2026 — Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#3b82f6;--blue-dark:#1d4ed8;--cyan:#06b6d4;
+  --dark:#0a0a0f;--deep:#060608;--card:#111118;
+  --text:#e2e2ea;--muted:rgba(226,226,234,0.5);
+  --border:rgba(59,130,246,0.1);
+}
+html{scroll-behavior:smooth;background:var(--deep)}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--text);background:var(--deep);
+  -webkit-font-smoothing:antialiased;line-height:1.5;
+}
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:linear-gradient(135deg,rgba(6,6,8,0.95) 0%,rgba(15,23,42,0.9) 50%,rgba(6,6,8,0.95) 100%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><pattern id="grid" patternUnits="userSpaceOnUse" width="40" height="40"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(59,130,246,0.04)" stroke-width="0.5"/></pattern></defs><rect width="800" height="600" fill="%23060608"/><rect width="800" height="600" fill="url(%23grid)"/></svg>');
+}
+.hero-content{position:relative;z-index:3;text-align:center;padding:60px 28px;max-width:600px}
+
+.sec{
+  position:relative;z-index:2;
+  padding:64px 24px;
+  display:flex;align-items:center;justify-content:center;
+}
+.sec-inner{max-width:540px;width:100%}
+
+.hero-badge{
+  display:inline-block;font-size:0.6rem;font-weight:600;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--cyan);background:rgba(6,182,212,0.08);
+  border:1px solid rgba(6,182,212,0.15);
+  border-radius:20px;padding:6px 16px;margin-bottom:20px;
+}
+.hero-title{
+  font-size:clamp(2.2rem,6vw,3.5rem);font-weight:800;
+  line-height:1.15;color:var(--text);letter-spacing:-0.02em;
+}
+.hero-title span{color:var(--blue)}
+.hero-sub{
+  font-size:clamp(0.85rem,1.8vw,1rem);font-weight:400;
+  color:var(--muted);margin-top:12px;line-height:1.6;
+}
+
+.stats{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px;
+}
+.stat{
+  background:rgba(17,17,24,0.8);border:1px solid var(--border);
+  border-radius:12px;padding:16px 24px;text-align:center;min-width:80px;
+}
+.stat-num{font-size:1.3rem;font-weight:700;color:var(--blue)}
+.stat-label{font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-top:4px}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;padding:24px;margin-bottom:16px;
+}
+.card-time{font-size:0.65rem;font-weight:600;color:var(--cyan);text-transform:uppercase;letter-spacing:0.1em}
+.card-title{font-size:1rem;font-weight:600;color:var(--text);margin:4px 0}
+.card-desc{font-size:0.75rem;color:var(--muted);line-height:1.5}
+.card-speaker{font-size:0.7rem;color:var(--muted);margin-top:4px}
+.card-speaker strong{color:var(--text);font-weight:500}
+
+.section-label{
+  font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.2em;
+  color:var(--cyan);margin-bottom:16px;
+}
+
+.rsvp-section{
+  background:linear-gradient(180deg,var(--deep) 0%,rgba(59,130,246,0.04) 40%,var(--deep) 100%);
+  padding:64px 24px;
+  display:flex;align-items:center;justify-content:center;position:relative;z-index:2;
+}
+.rsvp-box{
+  max-width:500px;width:100%;
+  background:rgba(17,17,24,0.8);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--border);
+  border-radius:20px;padding:36px 28px;
+}
+.fg{margin-bottom:18px}
+.fl{
+  font-size:0.55rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--muted);display:block;margin-bottom:8px;
+}
+.fi{
+  width:100%;font-family:'Inter',sans-serif;
+  font-size:0.9rem;padding:12px 0;color:var(--text);
+  background:transparent;border:none;
+  border-bottom:1px solid var(--border);
+  outline:none;transition:border-color 0.35s;
+}
+.fi:focus{border-bottom-color:var(--blue)}
+.fi::placeholder{color:rgba(226,226,234,0.1)}
+.btn{
+  display:block;width:100%;font-family:'Inter',sans-serif;
+  font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+  padding:14px;cursor:pointer;text-align:center;
+  background:var(--blue);color:white;
+  border:none;border-radius:12px;transition:all 0.3s;margin-top:16px;
+}
+.btn:hover{background:var(--blue-dark)}
+.foot{
+  text-align:center;padding:40px 24px 36px;
+  font-size:0.6rem;color:rgba(226,226,234,0.15);
+}
+
+.fade{opacity:0;transform:translateY(12px);transition:opacity 0.6s,transform 0.6s}
+.fade.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:0.1s}.d2{transition-delay:0.2s}.d3{transition-delay:0.3s}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-badge">June 5, 2026 · Miami</span>
+    <h1 class="hero-title">Tech <span>Summit</span> 2026</h1>
+    <p class="hero-sub">AI, Cloud & Cybersecurity — one day of talks, workshops, and networking for tech professionals in South Florida.</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label">Speakers</div></div>
+      <div class="stat"><div class="stat-num">200</div><div class="stat-label">Attendees</div></div>
+      <div class="stat"><div class="stat-num">8</div><div class="stat-label">Sessions</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-inner">
+    <p class="section-label fade">Agenda</p>
+
+    <div class="card fade">
+      <p class="card-time">9:00 AM</p>
+      <p class="card-title">Keynote: Building AI-Native Products</p>
+      <p class="card-desc">How startups are shipping AI features faster than enterprises — and what that means for your career.</p>
+      <p class="card-speaker"><strong>Dr. Elena Torres</strong> — VP Engineering, Synthwave AI</p>
+    </div>
+    <div class="card fade d1">
+      <p class="card-time">10:30 AM</p>
+      <p class="card-title">Workshop: Deploying LLMs in Production</p>
+      <p class="card-desc">Hands-on session. Bring your laptop. We'll deploy a model to a cloud GPU in 45 minutes.</p>
+      <p class="card-speaker"><strong>Marcus Chen</strong> — ML Infra Lead, Runway</p>
+    </div>
+    <div class="card fade d2">
+      <p class="card-time">1:00 PM</p>
+      <p class="card-title">Panel: Cybersecurity in the AI Era</p>
+      <p class="card-desc">What happens when attackers have AI too? A panel of CISOs on the new threat landscape.</p>
+      <p class="card-speaker"><strong>Moderated by</strong> Sarah Kim, CrowdStrike</p>
+    </div>
+    <div class="card fade d3">
+      <p class="card-time">3:00 PM</p>
+      <p class="card-title">Networking + Happy Hour</p>
+      <p class="card-desc">Drinks, light bites, and the connections that actually matter. Sponsored by Google Cloud.</p>
+    </div>
+  </div>
+</section>
+
+<section class="rsvp-section">
+  <div class="rsvp-box">
+    <p class="section-label fade" style="text-align:center">Register Now</p>
+    <p class="fade" style="text-align:center;font-size:0.8rem;color:var(--muted);margin-bottom:24px">Free admission. Space limited to 200.</p>
+
+    <form id="f">
+      <div class="fg fade d1"><label class="fl">Full Name</label><input class="fi" id="n" placeholder="Your name" required></div>
+      <div class="fg fade d1"><label class="fl">Email</label><input class="fi" id="e" type="email" placeholder="you@company.com" required></div>
+      <div class="fg fade d2"><label class="fl">Company / Organization</label><input class="fi" id="c" placeholder="Where you work"></div>
+      <div class="fg fade d2"><label class="fl">Role</label><input class="fi" id="r" placeholder="Engineer, Manager, Student..."></div>
+      <div class="fg fade d3"><label class="fl">Dietary Restrictions</label><input class="fi" id="d" placeholder="None / Vegetarian / etc."></div>
+      <div class="fade d3"><button type="submit" class="btn">Register — Free</button></div>
+    </form>
+    <div id="ok" style="display:none;text-align:center;padding:28px 8px">
+      <p style="font-size:2rem;margin-bottom:8px">✅</p>
+      <p style="font-weight:600;font-size:1rem;color:var(--text)">You're registered!</p>
+      <p style="font-size:0.8rem;color:var(--muted);margin-top:8px">Check your email for confirmation.<br>See you June 5th.</p>
+    </div>
+  </div>
+</section>
+
+<div class="foot"><p>TECH SUMMIT 2026 · MIAMI · JUNE 5</p></div>
+
+<script>
+(function(){
+  var D=document,W=window;
+  var rv=D.querySelectorAll('.fade');
+  function ck(){for(var i=0;i<rv.length;i++){var e=rv[i];if(!e.classList.contains('on')&&e.getBoundingClientRect().top<W.innerHeight*0.9)e.classList.add('on')}}
+  W.addEventListener('scroll',ck,{passive:true});setTimeout(ck,100);setTimeout(ck,400);
+  D.getElementById('f').addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=D.getElementById('n').value.trim();if(!n)return;
+    D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofia & Marco — Wedding</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#b8942f;--champagne:#dcc898;--ivory:#f0e8d8;
+  --rose:#c97d87;--dark:#0a0c09;--deep:#060805;
+  --text:#ece4d4;--muted:rgba(236,228,212,0.6);
+}
+html{scroll-behavior:smooth;background:var(--deep)}
+body{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  color:var(--text);background:var(--deep);
+  -webkit-font-smoothing:antialiased;line-height:1.6;
+}
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:linear-gradient(180deg,rgba(6,8,5,0.6) 0%,rgba(6,8,5,0.3) 40%,rgba(6,8,5,0.8) 100%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%23060805"/><stop offset="50%" stop-color="%231a1a18"/><stop offset="100%" stop-color="%23060805"/></linearGradient><pattern id="rose" patternUnits="userSpaceOnUse" width="80" height="80"><circle cx="40" cy="40" r="1.5" fill="rgba(201,125,135,0.15)"/></pattern></defs><rect fill="url(%23g)" width="800" height="1200"/><rect fill="url(%23rose)" width="800" height="1200"/></svg>');
+  background-size:cover;
+}
+.hero-content{position:relative;z-index:3;text-align:center;padding:60px 28px}
+
+.sec{
+  position:relative;z-index:2;
+  padding:64px 24px;
+  display:flex;align-items:center;justify-content:center;
+}
+.sec-inner{max-width:500px;width:100%}
+
+.title-script{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(4rem,10vw,7rem);
+  font-weight:400;line-height:1.1;
+  color:var(--champagne);
+  text-shadow:0 0 60px rgba(180,148,47,0.12);
+}
+.title-sub{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(1rem,2.5vw,1.2rem);
+  font-weight:400;letter-spacing:0.4em;
+  text-transform:uppercase;color:var(--ivory);
+  margin-top:12px;
+}
+.title-amp{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(2.5rem,6vw,3.5rem);
+  color:var(--rose);display:block;margin:4px 0;
+}
+
+.detail{
+  display:flex;align-items:flex-start;gap:16px;
+  margin:12px 0;padding:14px 0;
+  border-bottom:1px solid rgba(196,160,74,0.05);
+}
+.detail-icon{font-size:1.2rem;opacity:0.5;flex-shrink:0;margin-top:2px}
+.detail-label{
+  font-family:'Montserrat',sans-serif;font-size:0.45rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(201,125,135,0.5);margin-bottom:4px;
+}
+.detail-value{font-size:1.15rem;font-family:'Playfair Display',Georgia,serif;line-height:1.5}
+
+.rsvp-section{
+  background:linear-gradient(180deg,var(--deep) 0%,rgba(201,125,135,0.08) 40%,var(--deep) 100%);
+  padding:64px 24px;
+  display:flex;align-items:center;justify-content:center;position:relative;z-index:2;
+}
+.rsvp-box{
+  max-width:500px;width:100%;
+  background:rgba(6,8,5,0.6);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(196,160,74,0.12);
+  border-radius:20px;padding:40px 32px;
+}
+.fg{margin-bottom:20px}
+.fl{
+  font-family:'Montserrat',sans-serif;font-size:0.48rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--champagne);display:block;margin-bottom:8px;
+}
+.fi{
+  width:100%;font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.1rem;padding:14px 0;color:var(--text);
+  background:transparent;border:none;
+  border-bottom:1px solid rgba(196,160,74,0.12);
+  outline:none;transition:border-color 0.35s;
+}
+.fi:focus{border-bottom-color:var(--rose)}
+.fi::placeholder{color:rgba(236,228,212,0.1)}
+.btn{
+  display:block;width:100%;font-family:'Montserrat',sans-serif;
+  font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;
+  padding:16px;cursor:pointer;text-align:center;
+  background:rgba(201,125,135,0.15);color:var(--champagne);
+  border:1px solid rgba(201,125,135,0.2);
+  border-radius:12px;transition:all 0.4s;margin-top:20px;
+}
+.btn:hover{background:rgba(201,125,135,0.25)}
+.foot{
+  text-align:center;padding:48px 24px 40px;
+  font-family:'Montserrat',sans-serif;font-size:0.45rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(236,228,212,0.2);
+}
+.rule{
+  display:flex;align-items:center;justify-content:center;
+  gap:18px;margin:20px 0;
+}
+.rule::before,.rule::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,125,135,0.15),transparent);
+}
+.rule span{font-size:0.6rem;opacity:0.3;color:var(--rose)}
+
+.fade{opacity:0;transform:translateY(12px);transition:opacity 0.7s,transform 0.7s}
+.fade.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:0.1s}.d2{transition-delay:0.2s}.d3{transition-delay:0.3s}
+
+.poetic{
+  font-style:italic;font-size:1.1rem;
+  text-align:center;line-height:1.9;
+  color:var(--muted);
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-content">
+    <p class="title-sub">We're Getting Married</p>
+    <span class="title-amp">&</span>
+    <h1 class="title-script">Sofia<br>Marco</h1>
+    <p class="title-sub" style="font-size:0.8rem;letter-spacing:0.3em;margin-top:20px">June 20, 2026</p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-inner">
+    <p class="title-sub fade" style="text-align:center;margin-bottom:28px;font-size:0.9rem">Celebration Details</p>
+    <div class="detail fade"><div class="detail-icon">📅</div><div>
+      <p class="detail-label">Date</p>
+      <p class="detail-value">Saturday, June 20, 2026</p>
+    </div></div>
+    <div class="detail fade d1"><div class="detail-icon">🕐</div><div>
+      <p class="detail-label">Ceremony</p>
+      <p class="detail-value">4:00 PM</p>
+    </div></div>
+    <div class="detail fade d2"><div class="detail-icon">📍</div><div>
+      <p class="detail-label">Venue</p>
+      <p class="detail-value">The Garden Estate</p>
+      <p class="detail-value" style="font-size:0.9rem;color:var(--muted)">450 Palm Ave · Coral Gables, FL</p>
+    </div></div>
+    <div class="detail fade d3"><div class="detail-icon">🍽️</div><div>
+      <p class="detail-label">Reception</p>
+      <p class="detail-value">Dinner & Dancing to follow</p>
+      <p class="detail-value" style="font-size:0.9rem;color:var(--muted)">Cocktail hour at 5:30 PM</p>
+    </div></div>
+    <div class="rule fade"><span>✦</span></div>
+    <p class="poetic fade">"When you realize you want to spend the rest of your life with somebody, you want the rest of your life to start as soon as possible."</p>
+  </div>
+</section>
+
+<section class="rsvp-section">
+  <div class="rsvp-box">
+    <p class="title-sub fade" style="text-align:center;margin-bottom:4px;font-size:0.9rem">RSVP</p>
+    <p class="fade" style="text-align:center;font-size:0.85rem;color:var(--muted);margin-bottom:28px">Kindly respond by May 15, 2026</p>
+    <form id="f">
+      <div class="fg fade d1"><label class="fl">Your Name</label><input class="fi" id="n" placeholder="Full name" required></div>
+      <div class="fg fade d1"><label class="fl">Email</label><input class="fi" id="e" type="email" placeholder="your@email.com"></div>
+      <div class="fg fade d2"><label class="fl">Number of Guests</label><input class="fi" id="g" type="number" min="1" max="6" value="1"></div>
+      <div class="fg fade d2"><label class="fl">Meal Preference</label>
+        <select class="fi" id="m" style="color:var(--text);background:transparent"><option>No preference</option><option>Chicken</option><option>Steak</option><option>Vegetarian</option></select>
+      </div>
+      <div class="fg fade d3"><label class="fl">Message for the Couple</label><textarea class="fi" id="msg" rows="2" placeholder="Your wishes..."></textarea></div>
+      <div class="fade d3"><button type="submit" class="btn">Send RSVP</button></div>
+    </form>
+    <div id="ok" style="display:none;text-align:center;padding:32px 8px">
+      <p class="poetic" style="font-size:1.2rem">Thank you! We can't wait to celebrate with you.</p>
+      <p style="font-size:0.75rem;color:var(--muted);margin-top:12px">June 20, 2026 · The Garden Estate · 4:00 PM</p>
+    </div>
+  </div>
+</section>
+
+<div class="foot"><p>SOFIA & MARCO · 2026</p></div>
+
+<script>
+(function(){
+  var D=document,W=window;
+  var rv=D.querySelectorAll('.fade');
+  function ck(){for(var i=0;i<rv.length;i++){var e=rv[i];if(!e.classList.contains('on')&&e.getBoundingClientRect().top<W.innerHeight*0.9)e.classList.add('on')}}
+  W.addEventListener('scroll',ck,{passive:true});setTimeout(ck,100);setTimeout(ck,400);
+  D.getElementById('f').addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=D.getElementById('n').value.trim();if(!n)return;
+    D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
+  });
+})();
+</script>
+</body>
+</html>
