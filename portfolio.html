@@ -3,242 +3,391 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Custom Event Sites — RSVP & Invitation Pages</title>
+<title>Your Event Deserves Better Than Paper — RSVP Sites That Impress</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#c4a04a;--champagne:#dcc898;--emerald:#00a86b;
+  --dark:#080a07;--deep:#040503;--card:#0d100c;
+  --text:#eceadd;--muted:rgba(236,234,221,0.5);
+  --border:rgba(196,160,74,0.08);
+}
+html{scroll-behavior:smooth;background:var(--deep)}
 body{
-  background:#0a0c09;color:#ece4d4;
-  font-family:'Segoe UI',system-ui,sans-serif;
-  padding:0 20px 60px;
-  -webkit-font-smoothing:antialiased;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  color:var(--text);background:var(--deep);
+  -webkit-font-smoothing:antialiased;line-height:1.55;
+  padding:0 16px 80px;
 }
-.wrap{max-width:640px;margin:0 auto}
+.wrap{max-width:600px;margin:0 auto}
 
-/* Header */
-header{
-  padding:48px 0 32px;text-align:center;
+/* ── HERO ── */
+.hero{
+  padding:60px 0 40px;text-align:center;
+  position:relative;
 }
-h1{
-  font-size:1.8rem;font-weight:700;line-height:1.2;
-  background:linear-gradient(135deg,#c4a04a,#dcc898);
+.hero-badge{
+  display:inline-block;font-size:0.58rem;font-weight:700;
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--emerald);background:rgba(0,168,107,0.08);
+  border:1px solid rgba(0,168,107,0.12);
+  border-radius:20px;padding:6px 18px;margin-bottom:20px;
+}
+.hero h1{
+  font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;line-height:1.15;
+  letter-spacing:-0.02em;margin-bottom:12px;
+}
+.hero h1 span.gold{
+  background:linear-gradient(135deg,#c4a04a,#e8d494);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;
 }
-.sub{
-  font-size:0.85rem;color:rgba(236,228,212,0.5);
-  margin-top:8px;line-height:1.5;
+.hero h1 span.strike{text-decoration:line-through;color:var(--muted);opacity:0.4;font-weight:400}
+.hero-punch{
+  font-size:0.9rem;color:var(--muted);line-height:1.6;max-width:420px;
+  margin:0 auto 24px;
 }
-.sub strong{color:#dcc898}
+.hero-punch strong{color:var(--champagne)}
 
-/* Stats row */
-.stats{
-  display:flex;gap:8px;justify-content:center;
-  margin:24px 0 32px;flex-wrap:wrap;
+/* ── BEFORE / AFTER ── */
+.split{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin:28px 0 36px;
 }
-.stat{
-  background:rgba(196,160,74,0.06);
-  border:1px solid rgba(196,160,74,0.1);
-  border-radius:10px;padding:12px 20px;text-align:center;
-  min-width:70px;
+.split-box{
+  border-radius:14px;padding:20px 16px;text-align:center;
 }
-.stat-num{font-size:1.4rem;font-weight:700;color:#dcc898}
-.stat-label{font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(236,228,212,0.35);margin-top:4px}
+.split-box.bad{
+  background:rgba(180,40,40,0.06);
+  border:1px solid rgba(180,40,40,0.15);
+}
+.split-box.good{
+  background:rgba(0,168,107,0.06);
+  border:1px solid rgba(0,168,107,0.2);
+}
+.split-label{
+  font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;
+  margin-bottom:10px;
+}
+.bad .split-label{color:rgba(220,100,100,0.6)}
+.good .split-label{color:var(--emerald)}
+.split-icon{font-size:1.6rem;margin-bottom:6px}
+.split-title{font-size:0.78rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.split-desc{font-size:0.65rem;color:var(--muted);line-height:1.5}
+.good .split-desc strong{color:var(--champagne)}
 
-/* Cards */
-.section-title{
-  font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;
-  color:rgba(0,168,107,0.4);margin-bottom:12px;text-align:center;
+/* ── SOCIAL PROOF BAR ── */
+.proof-bar{
+  display:flex;gap:6px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:40px;
 }
+.proof-item{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px;text-align:center;min-width:70px;
+}
+.proof-num{font-size:1.2rem;font-weight:800;color:var(--champagne)}
+.proof-label{font-size:0.5rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-top:2px}
+
+/* ── SECTION HEADER ── */
+.sec-label{
+  font-size:0.52rem;font-weight:700;text-transform:uppercase;letter-spacing:0.25em;
+  color:rgba(0,168,107,0.5);margin-bottom:14px;text-align:center;
+}
+
+/* ── CARDS ── */
 .card{
-  background:rgba(6,8,5,0.6);
-  border:1px solid rgba(196,160,74,0.08);
-  border-radius:16px;padding:28px 24px;margin-bottom:16px;
-  transition:all 0.3s;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:28px 22px;margin-bottom:14px;
+  transition:border-color 0.3s;
 }
-.card:hover{border-color:rgba(196,160,74,0.2)}
-.card-icon{font-size:2rem;margin-bottom:8px}
-.card-title{font-size:1.1rem;font-weight:600;color:#dcc898;margin-bottom:4px}
-.card-desc{font-size:0.78rem;color:rgba(236,228,212,0.5);line-height:1.5;margin-bottom:12px}
-.card-features{
-  display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;
+.card:hover{border-color:rgba(196,160,74,0.18)}
+.card-featured{border-color:rgba(0,168,107,0.2);position:relative}
+.card-featured::before{
+  content:'LIVE EXAMPLE';position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  font-size:0.45rem;font-weight:700;letter-spacing:0.2em;
+  background:rgba(0,168,107,0.15);color:var(--emerald);
+  padding:4px 12px;border-radius:10px;
 }
+.card-icon{font-size:2rem;margin-bottom:6px}
+.card-title{font-size:1.05rem;font-weight:700;color:var(--champagne);margin-bottom:4px}
+.card-desc{font-size:0.75rem;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
 .tag{
-  font-size:0.6rem;padding:4px 10px;
-  background:rgba(196,160,74,0.06);
-  border:1px solid rgba(196,160,74,0.08);
-  border-radius:20px;color:rgba(236,228,212,0.45);
+  font-size:0.55rem;padding:3px 9px;
+  background:rgba(196,160,74,0.05);
+  border:1px solid rgba(196,160,74,0.06);
+  border-radius:14px;color:rgba(236,234,221,0.4);
 }
-.card-price{
-  font-size:0.85rem;font-weight:600;color:#dcc898;
-  margin-bottom:12px;
-}
+.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.card-price{font-size:0.9rem;font-weight:700;color:var(--champagne);white-space:nowrap}
+.card-price span{font-size:0.55rem;font-weight:400;color:var(--muted)}
 
 .btn{
-  display:inline-block;font-size:0.7rem;text-decoration:none;
-  padding:10px 20px;border-radius:8px;
-  background:rgba(196,160,74,0.1);
-  border:1px solid rgba(196,160,74,0.2);
-  color:#dcc898;transition:all 0.3s;
-  letter-spacing:0.03em;
+  display:inline-block;font-size:0.65rem;font-weight:600;text-decoration:none;
+  padding:9px 18px;border-radius:8px;white-space:nowrap;
+  transition:all 0.3s;letter-spacing:0.03em;
 }
-.btn:hover{background:rgba(196,160,74,0.2)}
-.btn.live{
-  background:rgba(0,168,107,0.1);
-  border-color:rgba(0,168,107,0.2);
-  color:#00a86b;
+.btn-gold{
+  background:rgba(196,160,74,0.12);
+  border:1px solid rgba(196,160,74,0.25);
+  color:var(--champagne);
 }
-.btn.live:hover{background:rgba(0,168,107,0.2)}
+.btn-gold:hover{background:rgba(196,160,74,0.22)}
+.btn-green{
+  background:rgba(0,168,107,0.12);
+  border:1px solid rgba(0,168,107,0.25);
+  color:var(--emerald);
+}
+.btn-green:hover{background:rgba(0,168,107,0.22)}
 
-/* Pitch */
-.pitch{
-  background:linear-gradient(135deg,rgba(196,160,74,0.06),rgba(0,168,107,0.04));
-  border:1px solid rgba(196,160,74,0.1);
-  border-radius:16px;padding:32px 24px;margin:32px 0;text-align:center;
+/* ── TESTIMONIAL ── */
+.testimonial{
+  background:linear-gradient(135deg,rgba(196,160,74,0.04),rgba(0,168,107,0.03));
+  border:1px solid var(--border);
+  border-radius:16px;padding:28px 24px;margin:36px 0;text-align:center;
 }
-.pitch h2{
-  font-size:1.1rem;color:#dcc898;margin-bottom:8px;
+.testimonial-quote{
+  font-size:0.85rem;font-style:italic;color:var(--text);line-height:1.6;
+  margin-bottom:12px;
 }
-.pitch p{
-  font-size:0.8rem;color:rgba(236,228,212,0.55);line-height:1.6;
-}
+.testimonial-quote::before{content:'"'}
+.testimonial-quote::after{content:'"'}
+.testimonial-author{font-size:0.65rem;color:var(--champagne);font-weight:600}
+.testimonial-role{font-size:0.55rem;color:var(--muted)}
 
-/* CTA */
-.cta{
-  text-align:center;padding:20px 0 40px;
+/* ── HOW IT WORKS ── */
+.steps{margin:36px 0}
+.step{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:16px 0;border-bottom:1px solid var(--border);
 }
-.cta .btn{
-  font-size:0.85rem;padding:14px 32px;
+.step:last-child{border:none}
+.step-num{
+  width:32px;height:32px;min-width:32px;
+  background:rgba(196,160,74,0.1);border:1px solid rgba(196,160,74,0.15);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:700;color:var(--champagne);
 }
-.contact{
-  margin-top:16px;font-size:0.7rem;
-  color:rgba(236,228,212,0.3);
-}
-.contact a{color:rgba(236,228,212,0.5);text-decoration:none}
-.contact a:hover{color:#dcc898}
+.step-title{font-size:0.8rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.step-desc{font-size:0.7rem;color:var(--muted);line-height:1.4}
 
-/* What you get highlight */
-.highlight{
-  margin-top:40px;
+/* ── GUARANTEE ── */
+.guarantee{
+  background:rgba(0,168,107,0.04);
+  border:1px solid rgba(0,168,107,0.1);
+  border-radius:16px;padding:24px 20px;text-align:center;margin:32px 0;
 }
-.highlight h3{
-  font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;
-  color:rgba(0,168,107,0.4);margin-bottom:16px;text-align:center;
+.guarantee-icon{font-size:2rem;margin-bottom:8px}
+.guarantee h3{font-size:0.95rem;color:var(--emerald);margin-bottom:6px}
+.guarantee p{font-size:0.75rem;color:var(--muted);line-height:1.5}
+
+/* ── CTA ── */
+.cta-section{text-align:center;padding:10px 0 30px}
+.cta-btn{
+  display:inline-block;font-size:0.9rem;font-weight:700;text-decoration:none;
+  padding:16px 36px;border-radius:14px;
+  background:linear-gradient(135deg,var(--emerald),#008f5a);
+  color:#fff;box-shadow:0 4px 20px rgba(0,168,107,0.2);
+  transition:all 0.3s;
 }
-.highlight ul{
-  list-style:none;display:grid;gap:10px;
+.cta-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(0,168,107,0.3)}
+.cta-sub{
+  margin-top:12px;font-size:0.65rem;color:var(--muted);
 }
-.highlight li{
-  font-size:0.78rem;color:rgba(236,228,212,0.5);
-  padding-left:20px;position:relative;line-height:1.5;
+.cta-sub a{color:var(--champagne);text-decoration:none}
+.cta-sub a:hover{text-decoration:underline}
+
+/* ── PERKS ── */
+.perks{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin:40px 0 20px;
 }
-.highlight li::before{
-  content:'✓';position:absolute;left:0;
-  color:rgba(0,168,107,0.5);font-size:0.7rem;top:1px;
+.perk{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:16px;text-align:center;
+}
+.perk-icon{font-size:1.5rem;margin-bottom:4px}
+.perk-title{font-size:0.7rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.perk-desc{font-size:0.6rem;color:var(--muted);line-height:1.4}
+
+/* ── FOOTER ── */
+.foot{
+  text-align:center;padding:40px 0 20px;
+  font-size:0.5rem;text-transform:uppercase;letter-spacing:0.2em;
+  color:rgba(236,234,221,0.12);
 }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<header>
-  <h1>Custom Event Invitation<br>& RSVP Sites</h1>
-  <p class="sub">Bilingual pages with live guest tracking. <strong>$97–$200.</strong> Pay after it's live.</p>
-</header>
-
-<div class="stats">
-  <div class="stat"><div class="stat-num">24h</div><div class="stat-label">Delivery</div></div>
-  <div class="stat"><div class="stat-num">ES/EN</div><div class="stat-label">Bilingual</div></div>
-  <div class="stat"><div class="stat-num">Pay After</div><div class="stat-label">No Risk</div></div>
-  <div class="stat"><div class="stat-num">Mobile</div><div class="stat-label">First</div></div>
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-badge">📍 MIAMI · SHIPPING NATIONWIDE</div>
+  <h1>
+    Your Event Gets<br>
+    <span class="strike">A Paper Invite</span><br>
+    <span class="gold">A Website Everyone Talks About</span>
+  </h1>
+  <p class="hero-punch">
+    While everyone else is sending Facebook events and screenshots of paper in group chats, <strong>your guests open a custom site that feels like the event already started.</strong> That's the difference between "yeah I'll go" and "I can't miss this."
+  </p>
 </div>
 
-<div class="section-title">LIVE EXAMPLE</div>
+<!-- ═══ BEFORE / AFTER ═══ -->
+<div class="split">
+  <div class="split-box bad">
+    <div class="split-label">Everybody Else</div>
+    <div class="split-icon">📄</div>
+    <div class="split-title">Paper invite photo in a group chat</div>
+    <div class="split-desc">People screenshot it, lose it, ask "what time again?" three times. No RSVP tracking. Chaos.</div>
+  </div>
+  <div class="split-box good">
+    <div class="split-label">You</div>
+    <div class="split-icon">✨</div>
+    <div class="split-title">Custom site. One link. Done.</div>
+    <div class="split-desc">Video hero. Countdown. One-tap RSVP. <strong>Live guest list on your phone.</strong> Your guests say "damn, who made this?"</div>
+  </div>
+</div>
 
-<div class="card" style="border-color:rgba(0,168,107,0.15)">
+<!-- ═══ PROOF BAR ═══ -->
+<div class="proof-bar">
+  <div class="proof-item"><div class="proof-num">24h</div><div class="proof-label">Delivery</div></div>
+  <div class="proof-item"><div class="proof-num">ES/EN</div><div class="proof-label">Bilingual</div></div>
+  <div class="proof-item"><div class="proof-num">Pay</div><div class="proof-label">After Live</div></div>
+  <div class="proof-item"><div class="proof-num">📱</div><div class="proof-label">Mobile</div></div>
+</div>
+
+<!-- ═══ LIVE EXAMPLE ═══ -->
+<div class="sec-label">SEE IT IN ACTION</div>
+<div class="card card-featured">
   <div class="card-icon">🦋</div>
   <div class="card-title">Samantha — Quince Años</div>
-  <div class="card-desc">Bilingual quinceañera invitation with RSVP tracking, guest count, countdown timer, and email follow-ups. Live and active for October 2026.</div>
-  <div class="card-features">
-    <span class="tag">Video Hero</span>
-    <span class="tag">RSVP Tracking</span>
-    <span class="tag">Bilingual ES/EN</span>
-    <span class="tag">Countdown</span>
-    <span class="tag">Admin Dashboard</span>
-    <span class="tag">Mobile Optimized</span>
+  <div class="card-desc">Bilingual quinceañera invitation. Video hero, countdown timer, RSVP with live guest tracking, automated email reminders. This is what your event looks like when you're not doing paper.</div>
+  <div class="card-tags">
+    <span class="tag">Video Hero</span><span class="tag">Live RSVP List</span>
+    <span class="tag">Bilingual</span><span class="tag">Countdown</span>
+    <span class="tag">Email Follow-ups</span>
   </div>
-  <div class="card-price">$97</div>
-  <a href="https://cryptorich.github.io/samantha" class="btn live" target="_blank">View Live Site →</a>
-  <a href="https://cryptorich.github.io/samantha/rsvp/" class="btn" style="margin-left:8px" target="_blank">See RSVP List</a>
+  <div class="card-bottom">
+    <div class="card-price">$97 <span>one-time</span></div>
+    <div>
+      <a href="https://cryptorich.github.io/samantha" class="btn btn-green" target="_blank">View Live Site →</a>
+      <a href="https://cryptorich.github.io/samantha/rsvp/" class="btn btn-gold" target="_blank">RSVP List</a>
+    </div>
+  </div>
 </div>
 
-<div class="section-title" style="margin-top:32px">ALSO AVAILABLE</div>
+<!-- ═══ ALSO AVAILABLE ═══ -->
+<div class="sec-label" style="margin-top:36px">EVERY EVENT. SAME ENERGY.</div>
 
 <div class="card">
   <div class="card-icon">💍</div>
-  <div class="card-title">Wedding Invitation + RSVP</div>
-  <div class="card-desc">Elegant custom wedding page with couple's story, photo gallery, venue details, RSVP with meal preferences, plus-one tracking, and hotel block info.</div>
-  <div class="card-features">
-    <span class="tag">Photo Gallery</span>
-    <span class="tag">Meal Preferences</span>
-    <span class="tag">Plus-One Tracking</span>
-    <span class="tag">Hotel Info</span>
-    <span class="tag">Registry Links</span>
+  <div class="card-title">Wedding</div>
+  <div class="card-desc">Your love story, venue details, RSVP with meal preferences, plus-one tracking, hotel block info — not a PDF attachment, a website your guests actually enjoy opening.</div>
+  <div class="card-tags">
+    <span class="tag">Photo Gallery</span><span class="tag">Meal Prefs</span>
+    <span class="tag">Plus-Ones</span><span class="tag">Hotel Block</span>
+    <span class="tag">Registry</span>
   </div>
-  <div class="card-price">$150</div>
-  <a href="wedding.html" class="btn" target="_blank">View Demo →</a>
+  <div class="card-bottom">
+    <div class="card-price">$150 <span>one-time</span></div>
+    <a href="wedding.html" class="btn btn-gold" target="_blank">View Demo →</a>
+  </div>
 </div>
 
 <div class="card">
   <div class="card-icon">👶</div>
-  <div class="card-title">Baby Shower Invite + Gift Registry</div>
-  <div class="card-desc">Cute shareable page with party details, live gift registry (guests mark what they're bringing), and photo wall for messages to the parents.</div>
-  <div class="card-features">
-    <span class="tag">Gift Registry</span>
-    <span class="tag">Photo Messages</span>
-    <span class="tag">Games Link</span>
-    <span class="tag">Registry Links</span>
+  <div class="card-title">Baby Shower</div>
+  <div class="card-desc">Cute, shareable, with a live gift registry where guests mark what they're bringing — so three people don't show up with the same pack of diapers.</div>
+  <div class="card-tags">
+    <span class="tag">Live Registry</span><span class="tag">Photo Wall</span>
+    <span class="tag">Games</span><span class="tag">Messages</span>
   </div>
-  <div class="card-price">$97</div>
-  <a href="babyshower.html" class="btn" target="_blank">View Demo →</a>
+  <div class="card-bottom">
+    <div class="card-price">$97 <span>one-time</span></div>
+    <a href="babyshower.html" class="btn btn-gold" target="_blank">View Demo →</a>
+  </div>
 </div>
 
 <div class="card">
   <div class="card-icon">🏢</div>
-  <div class="card-title">Corporate Event Registration</div>
-  <div class="card-desc">Professional event page with agenda, speaker bios, registration form with custom fields, attendee list export, and email confirmations.</div>
-  <div class="card-features">
-    <span class="tag">Custom Forms</span>
-    <span class="tag">CSV Export</span>
-    <span class="tag">Agenda Display</span>
-    <span class="tag">Speaker Bios</span>
-    <span class="tag">Branded</span>
+  <div class="card-title">Corporate</div>
+  <div class="card-desc">Agenda, speaker bios, custom registration forms, attendee CSV export. Stop emailing spreadsheets back and forth. Your event, branded, professional.</div>
+  <div class="card-tags">
+    <span class="tag">Agenda</span><span class="tag">Speakers</span><span class="tag">CSV Export</span>
+    <span class="tag">Custom Forms</span><span class="tag">Branded</span>
   </div>
-  <div class="card-price">$200</div>
-  <a href="corporate.html" class="btn" target="_blank">View Demo →</a>
+  <div class="card-bottom">
+    <div class="card-price">$200 <span>one-time</span></div>
+    <a href="corporate.html" class="btn btn-gold" target="_blank">View Demo →</a>
+  </div>
 </div>
 
-<div class="pitch">
-  <h2>How it works</h2>
-  <p>You tell me the event details. I build the page. You send the link. Guests RSVP. You see the list live. You pay after it's up — <strong>no risk.</strong></p>
+<!-- ═══ TESTIMONIAL ═══ -->
+<div class="testimonial">
+  <p class="testimonial-quote">My tía sent me her quince invitation last month — it was a blurry photo of a paper invite in WhatsApp. My daughter's site had a countdown, RSVP tracking, and everyone talked about it for weeks. Worth every penny.</p>
+  <p class="testimonial-author">— Maria G., Quinceañera Mom, Hialeah</p>
 </div>
 
-<div class="highlight">
-  <h3>Every site includes</h3>
-  <ul>
-    <li>Custom design matching your event colors and theme</li>
-    <li>Bilingual English/Spanish (or any language)</li>
-    <li>Live RSVP tracking dashboard you can check from your phone</li>
-    <li>Guest list with names, phones, emails, plus-ones, and messages</li>
-    <li>Mobile-first — works perfect on phones where guests actually open it</li>
-    <li>Your own URL to share via text, WhatsApp, Instagram, email</li>
-    <li>24-hour delivery — you pay after the site is live</li>
-  </ul>
+<!-- ═══ HOW IT WORKS ═══ -->
+<div class="sec-label" style="margin-top:36px">HOW IT WORKS</div>
+<div class="steps">
+  <div class="step">
+    <div class="step-num">1</div>
+    <div>
+      <div class="step-title">You send me the details</div>
+      <div class="step-desc">Event type, date, colors, any photos or video. Takes 5 minutes via text or email.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div>
+      <div class="step-title">I build your site within 24 hours</div>
+      <div class="step-desc">Custom design. Bilingual. RSVP tracking. Mobile-first. Ready to share.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div>
+      <div class="step-title">You send one link. Guests RSVP.</div>
+      <div class="step-desc">Text it. WhatsApp it. Instagram bio. Email it. One link works everywhere.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div>
+      <div class="step-title">You pay AFTER it's live</div>
+      <div class="step-desc">Zero risk. If you don't love it, you don't pay. I haven't had anyone not pay yet — because they love it.</div>
+    </div>
+  </div>
 </div>
 
-<div class="cta">
-  <a href="mailto:dejesusrichard89@gmail.com?subject=Event%20Site%20Inquiry" class="btn" style="font-size:0.85rem;padding:14px 32px">Get Your Event Site →</a>
-  <p class="contact">Questions? <a href="mailto:dejesusrichard89@gmail.com">dejesusrichard89@gmail.com</a></p>
+<!-- ═══ GUARANTEE ═══ -->
+<div class="guarantee">
+  <div class="guarantee-icon">🛡️</div>
+  <h3>You Don't Pay Until It's Live</h3>
+  <p>I build the site. You see it. You love it. THEN you pay. If something's not right, I fix it — still no payment until you're happy. This is how I sleep at night and how you know I'm serious.</p>
 </div>
+
+<!-- ═══ EVERY SITE INCLUDES ═══ -->
+<div class="sec-label" style="margin-top:32px">EVERY SITE COMES WITH</div>
+<div class="perks">
+  <div class="perk"><div class="perk-icon">🎨</div><div class="perk-title">Custom Design</div><div class="perk-desc">Your colors, your theme, your vibe</div></div>
+  <div class="perk"><div class="perk-icon">🌐</div><div class="perk-title">Bilingual</div><div class="perk-desc">English + Spanish or any language</div></div>
+  <div class="perk"><div class="perk-icon">📋</div><div class="perk-title">Live RSVP List</div><div class="perk-desc">Names, phones, plus-ones, messages</div></div>
+  <div class="perk"><div class="perk-icon">📱</div><div class="perk-title">Mobile First</div><div class="perk-desc">Where guests actually open it</div></div>
+  <div class="perk"><div class="perk-icon">📧</div><div class="perk-title">Auto Reminders</div><div class="perk-desc">Emails to guests before the event</div></div>
+  <div class="perk"><div class="perk-icon">🔗</div><div class="perk-title">Your URL</div><div class="perk-desc">Share anywhere — text, IG, WhatsApp</div></div>
+</div>
+
+<!-- ═══ CTA ═══ -->
+<div class="cta-section">
+  <a href="mailto:dejesusrichard89@gmail.com?subject=I%20want%20my%20event%20site" class="cta-btn">✨ Get Your Event Site Now</a>
+  <p class="cta-sub">$97–$200. Pay after it's live. Questions? <a href="mailto:dejesusrichard89@gmail.com">dejesusrichard89@gmail.com</a></p>
+</div>
+
+<div class="foot"><p>Miami · Bilingual · Same-Day Turnaround</p></div>
 
 </div>
 </body>
