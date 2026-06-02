@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valeria · Mis Quince</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#c4a04a;--champagne:#dcc898;
+  --burgundy:#6b1d2f;--rose:#c97d87;--ivory:#f5f0e8;
+  --dark:#0a0809;--deep:#050304;
+  --text:#f0ebe0;--muted:rgba(240,235,224,0.6);
+}
+html{scroll-behavior:smooth;background:var(--deep)}
+body{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  color:var(--text);background:var(--deep);
+  -webkit-font-smoothing:antialiased;line-height:1.6;
+}
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:linear-gradient(180deg,rgba(5,3,4,0.65) 0%,rgba(5,3,4,0.3) 40%,rgba(5,3,4,0.85) 100%),
+    radial-gradient(ellipse at center,rgba(107,29,47,0.2) 0%,transparent 70%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200"><defs><pattern id="p" patternUnits="userSpaceOnUse" width="100" height="100"><path d="M50 10 Q60 50 50 90 Q40 50 50 10" fill="none" stroke="rgba(196,160,74,0.03)" stroke-width="0.5"/></pattern></defs><rect fill="%23050304" width="800" height="1200"/><rect fill="url(%23p)" width="800" height="1200"/></svg>');
+  background-size:cover;
+}
+.hero-content{position:relative;z-index:3;text-align:center;padding:60px 28px}
+
+.sec{
+  position:relative;z-index:2;
+  padding:64px 24px;
+  display:flex;align-items:center;justify-content:center;
+}
+.sec-inner{max-width:520px;width:100%}
+
+.title-script{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(4.5rem,11vw,8.5rem);
+  font-weight:400;line-height:1.08;
+  color:var(--champagne);
+  text-shadow:0 0 64px rgba(196,160,74,0.12);
+  margin-top:4px;
+}
+.title-display{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(1rem,2.4vw,1.25rem);
+  font-weight:400;letter-spacing:0.4em;
+  text-transform:uppercase;color:var(--ivory);
+  margin-top:14px;
+}
+
+.detail{
+  display:flex;align-items:flex-start;gap:16px;
+  margin:12px 0;padding:14px 0;
+  border-bottom:1px solid rgba(201,125,135,0.06);
+}
+.detail-icon{font-size:1.2rem;opacity:0.5;flex-shrink:0;margin-top:2px}
+.detail-label{
+  font-family:'Montserrat',sans-serif;font-size:0.45rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(201,125,135,0.5);margin-bottom:4px;
+}
+.detail-value{font-size:1.1rem;font-family:'Playfair Display',Georgia,serif;line-height:1.5}
+
+.rsvp-section{
+  background:linear-gradient(180deg,var(--deep) 0%,rgba(107,29,47,0.1) 40%,var(--deep) 100%);
+  padding:64px 24px;
+  display:flex;align-items:center;justify-content:center;position:relative;z-index:2;
+}
+.rsvp-box{
+  max-width:500px;width:100%;
+  background:rgba(5,3,4,0.6);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(201,125,135,0.1);
+  border-radius:20px;padding:40px 32px;
+}
+.fg{margin-bottom:22px}
+.fl{
+  font-family:'Montserrat',sans-serif;font-size:0.48rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--champagne);display:block;margin-bottom:8px;
+}
+.fi{
+  width:100%;font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.15rem;padding:14px 0;color:var(--text);
+  background:transparent;border:none;
+  border-bottom:1px solid rgba(201,125,135,0.1);
+  outline:none;transition:border-color 0.35s;
+}
+.fi:focus{border-bottom-color:var(--rose)}
+.fi::placeholder{color:rgba(240,235,224,0.08)}
+.btn{
+  display:block;width:100%;font-family:'Montserrat',sans-serif;
+  font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;
+  padding:18px;cursor:pointer;text-align:center;
+  background:rgba(201,125,135,0.12);color:var(--champagne);
+  border:1px solid rgba(201,125,135,0.2);
+  border-radius:12px;transition:all 0.4s;margin-top:20px;
+}
+.btn:hover{background:rgba(201,125,135,0.22)}
+.social-proof{
+  text-align:center;margin-top:18px;
+  font-family:'Montserrat',sans-serif;font-size:0.5rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);
+}
+.social-proof strong{color:var(--champagne)}
+.foot{
+  text-align:center;padding:48px 24px 40px;
+  font-family:'Montserrat',sans-serif;font-size:0.45rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(240,235,224,0.15);
+}
+.rule{
+  display:flex;align-items:center;justify-content:center;
+  gap:18px;margin:20px 0;
+}
+.rule::before,.rule::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,125,135,0.15),transparent);
+}
+.rule span{font-size:0.6rem;opacity:0.3;color:var(--rose)}
+
+.fade{opacity:0;transform:translateY(12px);transition:opacity 0.7s,transform 0.7s}
+.fade.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:0.1s}.d2{transition-delay:0.2s}.d3{transition-delay:0.3s}
+
+.hero-cards{
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:24px;
+}
+.hc{
+  background:rgba(5,3,4,0.5);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(201,125,135,0.1);
+  border-radius:10px;padding:12px 18px;text-align:center;min-width:80px;
+}
+.hc-label{
+  font-family:'Montserrat',sans-serif;font-size:0.45rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(201,125,135,0.45);margin-bottom:4px;
+}
+.hc-value{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:1rem;color:var(--ivory);line-height:1.3;
+}
+.theme-line{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(0.9rem,2vw,1.1rem);
+  font-style:italic;text-align:center;
+  color:var(--champagne);letter-spacing:0.15em;
+  margin:8px 0;
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-cards fade">
+      <div class="hc"><p class="hc-label">Fecha</p><p class="hc-value">Jul 5, 2026</p></div>
+      <div class="hc"><p class="hc-label">Hora</p><p class="hc-value">4:00 PM</p></div>
+      <div class="hc"><p class="hc-label">Lugar</p><p class="hc-value">Doral, FL</p></div>
+    </div>
+    <p class="theme-line fade d1">"Un Sueño Entre Rosas"</p>
+    <p class="title-display fade d1">Te Invitamos a Mis Quince</p>
+    <h1 class="title-script fade d2">Valeria</h1>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-inner">
+    <p class="title-display fade" style="text-align:center;margin-bottom:28px;font-size:0.9rem">Detalles</p>
+
+    <div class="detail fade">
+      <div class="detail-icon">📅</div><div>
+        <p class="detail-label">Fecha</p>
+        <p class="detail-value">Domingo, 5 de Julio 2026</p>
+      </div>
+    </div>
+    <div class="detail fade d1">
+      <div class="detail-icon">🕐</div><div>
+        <p class="detail-label">Hora</p>
+        <p class="detail-value">4:00 PM — 10:00 PM</p>
+      </div>
+    </div>
+    <div class="detail fade d2">
+      <div class="detail-icon">📍</div><div>
+        <p class="detail-label">Lugar</p>
+        <p class="detail-value">Salón de Eventos Las Rosas</p>
+        <p class="detail-value" style="font-size:0.9rem;color:var(--muted)">8600 NW 36th St · Doral, FL 33166</p>
+      </div>
+    </div>
+    <div class="detail fade d3">
+      <div class="detail-icon">💒</div><div>
+        <p class="detail-label">Celebración</p>
+        <p class="detail-value">Misa de Acción de Gracias y Recepción</p>
+      </div>
+    </div>
+
+    <div class="rule fade"><span>✦</span></div>
+    <p class="fade" style="text-align:center;font-size:1.05rem;color:var(--muted);font-style:italic;line-height:1.8;">El sueño de toda niña hecho realidad.<br>Y tú eres parte de él.</p>
+  </div>
+</section>
+
+<section class="rsvp-section">
+  <div class="rsvp-box">
+    <p class="title-display fade" style="text-align:center;margin-bottom:4px;font-size:0.9rem">Confirmar Asistencia</p>
+    <p class="fade" style="text-align:center;font-size:0.85rem;color:var(--muted);margin-bottom:24px">Te esperamos para celebrar juntos</p>
+
+    <form id="f">
+      <div class="fg fade d1">
+        <label class="fl">Nombre Completo</label>
+        <input class="fi" id="n" type="text" placeholder="Tu nombre..." required>
+      </div>
+      <div class="fg fade d1">
+        <label class="fl">Teléfono</label>
+        <input class="fi" id="p" type="tel" placeholder="(305) 555-0123">
+      </div>
+      <div class="fg fade d2">
+        <label class="fl">Correo</label>
+        <input class="fi" id="e" type="email" placeholder="tu@email.com">
+      </div>
+      <div class="fg fade d2">
+        <label class="fl">Acompañantes</label>
+        <input class="fi" id="g" type="number" min="0" max="10" value="0">
+      </div>
+      <div class="fg fade d3">
+        <label class="fl">Mensaje para Valeria</label>
+        <textarea class="fi" id="m" rows="2" placeholder="Tus deseos..."></textarea>
+      </div>
+      <div class="fade d3">
+        <button type="submit" class="btn">Confirmar Asistencia</button>
+      </div>
+    </form>
+
+    <p class="social-proof fade d3">
+      <strong id="rc">18</strong> personas han confirmado
+    </p>
+
+    <div id="ok" style="display:none;text-align:center;padding:32px 8px">
+      <p style="font-size:1.3rem;color:var(--champagne)">¡Gracias!</p>
+      <p style="font-size:0.85rem;color:var(--muted);margin-top:8px">Te esperamos el 5 de Julio ✨</p>
+      <p style="font-size:0.75rem;color:var(--muted);margin-top:4px">Salón Las Rosas · Doral · 4:00 PM</p>
+    </div>
+  </div>
+</section>
+
+<div class="foot"><p>VALERIA · MIS QUINCE · 2026</p></div>
+
+<script>
+(function(){
+  var D=document,W=window;
+  var rv=D.querySelectorAll('.fade');
+  function ck(){for(var i=0;i<rv.length;i++){var e=rv[i];if(!e.classList.contains('on')&&e.getBoundingClientRect().top<W.innerHeight*0.9)e.classList.add('on')}}
+  W.addEventListener('scroll',ck,{passive:true});setTimeout(ck,100);setTimeout(ck,400);
+
+  // Update count from static data
+  fetch('valeria-rsvp-data.json')
+    .then(function(r){return r.json()})
+    .then(function(d){D.getElementById('rc').textContent=d.length})
+    .catch(function(){});
+
+  D.getElementById('f').addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=D.getElementById('n').value.trim();if(!n)return;
+    D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
+  });
+})();
+</script>
+</body>
+</html>

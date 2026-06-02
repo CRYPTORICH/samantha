@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP List — Valeria Quince</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:#0a0809;color:#f0ebe0;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  padding:36px 20px;
+}
+h1{font-size:1.2rem;font-weight:700;margin-bottom:2px;color:#dcc898}
+.sub{font-size:0.7rem;color:rgba(240,235,224,0.35);margin-bottom:20px}
+.count{font-size:0.75rem;color:rgba(240,235,224,0.4);margin-bottom:16px}
+.count strong{color:#dcc898}
+table{
+  width:100%;max-width:900px;border-collapse:collapse;
+  margin:0 auto;font-size:0.78rem;
+}
+th{
+  text-align:left;padding:8px 10px;
+  font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;
+  color:rgba(201,125,135,0.5);border-bottom:1px solid rgba(201,125,135,0.1);
+  font-weight:500;
+}
+td{
+  padding:10px;border-bottom:1px solid rgba(201,125,135,0.04);
+  vertical-align:top;line-height:1.4;
+}
+tr:hover td{background:rgba(201,125,135,0.02)}
+.name{font-weight:600;color:#dcc898;min-width:110px}
+.info{color:rgba(240,235,224,0.45);font-size:0.7rem}
+.msg{color:rgba(240,235,224,0.35);font-style:italic;max-width:240px;font-size:0.75rem}
+.guests{text-align:center;color:rgba(240,235,224,0.4)}
+.confirmed{color:rgba(0,168,107,0.4);font-size:0.6rem;font-weight:500}
+.btn{
+  font-size:0.6rem;padding:6px 14px;margin-bottom:16px;
+  background:rgba(196,160,74,0.08);
+  border:1px solid rgba(196,160,74,0.15);
+  color:#dcc898;cursor:pointer;border-radius:6px;
+}
+.back{margin-top:24px;font-size:0.65rem}
+.back a{color:rgba(240,235,224,0.25);text-decoration:none}
+.back a:hover{color:rgba(240,235,224,0.5)}
+</style>
+</head>
+<body>
+
+<h1>Valeria · Mis Quince</h1>
+<p class="sub">Guest Registry</p>
+
+<button class="btn" onclick="location.reload()">Refresh</button>
+<p class="count"><strong id="cnt">18</strong> confirmed guests&nbsp;&nbsp;|&nbsp;&nbsp;<span id="total">33</span> total attendees</p>
+
+<table id="table">
+  <thead><tr>
+    <th>#</th><th>Name</th><th>Phone</th><th>Email</th><th style="text-align:center">Guests</th>
+    <th>Message</th><th>Email Sent</th>
+  </tr></thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<div class="back"><a href="quince-demo.html">← Back to invitation</a></div>
+
+<script>
+function load(){
+  fetch('valeria-rsvp-data.json')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      document.getElementById('cnt').textContent=data.length;
+      var total=data.reduce(function(s,g){return s+1+(g.guests||0)},0);
+      document.getElementById('total').textContent=total;
+
+      var tbody=document.getElementById('tbody');
+      tbody.innerHTML=data.sort(function(a,b){return new Date(b.date)-new Date(a.date)})
+        .map(function(r,i){
+          return '<tr>'+
+            '<td style="color:rgba(240,235,224,0.2);font-size:0.6rem">'+(i+1)+'</td>'+
+            '<td class="name">'+esc(r.name)+'</td>'+
+            '<td class="info">'+(r.phone||'—')+'</td>'+
+            '<td class="info">'+(r.email||'—')+'</td>'+
+            '<td class="guests">'+(r.guests||0)+'</td>'+
+            '<td class="msg">'+(r.message?'"'+esc(r.message)+'"':'—')+'</td>'+
+            '<td class="confirmed">'+(r.confirmation_sent?'✓ sent':'—')+'</td>'+
+            '</tr>';
+        }).join('');
+    })
+    .catch(function(){
+      document.getElementById('tbody').innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:rgba(240,235,224,0.2)">Loading...</td></tr>';
+    });
+}
+
+function esc(s){
+  var d=document.createElement('div');d.textContent=s;return d.innerHTML;
+}
+
+load();
+</script>
+</body>
+</html>
