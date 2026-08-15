@@ -70,5 +70,17 @@
     "date": "2026-08-15T00:54:43.793339",
     "confirmation_sent": false,
     "followup_stage": 0
+  },
+  {
+    "_id": "fc15eb4b3405",
+    "name": "Gilberto fuentes",
+    "phone": "3028671750",
+    "email": "Gilberto1952@cloud.com",
+    "address": "109 s Jackson st Wilmington Del 19805",
+    "guests": 2,
+    "message": "",
+    "date": "2026-08-15T07:10:06.655675",
+    "confirmation_sent": false,
+    "followup_stage": 0
   }
 ]
