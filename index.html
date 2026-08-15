@@ -236,6 +236,19 @@ body.en [data-en]{display:block}
   color:rgba(236,228,212,0.2);
 }
 
+/* ═══ TABLETS / LARGE PHONES (481–900px) ═══
+   Previously there was ONE breakpoint at 480px, so everything from a large
+   phone in landscape up to a laptop got the full desktop layout. */
+@media(min-width:481px) and (max-width:900px){
+  .sec{padding:64px 28px}
+  .rsvp-section{padding:68px 28px}
+  .rsvp-box{padding:38px 30px}
+  .hero-content{padding:56px 24px 70px}
+  .corner{width:64px;height:64px}
+  .cd{gap:22px}
+  .hero-cards{gap:10px}
+}
+
 @media(max-width:480px){
   .sec{padding:56px 20px}
   .rsvp-section{padding:60px 20px}
@@ -244,6 +257,38 @@ body.en [data-en]{display:block}
   .hero-content{padding:48px 16px 60px}
   .corner{width:50px;height:50px}
   .cd{gap:16px}.cd-num{font-size:1.9rem}
+  /* the hero cards wrapped into a cramped 2+1; one clean row of three */
+  .hero-cards{gap:8px}
+  .hc{padding:11px 12px;min-width:0;flex:1}
+  .hc-value{font-size:0.95rem}
+  .hc-label{font-size:0.44rem;letter-spacing:0.18em}
+  /* keep taps comfortable */
+  .lang button{padding:11px 18px}
+  .fi{font-size:1.15rem;padding:15px 0}
+}
+
+/* ═══ MOBILE PERFORMANCE ═══
+   backdrop-filter on .hc sits directly over the autoplaying hero video, so
+   the blur is recomposited every single frame. On phones that is the most
+   expensive thing on the page and it drops frames on mid-range Androids.
+   Swap the blur for a solid tint below 900px — visually near-identical
+   against a dark video, far cheaper. Desktop keeps the real glass. */
+@media(max-width:900px){
+  .hc{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(6,8,5,0.72)}
+  .rsvp-box{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(6,8,5,0.9)}
+  .lang{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(6,8,5,0.88)}
+}
+
+/* Mobile browsers count 100vh as the viewport WITH the address bar hidden, so
+   the hero jumped as the bar collapsed. svh is the stable small-viewport unit. */
+@supports(min-height:100svh){
+  .hero{min-height:100svh}
+}
+
+/* The video autoplays; respect a stated preference against motion. */
+@media(prefers-reduced-motion:reduce){
+  .hero video{display:none}
+  .hero{background:linear-gradient(160deg,#0a0c09,#00291b 60%,#060805)}
 }
 </style>
 </head>
@@ -251,7 +296,7 @@ body.en [data-en]{display:block}
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" aria-label="Invitación principal">
-  <video autoplay muted loop playsinline preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 16'%3E%3Crect fill='%23060805' width='9' height='16'/%3E%3C/svg%3E">
+  <video id="hv" autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 16'%3E%3Crect fill='%23060805' width='9' height='16'/%3E%3C/svg%3E">
     <source src="hero-warm.mp4" type="video/mp4">
   </video>
 
@@ -270,7 +315,7 @@ body.en [data-en]{display:block}
       </div>
       <div class="hc">
         <p class="hc-label" data-es>Hora</p><p class="hc-label" data-en>Time</p>
-        <p class="hc-value">3:00 PM</p>
+        <p class="hc-value">3:00 – 6:00 PM</p>
       </div>
       <div class="hc">
         <p class="hc-label" data-es>Lugar</p><p class="hc-label" data-en>Venue</p>
@@ -286,8 +331,8 @@ body.en [data-en]{display:block}
 </section>
 
 <div class="lang">
-  <button id="btn-es" class="active" onclick="setLang('es')" aria-label="Español">Español</button>
-  <button id="btn-en" onclick="setLang('en')" aria-label="English">English</button>
+  <button id="btn-en" class="active" onclick="setLang('en')" aria-label="English">English</button>
+  <button id="btn-es" onclick="setLang('es')" aria-label="Español">Español</button>
 </div>
 
 <!-- ═══ DETAILS ═══ -->
@@ -312,7 +357,7 @@ body.en [data-en]{display:block}
       <svg class="detail-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke-width="1.2"/><line x1="12" y1="6" x2="12" y2="12" stroke-width="1.2"/><line x1="12" y1="12" x2="16" y2="14" stroke-width="1.2"/></svg>
       <div>
         <p class="detail-label" data-es>Hora</p><p class="detail-label" data-en>Time</p>
-        <p class="detail-value">3:00 PM</p>
+        <p class="detail-value">3:00 – 6:00 PM</p>
       </div>
     </div>
 
@@ -415,14 +460,14 @@ body.en [data-en]{display:block}
     </form>
 
     <!-- Social proof -->
-    <p class="social-proof reveal d4">
-      <span data-es><strong id="rc">0</strong> personas han confirmado</span>
-      <span data-en><strong id="rc-en">0</strong> guests have confirmed</span>
-    </p>
+    <!-- Public confirmed-guest count removed at the family's request.
+         The running total lives in the private dashboard and the host
+         notification email, not on the public invitation. -->
+
 
     <div id="ok" style="display:none;text-align:center;padding:40px 10px">
       <p class="poetic" style="font-size:1.3rem"><span data-es>Gracias. Te esperamos el 3 de Octubre.</span><span data-en>Thank you. See you October 3rd.</span></p>
-      <p style="font-size:0.8rem;color:var(--muted);margin-top:12px"><span data-es>Fairwind Baptist Church · 3:00 PM</span><span data-en>Fairwind Baptist Church · 3:00 PM</span></p>
+      <p style="font-size:0.8rem;color:var(--muted);margin-top:12px"><span data-es>Fairwind Baptist Church · 3:00 – 6:00 PM</span><span data-en>Fairwind Baptist Church · 3:00 – 6:00 PM</span></p>
     </div>
 
   </div>
@@ -441,7 +486,39 @@ body.en [data-en]{display:block}
     D.getElementById('btn-en').className=l=='en'?'active':'';
     try{localStorage.setItem('sl',l)}catch(e){}
   };
-  try{setLang(localStorage.getItem('sl')||'es')}catch(e){setLang('es')}
+  /* English is the default; Spanish stays one tap away at the top.
+     Anyone who already picked a language keeps their choice. */
+  try{setLang(localStorage.getItem('sl')||'en')}catch(e){setLang('en')}
+
+  /* ═══ HERO VIDEO — mobile autoplay ═══
+     The tag already had muted+playsinline, which is what iOS requires, but
+     autoplay still failed on phones. play() returns a PROMISE that mobile
+     browsers reject silently — under iOS Low Power Mode, Android Data Saver,
+     or before enough of the file is buffered. Nothing retried it, so the
+     poster just sat there.
+     Fix: call play() explicitly, and if the promise rejects, retry on the
+     first real user interaction (which always satisfies the gesture rule).   */
+  (function(){
+    var v=D.getElementById('hv'); if(!v) return;
+    var started=false;
+    function go(){
+      if(started) return;
+      var p=v.play();
+      if(p&&p.then){ p.then(function(){started=true}).catch(function(){}); }
+      else { started=true; }
+    }
+    go();
+    v.addEventListener('loadeddata',go,{once:true});
+    v.addEventListener('canplay',go,{once:true});
+    /* any first touch/scroll/click counts as the unlock gesture */
+    ['touchstart','pointerdown','click','scroll','keydown'].forEach(function(ev){
+      D.addEventListener(ev,go,{once:true,passive:true});
+    });
+    /* a tab restored from background can come back paused */
+    D.addEventListener('visibilitychange',function(){
+      if(!D.hidden&&v.paused){ started=false; go(); }
+    });
+  })();
 
   /* ═══ REVEAL ═══ */
   var rv=D.querySelectorAll('.reveal');
@@ -463,23 +540,11 @@ body.en [data-en]{display:block}
 
   /* ═══ RSVP COUNT ═══ */
   function loadCount(){
-    // Read count from GitHub Pages — always live
-    fetch('https://raw.githubusercontent.com/CRYPTORICH/samantha/main/rsvp_data.json')
-      .then(function(r){return r.json()})
-      .then(function(data){
-        D.getElementById('rc').textContent=data.length;
-        D.getElementById('rc-en').textContent=data.length;
-      })
-      .catch(function(){
-        // Fallback: try Render
-        fetch('https://samantha-rsvp.onrender.com/rsvp')
-          .then(function(r){return r.json()})
-          .then(function(data){
-            D.getElementById('rc').textContent=data.length;
-            D.getElementById('rc-en').textContent=data.length;
-          })
-          .catch(function(){});
-      });
+    /* The public confirmed-guest count was removed from the invitation, so
+       there is nothing to fill in. Kept as a no-op because it is still called
+       from the submit success path — deleting it outright would throw there
+       and break the thank-you screen after a guest RSVPs.
+       The live totals are in the dashboard and the host notification email. */
   }
   loadCount();
 

@@ -36,10 +36,16 @@ SMTP_USER = os.environ.get("GMAIL_ADDRESS", "")
 SMTP_PASS = os.environ.get("GMAIL_APP_PASSWORD", "")
 FROM_NAME = "Samantha Quince Anos"
 
+# Where the "you have a new guest" alert goes. Set HOST_EMAIL in the Render
+# dashboard to change it without a redeploy; falls back to the sending account.
+HOST_EMAIL = os.environ.get("HOST_EMAIL", "") or SMTP_USER
+DASHBOARD_URL = os.environ.get(
+    "DASHBOARD_URL", "https://cryptorich.github.io/samantha/rsvp/")
+
 EVENT_DATE = datetime.datetime(2026, 10, 3, 15, 0, 0)
 EVENT = {
     "date_str": "Sabado 3 de Octubre 2026 / Saturday, October 3, 2026",
-    "time": "3:00 PM",
+    "time": "3:00 PM - 6:00 PM",
     "venue": "Fairwind Baptist Church",
     "address": "801 Seymour Rd Bear, DE 19701",
 }
@@ -149,6 +155,46 @@ def confirmation_email(name):
     )
 
 
+def host_alert_email(entry, total_rsvps, total_guests):
+    """Notify the host the moment someone RSVPs.
+
+    Sent to HOST_EMAIL, separate from the guest's own confirmation. Every field
+    the guest submitted is included so the host does not have to open the
+    dashboard to know who replied - the dashboard link is for the full list.
+    """
+    name = entry.get("name") or "Someone"
+    rows = [
+        ("Name", entry.get("name") or "-"),
+        ("Guests", str(entry.get("guests", 0))),
+        ("Phone", entry.get("phone") or "-"),
+        ("Email", entry.get("email") or "-"),
+        ("Address", entry.get("address") or "-"),
+        ("Message", entry.get("message") or "-"),
+    ]
+    cells = "".join(
+        f"""<tr>
+<td style="padding:9px 14px;border-bottom:1px solid rgba(196,160,74,0.12);color:rgba(236,228,212,0.55);font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;vertical-align:top">{k}</td>
+<td style="padding:9px 14px;border-bottom:1px solid rgba(196,160,74,0.12);color:#ece4d4;font-size:1rem">{v}</td>
+</tr>""" for k, v in rows)
+
+    return (
+        f"New RSVP: {name} (+{entry.get('guests', 0)}) - Samantha Quince Anos",
+        f"""<div style="max-width:560px;margin:0 auto;font-family:Georgia,serif;color:#ece4d4;background:#0a0c09;padding:40px 32px;border:1px solid rgba(196,160,74,0.15);border-radius:12px">
+<h1 style="color:#dcc898;font-size:1.6rem;text-align:center;margin:0 0 4px">You have a new Guest on your RSVP list</h1>
+<p style="text-align:center;color:rgba(236,228,212,0.5);font-size:0.8rem;margin:0 0 26px">Tienes un nuevo invitado confirmado</p>
+<table style="width:100%;border-collapse:collapse;background:rgba(6,8,5,0.6);border:1px solid rgba(196,160,74,0.12);border-radius:10px;overflow:hidden">{cells}</table>
+<div style="text-align:center;margin:26px 0 8px">
+<p style="margin:0 0 4px;font-size:1.3rem;color:#dcc898"><strong>{total_guests}</strong> guests across <strong>{total_rsvps}</strong> RSVPs</p>
+<p style="margin:0;color:rgba(236,228,212,0.45);font-size:0.85rem">{EVENT['date_str']}<br>{EVENT['time']} - {EVENT['venue']}</p>
+</div>
+<div style="text-align:center;margin-top:28px">
+<a href="{DASHBOARD_URL}" style="display:inline-block;padding:15px 34px;background:#b8942f;color:#0a0c09;text-decoration:none;border-radius:8px;font-family:Helvetica,Arial,sans-serif;font-size:0.72rem;letter-spacing:0.28em;text-transform:uppercase;font-weight:bold">View Full Guest List</a>
+<p style="margin:14px 0 0;color:rgba(236,228,212,0.35);font-size:0.75rem">{DASHBOARD_URL}</p>
+</div>
+</div>"""
+    )
+
+
 FOLLOWUP_TEMPLATES = [
     {
         "subject": "Recordatorio / Samantha Quince Anos",
@@ -220,9 +266,21 @@ def submit():
             all_data[-1] = entry
             write_data(all_data)
 
+    # Host alert. Deliberately AFTER write_data and wrapped: the guest's RSVP is
+    # already saved by this point, so a mail outage can never cost a response.
+    host_notified = False
+    try:
+        if HOST_EMAIL:
+            total_guests = sum(int(g.get("guests") or 0) for g in all_data)
+            subject, body = host_alert_email(entry, len(all_data), total_guests)
+            host_notified = send_email(HOST_EMAIL, subject, body)
+    except Exception as e:
+        print(f"[host-alert] Failed: {e}")
+
     return jsonify({
         "ok": True,
         "confirmation_sent": entry["confirmation_sent"],
+        "host_notified": host_notified,
         "event": EVENT,
     })
 
