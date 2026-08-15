@@ -42,7 +42,28 @@ HOST_EMAIL = os.environ.get("HOST_EMAIL", "") or SMTP_USER
 DASHBOARD_URL = os.environ.get(
     "DASHBOARD_URL", "https://cryptorich.github.io/samantha/rsvp/")
 
-EVENT_DATE = datetime.datetime(2026, 10, 3, 15, 0, 0)
+# ── Time ───────────────────────────────────────────────────
+# TIMESTAMP BUG, fixed 2026-08-15. RSVPs were stored with
+# datetime.utcnow().isoformat(), which yields "2026-08-14T22:38:06" with NO
+# timezone marker. JavaScript parses an offset-less datetime as LOCAL time, so
+# the dashboard rendered every RSVP 4 hours late, and anything after 8pm ET
+# landed on the following day (Biby Santiago replied Fri 8:54pm, displayed Sat).
+# Timestamps are now written timezone-aware (...+00:00). Existing rows stay
+# exactly as they are and are read as UTC by the dashboard.
+try:
+    from zoneinfo import ZoneInfo
+    EASTERN = ZoneInfo("America/New_York")
+except Exception:                                  # pragma: no cover
+    EASTERN = datetime.timezone(datetime.timedelta(hours=-4))  # EDT fallback
+
+
+def now_utc():
+    """Timezone-aware UTC. Never datetime.utcnow() — that returns a naive value
+    that silently reads as local time everywhere downstream."""
+    return datetime.datetime.now(datetime.timezone.utc)
+
+
+EVENT_DATE = datetime.datetime(2026, 10, 3, 15, 0, 0, tzinfo=EASTERN)
 EVENT = {
     "date_str": "Sabado 3 de Octubre 2026 / Saturday, October 3, 2026",
     "time": "3:00 PM - 6:00 PM",
@@ -139,7 +160,7 @@ def write_data(data):
 
 # ── Email Templates ────────────────────────────────────────
 def confirmation_email(name):
-    days = (EVENT_DATE - datetime.datetime.now()).days
+    days = (EVENT_DATE - datetime.datetime.now(EASTERN)).days
     return (
         f"Gracias, {name} / Thank You, {name}!",
         f"""<div style="max-width:560px;margin:0 auto;font-family:Georgia,serif;color:#ece4d4;background:#0a0c09;padding:40px 32px;border:1px solid rgba(196,160,74,0.15);border-radius:12px">
@@ -163,6 +184,18 @@ def host_alert_email(entry, total_rsvps, total_guests):
     dashboard to know who replied - the dashboard link is for the full list.
     """
     name = entry.get("name") or "Someone"
+    # Stated in Eastern with the zone spelled out. The stored value is UTC, and
+    # reading it as anything else is exactly what made the dashboard confusing.
+    try:
+        _d = datetime.datetime.fromisoformat(entry["date"])
+        # A stored value with no offset is UTC. It must be tagged explicitly:
+        # astimezone() on a naive datetime assumes the SERVER's local zone,
+        # which is right on Render only by accident and wrong anywhere else.
+        if _d.tzinfo is None:
+            _d = _d.replace(tzinfo=datetime.timezone.utc)
+        received = _d.astimezone(EASTERN).strftime("%a %b %d, %Y at %I:%M %p %Z")
+    except Exception:
+        received = "-"
     rows = [
         ("Name", entry.get("name") or "-"),
         ("Guests", str(entry.get("guests", 0))),
@@ -170,6 +203,7 @@ def host_alert_email(entry, total_rsvps, total_guests):
         ("Email", entry.get("email") or "-"),
         ("Address", entry.get("address") or "-"),
         ("Message", entry.get("message") or "-"),
+        ("Received", received),
     ]
     cells = "".join(
         f"""<tr>
@@ -250,7 +284,7 @@ def submit():
         "address": (data.get('address') or '').strip(),
         "guests": int(data.get('guests') or 0),
         "message": (data.get('message') or '').strip(),
-        "date": datetime.datetime.utcnow().isoformat(),
+        "date": now_utc().isoformat(),   # tz-aware: ...+00:00
         "confirmation_sent": False,
         "followup_stage": 0,
     }
@@ -303,7 +337,7 @@ def delete_guest(entry_id):
 
 @app.route('/cron/send-followups', methods=['GET', 'POST'])
 def send_followups():
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(EASTERN)
     days_until = (EVENT_DATE - now).days
     if days_until <= 0:
         return jsonify({"ok": True, "message": "Event has passed", "sent": 0})
@@ -345,7 +379,7 @@ def send_followups():
 def stats():
     all_data = read_data()
     total_attendees = len(all_data) + sum(g.get("guests", 0) for g in all_data)
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(EASTERN)
     return jsonify({
         "total_rsvps": len(all_data),
         "total_attendees": total_attendees,

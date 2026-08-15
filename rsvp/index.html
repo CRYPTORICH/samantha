@@ -122,7 +122,7 @@ function render(data){
     return;
   }
 
-  tbody.innerHTML=data.sort(function(a,b){return new Date(b.date)-new Date(a.date)}).map(function(r,i){
+  tbody.innerHTML=data.sort(function(a,b){return (toDate(b.date)||0)-(toDate(a.date)||0)}).map(function(r,i){
     var id = r._id||('idx'+i);
     return '<tr>'+
       '<td class="name">'+(i+1)+'. '+esc(r.name)+'</td>'+
@@ -153,8 +153,24 @@ function esc(s){
   var d=document.createElement('div');d.textContent=s;return d.innerHTML;
 }
 
+/* Timestamps come in two shapes:
+     older rows  "2026-08-14T22:38:06.733451"        (no offset - it is UTC)
+     newer rows  "2026-08-15T15:20:00.123456+00:00"  (explicit)
+   JavaScript parses an offset-less datetime as LOCAL time, which is why the
+   list used to read 4 hours late and pushed evening RSVPs onto the next day.
+   Appending Z when no offset is present makes both shapes parse as UTC; we
+   then render in Eastern and label it so there is nothing to second-guess. */
+function toDate(d){
+  if(!d) return null;
+  var s=String(d);
+  if(!/[Zz]$|[+-]\d{2}:?\d{2}$/.test(s)) s+='Z';
+  var t=new Date(s);
+  return isNaN(t.getTime())?null:t;
+}
 function fmt(d){
-  try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})}catch(e){return d}
+  var t=toDate(d); if(!t) return d||'';
+  try{return t.toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})}
+  catch(e){return t.toISOString()}
 }
 
 window.refresh=load;
@@ -163,7 +179,7 @@ function exportCSV(){
   if(!allData.length)return;
   var rows=[['#','Name','Phone','Email','Address','Guests','Message','Date','Confirmation Sent']];
   allData.forEach(function(r,i){
-    rows.push([i+1,r.name,r.phone||'',r.email||'',r.address||'',r.guests||0,r.message||'',new Date(r.date).toLocaleString(),r.confirmation_sent?'Yes':'No']);
+    rows.push([i+1,r.name,r.phone||'',r.email||'',r.address||'',r.guests||0,r.message||'',fmt(r.date),r.confirmation_sent?'Yes':'No']);
   });
   var csv=rows.map(function(r){return r.map(function(c){return'"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
   var b=new Blob(['\uFEFF'+csv],{type:'text/csv'});
