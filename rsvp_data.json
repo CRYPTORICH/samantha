@@ -66,10 +66,13 @@
     "email": "cdsantiago72@aol.com",
     "address": "5 Maple CT, Elkton, MD 21921",
     "guests": 3,
-    "message": "Cant wait to celebrate your special day. Love you 😘",
+    "message": "Cant wait!",
     "date": "2026-08-15T00:54:43.793339",
     "confirmation_sent": false,
-    "followup_stage": 0
+    "followup_stage": 0,
+    "party_size": 3,
+    "client_token": "mtt3t6jul107uvv1",
+    "updated": "2026-09-08T20:11:35.494083+00:00"
   },
   {
     "_id": "fc15eb4b3405",
@@ -101,11 +104,14 @@
     "phone": "772-626-6001",
     "email": "beverlyjcarroll@yahoo.com",
     "address": "2803 Christiana Meadows Bear, Delaware 19701",
-    "guests": 1,
-    "message": "Take this as a preview to what's ahead. And remember to take God with you every day!!",
+    "guests": 2,
+    "message": "",
     "date": "2026-08-15T13:38:25.390905",
     "confirmation_sent": false,
-    "followup_stage": 0
+    "followup_stage": 0,
+    "party_size": 2,
+    "client_token": "mtt3sss2eyf62qhw",
+    "updated": "2026-09-08T20:11:05.981456+00:00"
   },
   {
     "_id": "e6c9eb8b0723",
@@ -164,34 +170,6 @@
     "guests": 1,
     "message": "May God Bless you on this special day of a New Year in life.",
     "date": "2026-08-21T01:09:23.605063+00:00",
-    "confirmation_sent": false,
-    "followup_stage": 0
-  },
-  {
-    "_id": "f3d22db63a80",
-    "name": "Beverly Carroll",
-    "phone": "772-626-6001",
-    "email": "beverlyjcarroll@yahoo.com",
-    "address": "2803 Christiana Meadows Bear, Delaware 19701",
-    "guests": 2,
-    "party_size": 2,
-    "message": "",
-    "client_token": "mtt3sss2eyf62qhw",
-    "date": "2026-09-08T20:11:05.981456+00:00",
-    "confirmation_sent": false,
-    "followup_stage": 0
-  },
-  {
-    "_id": "9c58d5bae44e",
-    "name": "Biby Santiago",
-    "phone": "3059261101",
-    "email": "cdsantiago72@aol.com",
-    "address": "5 Maple CT, Elkton, MD 21921",
-    "guests": 3,
-    "party_size": 3,
-    "message": "Cant wait!",
-    "client_token": "mtt3t6jul107uvv1",
-    "date": "2026-09-08T20:11:35.494083+00:00",
     "confirmation_sent": false,
     "followup_stage": 0
   }
