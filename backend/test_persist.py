@@ -172,3 +172,112 @@ def test_missing_token_is_an_error_not_an_empty_list(monkeypatch):
     monkeypatch.setattr(A, "GH_TOKEN", "")
     with pytest.raises(A.PersistError):
         A.read_data()
+
+
+# ── 2026-09-08 go-live QA ──────────────────────────────────────────────
+# Every test below encodes a defect found while auditing the site for launch.
+
+def test_non_numeric_guest_count_does_not_500():
+    """int('abc') used to escape as an unhandled 500."""
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    r = A.app.test_client().post("/rsvp", json={"name": "Ana", "guests": "abc"})
+    assert r.status_code == 200
+    assert [g for g in gh.rows if g["name"] == "Ana"][0]["guests"] == 0
+
+
+def test_guest_count_is_clamped_to_the_forms_max():
+    """The form says max=10 but read .value directly, so it was never enforced."""
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    c = A.app.test_client()
+    c.post("/rsvp", json={"name": "Big", "guests": 9999})
+    c.post("/rsvp", json={"name": "Neg", "guests": -5})
+    rows = {g["name"]: g["guests"] for g in gh.rows}
+    assert rows["Big"] == 10 and rows["Neg"] == 0
+
+
+def test_absurdly_long_fields_are_truncated():
+    """Unbounded strings land in a JSON file re-read on every single RSVP."""
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    A.app.test_client().post("/rsvp", json={
+        "name": "N" * 5000, "message": "M" * 90000, "address": "A" * 5000})
+    row = gh.rows[-1]
+    assert len(row["name"]) == 120
+    assert len(row["message"]) == 1200
+    assert len(row["address"]) == 250
+
+
+def test_a_resent_rsvp_is_stored_once():
+    """The offline queue resends. Without the token the guest was written twice."""
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    c = A.app.test_client()
+    body = {"name": "Ana", "guests": 2, "client_token": "tok-abc"}
+    first = c.post("/rsvp", json=body)
+    second = c.post("/rsvp", json=body)
+    assert first.status_code == 200 and second.status_code == 200
+    assert second.get_json().get("duplicate") is True
+    assert len(gh.rows) == 15, "the resend created a duplicate guest"
+    assert [g["name"] for g in gh.rows].count("Ana") == 1
+
+
+def test_two_different_guests_are_both_stored():
+    """Dedupe must not swallow genuinely separate submissions."""
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    c = A.app.test_client()
+    c.post("/rsvp", json={"name": "Ana", "client_token": "t1"})
+    c.post("/rsvp", json={"name": "Luis", "client_token": "t2"})
+    assert len(gh.rows) == 16
+
+
+def test_delete_without_the_admin_key_is_refused(monkeypatch):
+    """_ids are public in rsvp_data.json and CORS was wide open: any page on the
+    internet could delete every guest from a visitor's browser."""
+    monkeypatch.setattr(A, "ADMIN_KEY", "s3cret")
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    r = A.app.test_client().delete("/rsvp/id00")
+    assert r.status_code == 403
+    assert len(gh.rows) == 14, "a guest was deleted without the key"
+
+
+def test_delete_is_refused_when_no_key_is_configured(monkeypatch):
+    """Fail closed. An unset ADMIN_KEY must not mean 'anyone may delete'."""
+    monkeypatch.setattr(A, "ADMIN_KEY", "")
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    r = A.app.test_client().delete("/rsvp/id00", headers={"X-Admin-Key": ""})
+    assert r.status_code == 403
+    assert len(gh.rows) == 14
+
+
+def test_delete_with_the_admin_key_still_works(monkeypatch):
+    monkeypatch.setattr(A, "ADMIN_KEY", "s3cret")
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    r = A.app.test_client().delete("/rsvp/id00", headers={"X-Admin-Key": "s3cret"})
+    assert r.status_code == 200 and r.get_json()["ok"] is True
+    assert len(gh.rows) == 13
+
+
+def test_garbage_payload_is_a_400_not_a_crash():
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    c = A.app.test_client()
+    assert c.post("/rsvp", data="not json",
+                  content_type="application/json").status_code == 400
+    assert c.post("/rsvp", json=["a", "list"]).status_code == 400
+    assert len(gh.rows) == 14
+
+
+def test_headcount_counts_the_person_who_submitted():
+    """'Acompanantes' = people BESIDES you, so a party is 1 + guests."""
+    gh = FakeGH([{"_id": "a", "name": "A", "guests": 1},
+                 {"_id": "b", "name": "B", "guests": 3}])
+    A.req = gh
+    body = A.app.test_client().get("/stats").get_json()
+    assert body["total_rsvps"] == 2
+    assert body["total_attendees"] == 6, "2 submitters + 4 companions"

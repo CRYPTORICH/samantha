@@ -146,24 +146,51 @@ function render(data){
       '<td class="msg">'+(r.message?'"'+esc(r.message)+'"':'—')+'</td>'+
       '<td class="date">'+fmt(r.date)+'</td>'+
       '<td class="'+(r.confirmation_sent?'confirmed':'pending')+'">'+(r.confirmation_sent?'✓ sent':'—')+'</td>'+
-      '<td style="text-align:center"><button class="btn-del" onclick="del(\''+id+'\',\''+esc(r.name)+'\')" title="Delete">✕</button></td>'+
+      '<td style="text-align:center"><button class="btn-del" data-id="'+esc(id)+'" data-name="'+esc(r.name)+'" title="Delete">✕</button></td>'+
       '</tr>';
   }).join('');
 }
 
+document.addEventListener('click', function(ev){
+  var b = ev.target.closest && ev.target.closest('button.btn-del');
+  if(b) del(b.getAttribute('data-id'), b.getAttribute('data-name'));
+});
+
+function adminKey(){
+  var k='';
+  try{k=localStorage.getItem('sak')||''}catch(e){}
+  if(!k){
+    k=prompt('Admin key (the ADMIN_KEY set in Render):')||'';
+    if(k){try{localStorage.setItem('sak',k)}catch(e){}}
+  }
+  return k;
+}
+
 function del(id, name){
   if(!confirm('Delete RSVP from '+name+'?')) return;
-  fetch('https://samantha-rsvp.onrender.com/rsvp/'+id, {method:'DELETE'})
-    .then(function(r){return r.json()})
-    .then(function(data){
-      if(data.ok) load();
-      else alert('Failed to delete');
+  var k=adminKey();
+  if(!k) return;
+  fetch('https://samantha-rsvp.onrender.com/rsvp/'+encodeURIComponent(id), {
+    method:'DELETE', headers:{'X-Admin-Key':k}
+  })
+    .then(function(r){return r.json().then(function(j){return {s:r.status,j:j}})})
+    .then(function(res){
+      if(res.s===403){
+        try{localStorage.removeItem('sak')}catch(e){}
+        alert('Wrong or missing admin key. Nothing was deleted.');
+        return;
+      }
+      if(res.j && res.j.ok) load();
+      else alert('Failed to delete: '+((res.j&&res.j.detail)||'unknown'));
     })
     .catch(function(){alert('Delete failed — server may be down')});
 }
 
 function esc(s){
-  var d=document.createElement('div');d.textContent=s;return d.innerHTML;
+  // Escapes BOTH quotes too - esc() is interpolated into HTML attributes, and an
+  // unescaped ' used to break the delete button for any O'Brien / D'Angelo.
+  var d=document.createElement('div');d.textContent=(s==null?'':s);
+  return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 /* Timestamps come in two shapes:

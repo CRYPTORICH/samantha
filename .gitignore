@@ -8,3 +8,7 @@ __pycache__/
 .ghtoken
 backend/.ghtoken
 *.token
+
+# local QA backups
+*.bak_*
+rsvp_data_BACKUP_*.json

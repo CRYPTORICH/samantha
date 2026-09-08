@@ -1,12 +1,51 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os, datetime, json, base64, smtplib, uuid
+import os, datetime, json, base64, smtplib, uuid, hmac
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import requests as req
 
 app = Flask(__name__)
-CORS(app)
+
+# The site is served from exactly one origin (GitHub Pages, no custom domain).
+# A wide-open CORS(app) let ANY page on the internet call this API from a
+# visitor's browser - including DELETE, whose _ids are public in rsvp_data.json.
+ALLOWED_ORIGINS = [
+    "https://cryptorich.github.io",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+CORS(app, origins=ALLOWED_ORIGINS)
+
+# Deleting a guest is destructive and irreversible. It now requires a secret.
+# Unset => every delete is refused (fail closed). Losing a guest costs more
+# than an admin having to paste a key.
+ADMIN_KEY = os.environ.get("ADMIN_KEY", "")
+
+
+def _admin_ok():
+    supplied = request.headers.get("X-Admin-Key", "") or request.args.get("key", "")
+    return bool(ADMIN_KEY) and hmac.compare_digest(supplied, ADMIN_KEY)
+
+
+# Nothing a guest types is trusted for length or type. Unbounded strings go
+# straight into a JSON file that is re-read and re-written on every RSVP.
+FIELD_LIMITS = {"name": 120, "phone": 40, "email": 140, "address": 250, "message": 1200}
+MAX_GUESTS = 10          # matches max="10" on the form
+
+
+def _clean(data, key):
+    v = data.get(key)
+    return ("" if v is None else str(v)).strip()[:FIELD_LIMITS[key]]
+
+
+def _clean_guests(v):
+    """int('abc') used to raise straight through Flask as a 500."""
+    try:
+        n = int(float(str(v).strip() or 0))
+    except (TypeError, ValueError):
+        n = 0
+    return max(0, min(MAX_GUESTS, n))
 
 # ── GitHub API config ──────────────────────────────────────
 def _load_gh_token():
@@ -321,19 +360,27 @@ def home():
 
 @app.route('/rsvp', methods=['POST'])
 def submit():
-    data = request.get_json(force=True)
-    name = (data.get('name') or '').strip()
+    data = request.get_json(force=True, silent=True)
+    if not isinstance(data, dict):
+        return jsonify({"error": "invalid payload"}), 400
+    name = _clean(data, 'name')
     if not name:
         return jsonify({"error": "name required"}), 400
+
+    # The browser queues an RSVP whose response never arrived and resends it on
+    # the next visit. Without a stable token the server writes the guest twice.
+    # A token is NOT an _id: it can never overwrite another guest's row.
+    client_token = str(data.get('client_token') or '').strip()[:64]
 
     entry = {
         "_id": uuid.uuid4().hex[:12],
         "name": name,
-        "phone": (data.get('phone') or '').strip(),
-        "email": (data.get('email') or '').strip(),
-        "address": (data.get('address') or '').strip(),
-        "guests": int(data.get('guests') or 0),
-        "message": (data.get('message') or '').strip(),
+        "phone": _clean(data, 'phone'),
+        "email": _clean(data, 'email'),
+        "address": _clean(data, 'address'),
+        "guests": _clean_guests(data.get('guests')),
+        "message": _clean(data, 'message'),
+        "client_token": client_token,
         "date": now_utc().isoformat(),   # tz-aware: ...+00:00
         "confirmation_sent": False,
         "followup_stage": 0,
@@ -343,6 +390,15 @@ def submit():
     # 2026-09-03 this returned ok:true even when nothing was stored.
     try:
         all_data = read_data()
+        if client_token:
+            for g in all_data:
+                if g.get("client_token") == client_token:
+                    print(f"[submit] duplicate resend ignored for {name!r}")
+                    return jsonify({
+                        "ok": True, "duplicate": True,
+                        "confirmation_sent": bool(g.get("confirmation_sent")),
+                        "host_notified": False, "event": EVENT,
+                    })
         all_data.append(entry)
         all_data = write_data(all_data)
     except PersistError as e:
@@ -367,7 +423,7 @@ def submit():
     host_notified = False
     try:
         if HOST_EMAIL:
-            total_guests = sum(int(g.get("guests") or 0) for g in all_data)
+            total_guests = len(all_data) + sum(int(g.get("guests") or 0) for g in all_data)
             subject, body = host_alert_email(entry, len(all_data), total_guests)
             host_notified = send_email(HOST_EMAIL, subject, body)
     except Exception as e:
@@ -392,6 +448,12 @@ def list_guests():
 
 @app.route('/rsvp/<entry_id>', methods=['DELETE'])
 def delete_guest(entry_id):
+    if not _admin_ok():
+        return jsonify({
+            "error": "forbidden",
+            "detail": "Deleting requires ADMIN_KEY. Set it in the Render "
+                      "environment, then enter it on the guest-list page.",
+        }), 403
     try:
         all_data = read_data()
         before = len(all_data)

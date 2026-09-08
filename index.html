@@ -543,7 +543,8 @@ body.en [data-en]{display:block}
   W.addEventListener('scroll',ck,{passive:true});setTimeout(ck,100);setTimeout(ck,400);
 
   /* ═══ COUNTDOWN ═══ */
-  var tg=new Date('2026-10-03T15:00:00');
+  var tg=new Date('2026-10-03T15:00:00-04:00');  // EDT. Without the offset every
+  // viewer counted down to 3PM in THEIR OWN timezone.
   function tk(){var df=tg-new Date();if(df<=0){D.getElementById('cd-d').textContent='00';D.getElementById('cd-h').textContent='00';D.getElementById('cd-m').textContent='00';D.getElementById('cd-s').textContent='00';return}
     D.getElementById('cd-d').textContent=String(Math.floor(df/86400000)).padStart(2,'0');
     D.getElementById('cd-h').textContent=String(Math.floor((df%86400000)/3600000)).padStart(2,'0');
@@ -616,7 +617,9 @@ body.en [data-en]{display:block}
     var origText=btn.textContent;
     btn.textContent='Enviando…';btn.disabled=true;
     var nm=D.getElementById('n').value.trim();if(!nm){btn.textContent=origText;btn.disabled=false;return;}
-    var d={name:nm,phone:D.getElementById('p').value.trim(),email:D.getElementById('e').value.trim(),address:D.getElementById('a').value.trim(),guests:Number(D.getElementById('g').value)||0,message:D.getElementById('m').value.trim()};
+    // One token per filled-in form. The 3s retry and the offline queue both resend
+    // THIS token, so a response lost in transit can never store the guest twice.
+    var d={client_token:(Date.now().toString(36)+Math.random().toString(36).slice(2,10)),name:nm,phone:D.getElementById('p').value.trim(),email:D.getElementById('e').value.trim(),address:D.getElementById('a').value.trim(),guests:Number(D.getElementById('g').value)||0,message:D.getElementById('m').value.trim()};
 
     function trySubmit(attempt){
       postRsvp(d).then(function(){
