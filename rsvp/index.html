@@ -57,6 +57,7 @@ tr:hover td{background:rgba(196,160,74,0.03)}
   transition:all 0.2s;
 }
 .btn-del:hover{background:rgba(220,60,60,0.25);color:#f88}
+.unsure{color:#d8a63a;font-size:0.82em;margin-left:3px;cursor:help}
 .back{margin-top:32px;padding-top:16px;border-top:1px solid rgba(196,160,74,0.06)}
 .back a{color:rgba(236,228,212,0.25);text-decoration:none;font-size:0.7rem}
 .back a:hover{color:rgba(236,228,212,0.5)}
@@ -81,7 +82,7 @@ tr:hover td{background:rgba(196,160,74,0.03)}
       <th>Phone</th>
       <th>Email</th>
       <th>Address</th>
-      <th style="text-align:center">Guests</th>
+      <th style="text-align:center">Party</th>
       <th>Message</th>
       <th>Date</th>
       <th>Email</th>
@@ -128,7 +129,20 @@ function unavailable(){
 
 function render(data){
   var tbody=document.getElementById('tbody');
-  document.getElementById('count').innerHTML='<strong>'+data.length+'</strong> confirmed guests';
+  // Headline the PEOPLE count, and never present a guess as a fact: rows from
+  // before the form was clarified may or may not have counted the submitter.
+  var exact=0, low=0, high=0, unsure=0;
+  data.forEach(function(r){
+    var g=parseInt(r.guests,10)||0;
+    if(r.party_size){ var p=parseInt(r.party_size,10)||0; exact+=p; low+=p; high+=p; }
+    else { unsure++; low+=g; high+=g+1; }
+  });
+  var head='<strong>'+data.length+'</strong> RSVPs &middot; ';
+  head += (low===high)
+    ? '<strong>'+high+'</strong> people'
+    : '<strong>'+low+'–'+high+'</strong> people <span class="unsure">('
+      +unsure+' need confirming)</span>';
+  document.getElementById('count').innerHTML=head;
 
   if(!data.length){
     tbody.innerHTML='<tr><td colspan="9" class="empty">No RSVPs yet.</td></tr>';
@@ -142,7 +156,7 @@ function render(data){
       '<td class="phone">'+(r.phone?esc(r.phone):'—')+'</td>'+
       '<td class="email">'+(r.email?'<a href="mailto:'+esc(r.email)+'">'+esc(r.email)+'</a>':'—')+'</td>'+
       '<td class="address">'+(r.address?esc(r.address):'—')+'</td>'+
-      '<td class="guests">'+(r.guests||0)+'</td>'+
+      '<td class="guests">'+partyCell(r)+'</td>'+
       '<td class="msg">'+(r.message?'"'+esc(r.message)+'"':'—')+'</td>'+
       '<td class="date">'+fmt(r.date)+'</td>'+
       '<td class="'+(r.confirmation_sent?'confirmed':'pending')+'">'+(r.confirmation_sent?'✓ sent':'—')+'</td>'+
@@ -184,6 +198,14 @@ function del(id, name){
       else alert('Failed to delete: '+((res.j&&res.j.detail)||'unknown'));
     })
     .catch(function(){alert('Delete failed — server may be down')});
+}
+
+function partyCell(r){
+  var g=parseInt(r.guests,10)||0;
+  if(r.party_size) return String(parseInt(r.party_size,10)||0);
+  // Ambiguous row: the old label did not say whether "guests" included them.
+  return g+'–'+(g+1)+'<span class="unsure" title="Submitted before the form '
+       + 'was clarified - ask whether that number included them">?</span>';
 }
 
 function esc(s){

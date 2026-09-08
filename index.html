@@ -187,6 +187,12 @@ body.en [data-en]{display:block}
   border-radius:20px;padding:44px 36px;
 }
 .fg{margin-bottom:24px}
+.ptot{
+  font-family:'Montserrat',sans-serif;font-size:0.52rem;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--champagne);opacity:0.72;margin-top:10px;
+}
+.ptot b{font-size:0.78rem;letter-spacing:0.06em;opacity:1}
 .fl{
   font-family:'Montserrat',sans-serif;font-size:0.48rem;
   letter-spacing:0.3em;text-transform:uppercase;
@@ -442,9 +448,14 @@ body.en [data-en]{display:block}
         <input class="fi" id="a" type="text" placeholder="Tu dirección..." autocomplete="street-address">
       </div>
       <div class="fg reveal d3">
-        <label class="fl" for="g" data-es>Acompañantes</label>
-        <label class="fl" for="g" data-en>Guests</label>
-        <input class="fi" id="g" type="number" min="0" max="10" value="0">
+        <label class="fl" for="g" data-es>Acompañantes — personas además de ti</label>
+        <label class="fl" for="g" data-en>Guests — people besides yourself</label>
+        <input class="fi" id="g" type="number" min="0" max="10" value="0"
+               inputmode="numeric" aria-describedby="ptot">
+        <div class="ptot" id="ptot" aria-live="polite">
+          <span data-es>En total: <b class="ptn">1</b> <span class="ptw">persona</span>, contándote a ti</span>
+          <span data-en>That’s <b class="ptn">1</b> <span class="ptw">person</span> in total, including you</span>
+        </div>
       </div>
       <div class="fg reveal d3">
         <label class="fl" for="m" data-es>Mensaje para Samantha</label>
@@ -619,6 +630,29 @@ body.en [data-en]{display:block}
     })();
   }
   resendPending();
+
+  // The old label just said "Guests" and defaulted to 0, so nobody could tell
+  // whether it meant their whole party or the people they were bringing. All 14
+  // early replies entered 1 or more, which is exactly what that ambiguity looks
+  // like. Showing the resulting total makes it impossible to get wrong.
+  (function(){
+    var gi=D.getElementById('g');
+    if(!gi) return;
+    function paint(){
+      var n=parseInt(gi.value,10); if(isNaN(n)||n<0) n=0; if(n>10) n=10;
+      var total=n+1;
+      var nums=D.querySelectorAll('.ptn'), words=D.querySelectorAll('.ptw');
+      for(var i=0;i<nums.length;i++) nums[i].textContent=total;
+      for(var j=0;j<words.length;j++){
+        var es=words[j].parentNode.hasAttribute('data-es');
+        words[j].textContent = es ? (total===1?'persona':'personas')
+                                  : (total===1?'person':'people');
+      }
+    }
+    gi.addEventListener('input',paint);
+    gi.addEventListener('change',paint);
+    paint();
+  })();
 
   function newToken(){return Date.now().toString(36)+Math.random().toString(36).slice(2,10)}
   var formToken=newToken();

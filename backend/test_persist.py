@@ -53,6 +53,7 @@ class FakeGH:
         self.rows = list(rows)
         self.get_status = get_status
         self.puts = []
+        self.messages = []
 
     def get(self, url, headers=None, timeout=None):
         if self.get_status != 200:
@@ -62,6 +63,7 @@ class FakeGH:
     def put(self, url, headers=None, json=None, timeout=None):
         decoded = base64.b64decode(json["content"]).decode()
         self.puts.append(__import__("json").loads(decoded))
+        self.messages.append(json.get("message", ""))
         self.rows = self.puts[-1]
         return FakeResp(200, {})
 
@@ -371,3 +373,64 @@ def test_followup_mailer_is_closed_when_no_key_is_set(monkeypatch):
     monkeypatch.setattr(A, "ADMIN_KEY", "")
     A.req = FakeGH(REMOTE_14)
     assert A.app.test_client().get("/cron/send-followups").status_code == 403
+
+
+# ── 2026-09-08 third pass: make the headcount a fact, not an inference ──
+
+def test_party_size_is_recorded_not_inferred():
+    gh = FakeGH([])
+    A.req = gh
+    A.app.test_client().post("/rsvp", json={"name": "Ana", "guests": 3})
+    row = gh.rows[-1]
+    assert row["party_size"] == 4, "Ana plus 3 companions"
+    assert row["guests"] == 3, "the raw answer is kept too"
+
+
+def test_a_solo_guest_is_a_party_of_one():
+    gh = FakeGH([])
+    A.req = gh
+    A.app.test_client().post("/rsvp", json={"name": "Solo", "guests": 0})
+    assert gh.rows[-1]["party_size"] == 1
+
+
+def test_stats_reports_a_range_while_old_rows_are_unconfirmed():
+    """Never present a guess as a fact. The pre-2026-09-08 form did not say
+    whether 'guests' included the person filling it in."""
+    gh = FakeGH([{"_id": "old1", "name": "Old", "guests": 3}])   # ambiguous
+    A.req = gh
+    c = A.app.test_client()
+    c.post("/rsvp", json={"name": "New", "guests": 1})           # party_size = 2
+    b = c.get("/stats").get_json()
+    assert b["attendees_confirmed"] == 2, "only the new row is certain"
+    assert b["needs_confirmation"] == 1
+    assert b["attendees_low"] == 2 + 3
+    assert b["attendees_high"] == 2 + 4
+    assert b["total_attendees"] == b["attendees_high"]
+
+
+def test_stats_stops_reporting_a_range_once_everything_is_confirmed():
+    gh = FakeGH([])
+    A.req = gh
+    c = A.app.test_client()
+    c.post("/rsvp", json={"name": "A", "guests": 1})
+    c.post("/rsvp", json={"name": "B", "guests": 0})
+    b = c.get("/stats").get_json()
+    assert b["needs_confirmation"] == 0
+    assert b["attendees_low"] == b["attendees_high"] == 3
+
+
+def test_the_commit_message_names_the_new_guest():
+    """This is the notification channel: GitHub mails the commit to watchers,
+    so a new RSVP reaches a phone with no bot token and no mail credentials."""
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    A.app.test_client().post("/rsvp", json={"name": "Ana Ruiz", "guests": 2})
+    msg = gh.messages[-1]
+    assert "Ana Ruiz" in msg and "party of 3" in msg, msg
+
+
+def test_a_bulk_write_does_not_pretend_someone_new_arrived():
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    A.write_data(list(REMOTE_14))          # no newcomer
+    assert gh.messages[-1].startswith("RSVP update"), gh.messages[-1]

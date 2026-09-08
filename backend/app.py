@@ -40,6 +40,17 @@ def _clean(data, key):
     return ("" if v is None else str(v)).strip()[:FIELD_LIMITS[key]]
 
 
+def party_of(entry):
+    """People in this party. Uses the recorded value when the row has one."""
+    ps = entry.get("party_size")
+    try:
+        if ps is not None and int(ps) > 0:
+            return int(ps)
+    except (TypeError, ValueError):
+        pass
+    return 1 + int(entry.get("guests") or 0)
+
+
 def _clean_guests(v):
     """int('abc') used to raise straight through Flask as a 500."""
     try:
@@ -201,6 +212,20 @@ def read_data():
     return data
 
 
+def _commit_note(remote, merged):
+    """Name whoever is new in this write, so the commit reads like an alert."""
+    known = {e.get("_id") for e in remote}
+    fresh = [e for e in merged if e.get("_id") not in known]
+    if len(fresh) == 1:
+        g = fresh[0]
+        who = (g.get("name") or "guest").strip()[:60]
+        return f"RSVP: {who} (party of {party_of(g)}) - {len(merged)} RSVPs total"
+    if len(fresh) > 1:
+        names = ", ".join((e.get("name") or "?").strip()[:24] for e in fresh[:4])
+        return f"RSVP: {len(fresh)} new ({names}) - {len(merged)} RSVPs total"
+    return f"RSVP update ({len(merged)} guests)"
+
+
 def _write_internal(data, allow_shrink=False, _attempt=0):
     """Merge `data` into the live remote file and PUT the union.
 
@@ -238,8 +263,12 @@ def _write_internal(data, allow_shrink=False, _attempt=0):
             )
 
     content = json.dumps(merged, ensure_ascii=False, indent=2)
+    # This commit message is a notification channel that costs nothing: GitHub
+    # emails it to anyone watching the repo, so a new RSVP reaches a phone with
+    # no bot token and no mail credentials anywhere.
+    note = _commit_note(remote, merged)
     payload = {
-        "message": f"RSVP update ({len(merged)} guests)",
+        "message": note,
         "content": base64.b64encode(content.encode("utf-8")).decode("ascii"),
     }
     if sha:
@@ -403,6 +432,11 @@ def submit():
         "email": _clean(data, 'email'),
         "address": _clean(data, 'address'),
         "guests": _clean_guests(data.get('guests')),
+        # The number of people, RECORDED rather than inferred. "Acompanantes"
+        # means people besides you, so a party is 1 + guests - but that reading
+        # lived only in the /stats formula, which is why the headcount was
+        # ambiguous by up to one person per row.
+        "party_size": 1 + _clean_guests(data.get('guests')),
         "message": _clean(data, 'message'),
         "client_token": client_token,
         "date": now_utc().isoformat(),   # tz-aware: ...+00:00
@@ -547,11 +581,22 @@ def stats():
         all_data = read_data()
     except PersistError as e:
         return jsonify({"error": "storage_unavailable", "detail": str(e)}), 503
-    total_attendees = len(all_data) + sum(g.get("guests", 0) for g in all_data)
+    # Rows submitted before 2026-09-08 have no recorded party_size. For those
+    # the form label was ambiguous, so the honest answer is a RANGE: the guest
+    # may or may not have counted themselves. Never present a guess as a fact.
+    recorded = [g for g in all_data if g.get("party_size")]
+    legacy = [g for g in all_data if not g.get("party_size")]
+    exact = sum(party_of(g) for g in recorded)
+    legacy_low = sum(int(g.get("guests") or 0) for g in legacy)
+    legacy_high = legacy_low + len(legacy)
     now = datetime.datetime.now(EASTERN)
     return jsonify({
         "total_rsvps": len(all_data),
-        "total_attendees": total_attendees,
+        "total_attendees": exact + legacy_high,      # unchanged headline
+        "attendees_low": exact + legacy_low,
+        "attendees_high": exact + legacy_high,
+        "attendees_confirmed": exact,
+        "needs_confirmation": len(legacy),
         "days_until": (EVENT_DATE - now).days,
     })
 
