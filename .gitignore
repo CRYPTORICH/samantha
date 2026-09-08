@@ -1,1 +1,10 @@
-__pycache__/\n*.pyc\nrsvp_data.json\n.DS_Store\n
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+.claude/
+# NEVER commit credentials — a token committed here died 2026-08-21
+# and took 18 days of RSVPs with it. Secrets live in Render env only.
+.ghtoken
+backend/.ghtoken
+*.token
