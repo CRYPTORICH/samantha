@@ -166,5 +166,19 @@
     "date": "2026-08-21T01:09:23.605063+00:00",
     "confirmation_sent": false,
     "followup_stage": 0
+  },
+  {
+    "_id": "30ef5201bba7",
+    "name": "ZZ Telegram Check",
+    "phone": "302-555-0199",
+    "email": "test@example.com",
+    "address": "",
+    "guests": 2,
+    "party_size": 2,
+    "message": "Testing alerts",
+    "client_token": "live-1788898067",
+    "date": "2026-09-08T20:07:47.852514+00:00",
+    "confirmation_sent": false,
+    "followup_stage": 0
   }
 ]
