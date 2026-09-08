@@ -275,14 +275,15 @@ def test_garbage_payload_is_a_400_not_a_crash():
     assert len(gh.rows) == 14
 
 
-def test_headcount_counts_the_person_who_submitted():
-    """'Acompanantes' = people BESIDES you, so a party is 1 + guests."""
+def test_the_headcount_is_a_plain_sum():
+    """Operator decision 2026-09-08: the number a guest types IS the number of
+    people. Nothing is added to it, so the headcount is a sum, not a reading."""
     gh = FakeGH([{"_id": "a", "name": "A", "guests": 1},
                  {"_id": "b", "name": "B", "guests": 3}])
     A.req = gh
     body = A.app.test_client().get("/stats").get_json()
     assert body["total_rsvps"] == 2
-    assert body["total_attendees"] == 6, "2 submitters + 4 companions"
+    assert body["total_attendees"] == 4, "1 + 3, with nobody added on"
 
 
 # ── 2026-09-08 second audit ────────────────────────────────────────────
@@ -377,46 +378,36 @@ def test_followup_mailer_is_closed_when_no_key_is_set(monkeypatch):
 
 # ── 2026-09-08 third pass: make the headcount a fact, not an inference ──
 
-def test_party_size_is_recorded_not_inferred():
+def test_party_size_is_exactly_what_the_guest_typed():
     gh = FakeGH([])
     A.req = gh
     A.app.test_client().post("/rsvp", json={"name": "Ana", "guests": 3})
     row = gh.rows[-1]
-    assert row["party_size"] == 4, "Ana plus 3 companions"
-    assert row["guests"] == 3, "the raw answer is kept too"
+    assert row["party_size"] == 3, "three people means three people"
+    assert row["guests"] == 3
 
 
-def test_a_solo_guest_is_a_party_of_one():
-    gh = FakeGH([])
-    A.req = gh
-    A.app.test_client().post("/rsvp", json={"name": "Solo", "guests": 0})
-    assert gh.rows[-1]["party_size"] == 1
-
-
-def test_stats_reports_a_range_while_old_rows_are_unconfirmed():
-    """Never present a guess as a fact. The pre-2026-09-08 form did not say
-    whether 'guests' included the person filling it in."""
-    gh = FakeGH([{"_id": "old1", "name": "Old", "guests": 3}])   # ambiguous
-    A.req = gh
-    c = A.app.test_client()
-    c.post("/rsvp", json={"name": "New", "guests": 1})           # party_size = 2
-    b = c.get("/stats").get_json()
-    assert b["attendees_confirmed"] == 2, "only the new row is certain"
-    assert b["needs_confirmation"] == 1
-    assert b["attendees_low"] == 2 + 3
-    assert b["attendees_high"] == 2 + 4
-    assert b["total_attendees"] == b["attendees_high"]
-
-
-def test_stats_stops_reporting_a_range_once_everything_is_confirmed():
+def test_a_blank_or_zero_count_still_means_one_person():
+    """Somebody replied, so at least one person is coming."""
     gh = FakeGH([])
     A.req = gh
     c = A.app.test_client()
-    c.post("/rsvp", json={"name": "A", "guests": 1})
-    c.post("/rsvp", json={"name": "B", "guests": 0})
+    c.post("/rsvp", json={"name": "Solo", "guests": 0})
+    c.post("/rsvp", json={"name": "Blank"})
+    assert [r["party_size"] for r in gh.rows] == [1, 1]
+
+
+def test_old_rows_read_as_plain_people_too():
+    """Rows written before party_size existed carry the same meaning: the
+    number is the number. No row is treated as ambiguous any more."""
+    gh = FakeGH([{"_id": "old1", "name": "Old", "guests": 3}])
+    A.req = gh
+    c = A.app.test_client()
+    c.post("/rsvp", json={"name": "New", "guests": 2})
     b = c.get("/stats").get_json()
-    assert b["needs_confirmation"] == 0
-    assert b["attendees_low"] == b["attendees_high"] == 3
+    assert b["total_attendees"] == 5, "3 + 2"
+    assert b["total_rsvps"] == 2
+    assert "attendees_low" not in b, "the range is gone; there is one number"
 
 
 def test_the_commit_message_names_the_new_guest():
@@ -426,7 +417,7 @@ def test_the_commit_message_names_the_new_guest():
     A.req = gh
     A.app.test_client().post("/rsvp", json={"name": "Ana Ruiz", "guests": 2})
     msg = gh.messages[-1]
-    assert "Ana Ruiz" in msg and "party of 3" in msg, msg
+    assert "Ana Ruiz" in msg and "party of 2" in msg, msg
 
 
 def test_a_bulk_write_does_not_pretend_someone_new_arrived():

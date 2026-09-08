@@ -41,14 +41,16 @@ def _clean(data, key):
 
 
 def party_of(entry):
-    """People in this party. Uses the recorded value when the row has one."""
-    ps = entry.get("party_size")
-    try:
-        if ps is not None and int(ps) > 0:
-            return int(ps)
-    except (TypeError, ValueError):
-        pass
-    return 1 + int(entry.get("guests") or 0)
+    """People in this party. The number the guest typed IS the number of
+    people - nothing is added to it."""
+    for key in ("party_size", "guests"):
+        try:
+            n = int(entry.get(key) or 0)
+        except (TypeError, ValueError):
+            n = 0
+        if n > 0:
+            return n
+    return 1
 
 
 def _clean_guests(v):
@@ -432,11 +434,9 @@ def submit():
         "email": _clean(data, 'email'),
         "address": _clean(data, 'address'),
         "guests": _clean_guests(data.get('guests')),
-        # The number of people, RECORDED rather than inferred. "Acompanantes"
-        # means people besides you, so a party is 1 + guests - but that reading
-        # lived only in the /stats formula, which is why the headcount was
-        # ambiguous by up to one person per row.
-        "party_size": 1 + _clean_guests(data.get('guests')),
+        # How many people are coming, exactly as the guest answered it. Never
+        # adjusted, so the headcount is a sum and not an interpretation.
+        "party_size": max(1, _clean_guests(data.get('guests'))),
         "message": _clean(data, 'message'),
         "client_token": client_token,
         "date": now_utc().isoformat(),   # tz-aware: ...+00:00
@@ -481,7 +481,7 @@ def submit():
     host_notified = False
     try:
         if HOST_EMAIL:
-            total_guests = len(all_data) + sum(int(g.get("guests") or 0) for g in all_data)
+            total_guests = sum(party_of(g) for g in all_data)
             subject, body = host_alert_email(entry, len(all_data), total_guests)
             host_notified = send_email(HOST_EMAIL, subject, body)
     except Exception as e:
@@ -581,22 +581,10 @@ def stats():
         all_data = read_data()
     except PersistError as e:
         return jsonify({"error": "storage_unavailable", "detail": str(e)}), 503
-    # Rows submitted before 2026-09-08 have no recorded party_size. For those
-    # the form label was ambiguous, so the honest answer is a RANGE: the guest
-    # may or may not have counted themselves. Never present a guess as a fact.
-    recorded = [g for g in all_data if g.get("party_size")]
-    legacy = [g for g in all_data if not g.get("party_size")]
-    exact = sum(party_of(g) for g in recorded)
-    legacy_low = sum(int(g.get("guests") or 0) for g in legacy)
-    legacy_high = legacy_low + len(legacy)
     now = datetime.datetime.now(EASTERN)
     return jsonify({
         "total_rsvps": len(all_data),
-        "total_attendees": exact + legacy_high,      # unchanged headline
-        "attendees_low": exact + legacy_low,
-        "attendees_high": exact + legacy_high,
-        "attendees_confirmed": exact,
-        "needs_confirmation": len(legacy),
+        "total_attendees": sum(party_of(g) for g in all_data),
         "days_until": (EVENT_DATE - now).days,
     })
 
