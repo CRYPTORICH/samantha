@@ -166,19 +166,5 @@
     "date": "2026-08-21T01:09:23.605063+00:00",
     "confirmation_sent": false,
     "followup_stage": 0
-  },
-  {
-    "_id": "66046c3c4de1",
-    "name": "ZZ Ana Ruiz",
-    "phone": "302-555-0100",
-    "email": "ana@example.com",
-    "address": "",
-    "guests": 2,
-    "party_size": 3,
-    "message": "Felicidades Samantha!",
-    "client_token": "p3-1788895799",
-    "date": "2026-09-08T19:30:00.402345+00:00",
-    "confirmation_sent": false,
-    "followup_stage": 0
   }
 ]
