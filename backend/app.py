@@ -13,12 +13,10 @@ def _load_gh_token():
     t = os.environ.get("GITHUB_TOKEN", "")
     if t:
         return t
-    tf = os.path.join(os.path.dirname(__file__), '.ghtoken')
-    if os.path.exists(tf):
-        with open(tf, 'r') as f:
-            t = f.read().strip()
-        # Token stored reversed to avoid GitHub secret scanning
-        t = t[::-1]
+    # The old fallback read backend/.ghtoken - a token COMMITTED TO THIS
+    # PUBLIC REPO (reversed, to slip past GitHub secret scanning). It died
+    # 2026-08-21 with 401 Bad credentials and took 13 days of RSVPs with it.
+    # Secrets live in the Render environment only.
     return t
 
 GH_TOKEN = _load_gh_token()
@@ -92,29 +90,55 @@ def send_email(to_email, subject, body_html):
 
 
 # ── Data Store ─────────────────────────────────────────────
+class PersistError(Exception):
+    """Storage is unreachable. NEVER swallow this — a guest must be told."""
+
+
+# ── DATA-LOSS POSTMORTEM 2026-09-03 ────────────────────────
+# The GitHub token died 2026-08-21 (401 Bad credentials). From that moment:
+#   read_data()  -> GitHub 401 -> data = []  (silently "no guests")
+#   submit()     -> [].append(guest) -> write_data([guest])
+#   _write_internal -> PUT the 1-element array over the 14-record file
+# Only the token being dead for WRITES too kept the 14 alive. A fresh token
+# dropped into the old code would have wiped them on the next RSVP.
+# Three invariants now hold:
+#   1. A failed read RAISES. It never degrades into an empty list.
+#   2. Every write MERGES into a fresh remote read, keyed by _id, so a stale
+#      or empty in-memory list can only ever ADD, never remove.
+#   3. A write that would shrink the file is refused unless it is an
+#      explicit delete (allow_shrink=True).
+def _gh_headers():
+    return {
+        "Authorization": f"Bearer {GH_TOKEN}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+
+
+def _gh_read():
+    """(data, sha) from GitHub. Raises PersistError — never returns []-on-error."""
+    if not GH_TOKEN:
+        raise PersistError(
+            "GITHUB_TOKEN is not set. Refusing to serve or store RSVPs from "
+            "ephemeral disk, which is wiped on every deploy."
+        )
+    try:
+        r = req.get(GH_API, headers=_gh_headers(), timeout=15)
+    except Exception as e:
+        raise PersistError(f"GitHub unreachable: {e}")
+    if r.status_code == 401:
+        raise PersistError("GitHub token rejected (401). Rotate GITHUB_TOKEN in Render.")
+    if r.status_code == 404:
+        return [], ""            # file not created yet — legitimate empty
+    if r.status_code != 200:
+        raise PersistError(f"GitHub read failed: HTTP {r.status_code}")
+    body = r.json()
+    content = base64.b64decode(body["content"]).decode("utf-8")
+    return json.loads(content), body.get("sha", "")
+
+
 def read_data():
-    data = []
-    if GH_TOKEN:
-        try:
-            headers = {
-                "Authorization": f"Bearer {GH_TOKEN}",
-                "Accept": "application/vnd.github+json",
-                "X-GitHub-Api-Version": "2022-11-28",
-            }
-            r = req.get(GH_API, headers=headers, timeout=10)
-            if r.status_code == 200:
-                content = base64.b64decode(r.json()["content"]).decode("utf-8")
-                data = json.loads(content)
-        except Exception as e:
-            print(f"[data] GitHub read error: {e}")
-
-    if not data and os.path.exists(DATA_FILE):
-        try:
-            with open(DATA_FILE, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-        except:
-            pass
-
+    data, _sha = _gh_read()
     changed = False
     for entry in data:
         if '_id' not in entry:
@@ -125,37 +149,63 @@ def read_data():
     return data
 
 
-def _write_internal(data):
-    content = json.dumps(data, ensure_ascii=False, indent=2)
-    if GH_TOKEN:
-        try:
-            headers = {
-                "Authorization": f"Bearer {GH_TOKEN}",
-                "Accept": "application/vnd.github+json",
-                "X-GitHub-Api-Version": "2022-11-28",
-            }
-            r = req.get(GH_API, headers=headers, timeout=10)
-            sha = r.json().get("sha", "") if r.status_code == 200 else ""
-            payload = {
-                "message": f"RSVP update ({len(data)} guests)",
-                "content": base64.b64encode(content.encode("utf-8")).decode("ascii"),
-            }
-            if sha:
-                payload["sha"] = sha
-            r = req.put(GH_API, headers=headers, json=payload, timeout=15)
-            if r.status_code in (200, 201):
-                print(f"[data] Saved {len(data)} RSVPs to GitHub")
-        except Exception as e:
-            print(f"[data] GitHub write error: {e}")
+def _write_internal(data, allow_shrink=False):
+    """Merge `data` into the live remote file and PUT the union.
+
+    allow_shrink=True is ONLY for the delete endpoint, which passes the full
+    intended list.
+    """
+    remote, sha = _gh_read()
+
+    if allow_shrink:
+        merged = list(data)
+    else:
+        by_id = {}
+        for e in remote:
+            # A legacy row with no _id must NOT fall out of the merge. Adding a
+            # newcomer in the same write keeps the count equal, so the length
+            # guard below would not catch the loss. Give it an id and keep it.
+            if not e.get('_id'):
+                e['_id'] = uuid.uuid4().hex[:12]
+            by_id[e['_id']] = e
+        for e in data:
+            if not e.get('_id'):
+                e['_id'] = uuid.uuid4().hex[:12]
+            by_id[e['_id']] = e              # update in place or append
+        merged = list(by_id.values())
+        merged.sort(key=lambda e: str(e.get('date') or ''))
+        if len(merged) < len(remote):
+            raise PersistError(
+                f"refusing to shrink RSVP file {len(remote)} -> {len(merged)}"
+            )
+
+    content = json.dumps(merged, ensure_ascii=False, indent=2)
+    payload = {
+        "message": f"RSVP update ({len(merged)} guests)",
+        "content": base64.b64encode(content.encode("utf-8")).decode("ascii"),
+    }
+    if sha:
+        payload["sha"] = sha
     try:
+        r = req.put(GH_API, headers=_gh_headers(), json=payload, timeout=20)
+    except Exception as e:
+        raise PersistError(f"GitHub write unreachable: {e}")
+    if r.status_code == 409:
+        raise PersistError("GitHub write conflict (concurrent RSVP) — retry")
+    if r.status_code not in (200, 201):
+        raise PersistError(f"GitHub write failed: HTTP {r.status_code}")
+    print(f"[data] Saved {len(merged)} RSVPs to GitHub")
+
+    try:                                     # local mirror is a convenience only
         with open(DATA_FILE, 'w', encoding='utf-8') as f:
             f.write(content)
-    except:
+    except Exception:
         pass
+    return merged
 
 
-def write_data(data):
-    _write_internal(data)
+def write_data(data, allow_shrink=False):
+    return _write_internal(data, allow_shrink=allow_shrink)
 
 
 # ── Email Templates ────────────────────────────────────────
@@ -289,16 +339,28 @@ def submit():
         "followup_stage": 0,
     }
 
-    all_data = read_data()
-    all_data.append(entry)
-    write_data(all_data)
+    # A guest is told "confirmed" ONLY after the RSVP is on GitHub. Before
+    # 2026-09-03 this returned ok:true even when nothing was stored.
+    try:
+        all_data = read_data()
+        all_data.append(entry)
+        all_data = write_data(all_data)
+    except PersistError as e:
+        print(f"[submit] PERSIST FAILED — {name!r} not stored: {e}")
+        return jsonify({
+            "ok": False,
+            "error": "storage_unavailable",
+            "message": "No pudimos guardar tu RSVP / We could not save your RSVP.",
+        }), 503
 
     if entry["email"]:
         subject, body = confirmation_email(name)
         if send_email(entry["email"], subject, body):
             entry["confirmation_sent"] = True
-            all_data[-1] = entry
-            write_data(all_data)
+            try:
+                write_data([entry])      # merge-by-_id: flips the flag only
+            except PersistError as e:
+                print(f"[submit] confirmation flag not persisted: {e}")
 
     # Host alert. Deliberately AFTER write_data and wrapped: the guest's RSVP is
     # already saved by this point, so a mail outage can never cost a response.
@@ -321,17 +383,24 @@ def submit():
 
 @app.route('/rsvp', methods=['GET'])
 def list_guests():
-    return jsonify(read_data())
+    # Show "unavailable", never a falsely-empty guest list.
+    try:
+        return jsonify(read_data())
+    except PersistError as e:
+        return jsonify({"error": "storage_unavailable", "detail": str(e)}), 503
 
 
 @app.route('/rsvp/<entry_id>', methods=['DELETE'])
 def delete_guest(entry_id):
-    all_data = read_data()
-    before = len(all_data)
-    all_data = [g for g in all_data if g.get('_id') != entry_id]
-    if len(all_data) == before:
-        return jsonify({"error": "not found"}), 404
-    write_data(all_data)
+    try:
+        all_data = read_data()
+        before = len(all_data)
+        all_data = [g for g in all_data if g.get('_id') != entry_id]
+        if len(all_data) == before:
+            return jsonify({"error": "not found"}), 404
+        write_data(all_data, allow_shrink=True)   # the one legitimate shrink
+    except PersistError as e:
+        return jsonify({"error": "storage_unavailable", "detail": str(e)}), 503
     return jsonify({"ok": True, "deleted": entry_id})
 
 
@@ -342,7 +411,10 @@ def send_followups():
     if days_until <= 0:
         return jsonify({"ok": True, "message": "Event has passed", "sent": 0})
 
-    all_data = read_data()
+    try:
+        all_data = read_data()
+    except PersistError as e:
+        return jsonify({"error": "storage_unavailable", "detail": str(e)}), 503
     sent_count = 0
     changed = False
 
@@ -371,13 +443,19 @@ def send_followups():
                 changed = True
 
     if changed:
-        write_data(all_data)
+        try:
+            write_data(all_data)
+        except PersistError as e:
+            print(f"[followups] flags not persisted: {e}")
     return jsonify({"ok": True, "days_until_event": days_until, "sent": sent_count})
 
 
 @app.route('/stats', methods=['GET'])
 def stats():
-    all_data = read_data()
+    try:
+        all_data = read_data()
+    except PersistError as e:
+        return jsonify({"error": "storage_unavailable", "detail": str(e)}), 503
     total_attendees = len(all_data) + sum(g.get("guests", 0) for g in all_data)
     now = datetime.datetime.now(EASTERN)
     return jsonify({

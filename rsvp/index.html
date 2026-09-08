@@ -97,20 +97,33 @@ tr:hover td{background:rgba(196,160,74,0.03)}
 var allData = [];
 
 function load(){
-  // Read directly from GitHub Pages — always live, no Render cold start
-  fetch('https://raw.githubusercontent.com/CRYPTORICH/samantha/main/rsvp_data.json')
-    .then(function(r){return r.json()})
+  // NEVER render a number that isn't real. This used to call render([]) when
+  // both sources failed, showing "0 confirmed guests" / "No RSVPs yet" — the
+  // same lie the backend was telling. An unreachable source now says so.
+  // raw.githubusercontent is CDN-cached, so bust it.
+  fetch('https://raw.githubusercontent.com/CRYPTORICH/samantha/main/rsvp_data.json?t='+Date.now())
+    .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json()})
     .then(function(data){
+      if(!Array.isArray(data)) throw new Error('not a guest list');
       allData = data;
       render(data);
     })
     .catch(function(){
-      // Last resort: try Render (if GitHub Pages hasn't updated yet)
       fetch('https://samantha-rsvp.onrender.com/rsvp')
-        .then(function(r){return r.json()})
-        .then(function(d2){allData=d2; render(d2);})
-        .catch(function(){render([]);});
+        .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json()})
+        .then(function(d2){
+          if(!Array.isArray(d2)) throw new Error('not a guest list');
+          allData=d2; render(d2);
+        })
+        .catch(unavailable);
     });
+}
+
+function unavailable(){
+  document.getElementById('count').innerHTML='<strong>—</strong> guest list unavailable';
+  document.getElementById('tbody').innerHTML=
+    '<tr><td colspan="9" class="empty">Could not reach the guest list. '+
+    'This is NOT zero RSVPs — do not act on it. Retry in a moment.</td></tr>';
 }
 
 function render(data){

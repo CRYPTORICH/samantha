@@ -470,6 +470,23 @@ body.en [data-en]{display:block}
       <p style="font-size:0.8rem;color:var(--muted);margin-top:12px"><span data-es>Fairwind Baptist Church · 3:00 – 6:00 PM</span><span data-en>Fairwind Baptist Church · 3:00 – 6:00 PM</span></p>
     </div>
 
+    <!-- Shown when the RSVP could NOT be stored. Before 2026-09-03 this case
+         displayed the thank-you screen above and dropped the guest into
+         localStorage, so people believed they had replied and never appeared. -->
+    <div id="err" style="display:none;text-align:center;padding:28px 10px">
+      <p style="font-size:1.05rem;color:#b8763a">
+        <span data-es>No pudimos confirmar tu respuesta ahora mismo.</span>
+        <span data-en>We could not confirm your reply right now.</span>
+      </p>
+      <p style="font-size:0.85rem;color:var(--muted);margin-top:10px">
+        <span data-es>La guardamos en este dispositivo y la reenviaremos sola cuando vuelvas a abrir esta página. Si quieres estar seguro, intenta de nuevo o escríbenos.</span>
+        <span data-en>We saved it on this device and it will resend itself next time you open this page. To be sure, try again or message us.</span>
+      </p>
+      <button type="button" id="retry" style="margin-top:16px;padding:10px 22px;cursor:pointer">
+        <span data-es>Intentar de nuevo</span><span data-en>Try again</span>
+      </button>
+    </div>
+
   </div>
 </section>
 
@@ -548,6 +565,51 @@ body.en [data-en]{display:block}
   }
   loadCount();
 
+  /* ═══ RSVP DELIVERY ═══
+     A reply counts only when the server says it stored it. A 503 still carries
+     a JSON body, so parsing JSON is NOT proof of success — check r.ok and
+     j.ok. Anything undelivered waits in 'sr_pending' and is retried on the
+     next visit, including replies stranded under the old 'sr' key while the
+     backend was down (2026-08-21 → 2026-09-03). */
+  var RSVP_URL='https://samantha-rsvp.onrender.com/rsvp';
+  function pendingGet(){try{return JSON.parse(localStorage.getItem('sr_pending')||'[]')}catch(e){return[]}}
+  function pendingSet(l){try{localStorage.setItem('sr_pending',JSON.stringify(l))}catch(e){}}
+  function pendingAdd(d){var l=pendingGet();l.push(d);pendingSet(l)}
+
+  function postRsvp(d){
+    var ctrl=new AbortController();
+    var t=setTimeout(function(){ctrl.abort()},25000); // cold start can take ~22s
+    return fetch(RSVP_URL,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(d),signal:ctrl.signal
+    }).then(function(r){
+      clearTimeout(t);
+      if(!r.ok) throw new Error('http '+r.status);
+      return r.json();
+    }).then(function(j){
+      if(!j || j.ok===false) throw new Error((j&&j.error)||'not stored');
+      return j;
+    });
+  }
+
+  function resendPending(){
+    var legacy=[];
+    try{legacy=JSON.parse(localStorage.getItem('sr')||'[]')}catch(e){}
+    if(legacy.length){
+      pendingSet(pendingGet().concat(legacy));
+      try{localStorage.removeItem('sr')}catch(e){}
+    }
+    var q=pendingGet();
+    if(!q.length) return;
+    var left=[],i=0;
+    (function next(){
+      if(i>=q.length){pendingSet(left);return}
+      var item=q[i++];
+      postRsvp(item).catch(function(){left.push(item)}).then(next);
+    })();
+  }
+  resendPending();
+
   D.getElementById('f').addEventListener('submit',function(e){
     e.preventDefault();
     var btn=e.target.querySelector('button[type=submit]');
@@ -557,29 +619,33 @@ body.en [data-en]{display:block}
     var d={name:nm,phone:D.getElementById('p').value.trim(),email:D.getElementById('e').value.trim(),address:D.getElementById('a').value.trim(),guests:Number(D.getElementById('g').value)||0,message:D.getElementById('m').value.trim()};
 
     function trySubmit(attempt){
-      var ctrl=new AbortController();
-      var t=setTimeout(function(){ctrl.abort()}, 25000); // 25s timeout for cold starts
-      fetch('https://samantha-rsvp.onrender.com/rsvp',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(d),signal:ctrl.signal
-      }).then(function(r){clearTimeout(t);return r.json()}).then(function(){
-        D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
+      postRsvp(d).then(function(){
+        // Stored on the server for real — only now may we say thank you.
+        D.getElementById('f').style.display='none';
+        D.getElementById('err').style.display='none';
+        D.getElementById('ok').style.display='block';
         loadCount();
       }).catch(function(){
-        clearTimeout(t);
         if(attempt < 1){
-          // One retry after cold start
           btn.textContent='Reintentando…';
           setTimeout(function(){trySubmit(attempt+1)}, 3000);
           return;
         }
-        // Fallback to localStorage after retries
-        try{var list=JSON.parse(localStorage.getItem('sr')||'[]');list.push(Object.assign(d,{date:new Date().toISOString()}));localStorage.setItem('sr',JSON.stringify(list))}catch(er){}
-        D.getElementById('f').style.display='none';D.getElementById('ok').style.display='block';
-        loadCount();
+        // Keep it on the device AND tell the truth. It is re-sent on next load.
+        pendingAdd(Object.assign({}, d, {date:new Date().toISOString()}));
+        D.getElementById('f').style.display='none';
+        D.getElementById('err').style.display='block';
+        btn.textContent=origText; btn.disabled=false;
       });
     }
     trySubmit(0);
+  });
+
+  var rb=D.getElementById('retry');
+  if(rb) rb.addEventListener('click',function(){
+    D.getElementById('err').style.display='none';
+    D.getElementById('f').style.display='';
+    resendPending();
   });
 
 })();
