@@ -166,17 +166,5 @@
     "date": "2026-08-21T01:09:23.605063+00:00",
     "confirmation_sent": false,
     "followup_stage": 0
-  },
-  {
-    "_id": "34f8f93e61a8",
-    "name": "ZZ WRITE-TEST (Claude, auto-deleted)",
-    "phone": "",
-    "email": "",
-    "address": "",
-    "guests": 0,
-    "message": "verifying write path after token fix - delete me",
-    "date": "2026-09-08T16:55:17.097285+00:00",
-    "confirmation_sent": false,
-    "followup_stage": 0
   }
 ]
