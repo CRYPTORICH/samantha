@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os, datetime, json, base64, smtplib, uuid, hmac
+import os, datetime, json, base64, smtplib, uuid, hmac, time, hashlib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import requests as req
@@ -32,6 +32,7 @@ def _admin_ok():
 # straight into a JSON file that is re-read and re-written on every RSVP.
 FIELD_LIMITS = {"name": 120, "phone": 40, "email": 140, "address": 250, "message": 1200}
 MAX_GUESTS = 10          # matches max="10" on the form
+MAX_WRITE_ATTEMPTS = 4   # a burst of simultaneous RSVPs must not 503
 
 
 def _clean(data, key):
@@ -176,23 +177,41 @@ def _gh_read():
     return json.loads(content), body.get("sha", "")
 
 
+def _stable_id(entry):
+    """An id for a row that predates _id, DERIVED from its content.
+
+    It must not be random: read_data() and _write_internal() each fill in a
+    missing id independently, and two random ids for the same guest make the
+    merge treat them as two people and duplicate the row.
+    """
+    basis = json.dumps(
+        [entry.get('name'), entry.get('date'), entry.get('phone'), entry.get('email')],
+        sort_keys=True, ensure_ascii=False)
+    return hashlib.sha1(basis.encode('utf-8')).hexdigest()[:12]
+
+
 def read_data():
+    """Pure read. It used to PUT back to GitHub when it filled in a missing
+    _id, so a plain GET /stats could raise a write conflict as a 503. Ids are
+    backfilled by _write_internal on the next real write instead."""
     data, _sha = _gh_read()
-    changed = False
     for entry in data:
-        if '_id' not in entry:
-            entry['_id'] = uuid.uuid4().hex[:12]
-            changed = True
-    if changed:
-        _write_internal(data)
+        if not entry.get('_id'):
+            entry['_id'] = _stable_id(entry)
     return data
 
 
-def _write_internal(data, allow_shrink=False):
+def _write_internal(data, allow_shrink=False, _attempt=0):
     """Merge `data` into the live remote file and PUT the union.
 
     allow_shrink=True is ONLY for the delete endpoint, which passes the full
     intended list.
+
+    On a 409 the sha we read went stale because another RSVP landed first —
+    which is precisely what happens when an invitation goes out and several
+    people reply at once. Re-read and merge again. The merge is keyed by _id
+    and therefore idempotent, so replaying it is safe; without this the second
+    guest got a 503 and had to come back to the page for the queue to flush.
     """
     remote, sha = _gh_read()
 
@@ -205,11 +224,11 @@ def _write_internal(data, allow_shrink=False):
             # newcomer in the same write keeps the count equal, so the length
             # guard below would not catch the loss. Give it an id and keep it.
             if not e.get('_id'):
-                e['_id'] = uuid.uuid4().hex[:12]
+                e['_id'] = _stable_id(e)
             by_id[e['_id']] = e
         for e in data:
             if not e.get('_id'):
-                e['_id'] = uuid.uuid4().hex[:12]
+                e['_id'] = _stable_id(e)
             by_id[e['_id']] = e              # update in place or append
         merged = list(by_id.values())
         merged.sort(key=lambda e: str(e.get('date') or ''))
@@ -229,8 +248,13 @@ def _write_internal(data, allow_shrink=False):
         r = req.put(GH_API, headers=_gh_headers(), json=payload, timeout=20)
     except Exception as e:
         raise PersistError(f"GitHub write unreachable: {e}")
+    if r.status_code in (409, 422) and _attempt < MAX_WRITE_ATTEMPTS - 1:
+        print(f"[data] write conflict (HTTP {r.status_code}), "
+              f"re-reading and retrying ({_attempt + 1}/{MAX_WRITE_ATTEMPTS})")
+        time.sleep(0.4 * (_attempt + 1))
+        return _write_internal(data, allow_shrink=allow_shrink, _attempt=_attempt + 1)
     if r.status_code == 409:
-        raise PersistError("GitHub write conflict (concurrent RSVP) — retry")
+        raise PersistError("GitHub write conflict after retries (concurrent RSVP)")
     if r.status_code not in (200, 201):
         raise PersistError(f"GitHub write failed: HTTP {r.status_code}")
     print(f"[data] Saved {len(merged)} RSVPs to GitHub")
@@ -468,6 +492,11 @@ def delete_guest(entry_id):
 
 @app.route('/cron/send-followups', methods=['GET', 'POST'])
 def send_followups():
+    # Was reachable by anyone, GET or POST. It mails every guest and writes
+    # their follow-up stage back to storage.
+    if not _admin_ok():
+        return jsonify({"error": "forbidden",
+                        "detail": "Follow-ups require ADMIN_KEY."}), 403
     now = datetime.datetime.now(EASTERN)
     days_until = (EVENT_DATE - now).days
     if days_until <= 0:

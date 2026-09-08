@@ -281,3 +281,93 @@ def test_headcount_counts_the_person_who_submitted():
     body = A.app.test_client().get("/stats").get_json()
     assert body["total_rsvps"] == 2
     assert body["total_attendees"] == 6, "2 submitters + 4 companions"
+
+
+# ── 2026-09-08 second audit ────────────────────────────────────────────
+# Concurrency, and endpoints nobody was guarding.
+
+class ConflictingGH(FakeGH):
+    """GitHub rejects a PUT whose sha went stale because another RSVP landed
+    first. This is the invitation-just-went-out case."""
+
+    def __init__(self, rows, conflicts=1):
+        super().__init__(rows)
+        self.conflicts = conflicts
+        self.put_calls = 0
+
+    def put(self, url, headers=None, json=None, timeout=None):
+        self.put_calls += 1
+        if self.put_calls <= self.conflicts:
+            return FakeResp(409, {"message": "does not match"})
+        return super().put(url, headers=headers, json=json, timeout=timeout)
+
+
+@pytest.fixture(autouse=True)
+def _no_backoff_sleep(monkeypatch):
+    monkeypatch.setattr(A.time, "sleep", lambda *_: None)
+
+
+def test_a_concurrent_rsvp_is_retried_not_lost():
+    """Two people replying at once made the second one see an error screen."""
+    gh = ConflictingGH(REMOTE_14, conflicts=1)
+    A.req = gh
+    r = A.app.test_client().post("/rsvp", json={"name": "Ana", "guests": 1})
+    assert r.status_code == 200, "the second simultaneous RSVP got an error"
+    assert gh.put_calls == 2, "it did not retry"
+    assert len(gh.rows) == 15
+    assert "Ana" in {g["name"] for g in gh.rows}
+
+
+def test_a_burst_of_conflicts_still_lands():
+    gh = ConflictingGH(REMOTE_14, conflicts=3)
+    A.req = gh
+    r = A.app.test_client().post("/rsvp", json={"name": "Luis"})
+    assert r.status_code == 200 and len(gh.rows) == 15
+
+
+def test_endless_conflict_gives_up_loudly_instead_of_looping():
+    """It must stop, and it must tell the guest — never a silent 200."""
+    gh = ConflictingGH(REMOTE_14, conflicts=99)
+    A.req = gh
+    r = A.app.test_client().post("/rsvp", json={"name": "Ana"})
+    assert r.status_code == 503
+    assert r.get_json()["ok"] is False
+    assert gh.put_calls == A.MAX_WRITE_ATTEMPTS
+    assert len(gh.rows) == 14, "a failed write must not have altered the file"
+
+
+def test_a_plain_read_never_writes():
+    """read_data() used to PUT back when it filled in a missing _id, so a GET
+    could fail with a write conflict."""
+    gh = FakeGH([{"name": "Legacy", "guests": 1}])      # no _id
+    A.req = gh
+    c = A.app.test_client()
+    assert c.get("/rsvp").status_code == 200
+    assert c.get("/stats").status_code == 200
+    assert gh.puts == [], "a read wrote to storage"
+
+
+def test_legacy_row_still_gets_an_id_on_the_next_real_write():
+    gh = FakeGH([{"name": "Legacy", "guests": 1}])
+    A.req = gh
+    A.app.test_client().post("/rsvp", json={"name": "Ana"})
+    assert all(g.get("_id") for g in gh.rows)
+    assert len(gh.rows) == 2
+
+
+def test_followup_mailer_is_not_open_to_the_internet(monkeypatch):
+    """It mails every guest and writes their stage back to storage."""
+    monkeypatch.setattr(A, "ADMIN_KEY", "s3cret")
+    gh = FakeGH(REMOTE_14)
+    A.req = gh
+    c = A.app.test_client()
+    assert c.get("/cron/send-followups").status_code == 403
+    assert c.post("/cron/send-followups").status_code == 403
+    assert c.get("/cron/send-followups",
+                 headers={"X-Admin-Key": "s3cret"}).status_code == 200
+
+
+def test_followup_mailer_is_closed_when_no_key_is_set(monkeypatch):
+    monkeypatch.setattr(A, "ADMIN_KEY", "")
+    A.req = FakeGH(REMOTE_14)
+    assert A.app.test_client().get("/cron/send-followups").status_code == 403

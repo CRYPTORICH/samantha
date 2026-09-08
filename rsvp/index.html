@@ -221,7 +221,14 @@ function exportCSV(){
   allData.forEach(function(r,i){
     rows.push([i+1,r.name,r.phone||'',r.email||'',r.address||'',r.guests||0,r.message||'',fmt(r.date),r.confirmation_sent?'Yes':'No']);
   });
-  var csv=rows.map(function(r){return r.map(function(c){return'"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
+  // A cell starting = + - @ is executed as a formula by Excel and Sheets even
+  // inside quotes. Guest-supplied text must never become a formula.
+  function cell(c){
+    var v=String(c==null?'':c);
+    if(/^[=+@]/.test(v) || v.charAt(0) === '-') v = "'" + v;
+    return '"'+v.replace(/"/g,'""')+'"';
+  }
+  var csv=rows.map(function(r){return r.map(cell).join(',')}).join('\n');
   var b=new Blob(['\uFEFF'+csv],{type:'text/csv'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);
   a.download='samantha-rsvp.csv';a.click();

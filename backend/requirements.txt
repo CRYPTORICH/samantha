@@ -1,4 +1,7 @@
-flask
-flask-cors
-gunicorn
-requests
+# Upper bounds only - these can never force an upgrade of what is already
+# deployed, they only stop a rebuild from silently jumping a major version
+# and failing to boot. Render rebuilds on every push.
+flask<4
+flask-cors<7
+gunicorn<24
+requests<3

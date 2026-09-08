@@ -575,11 +575,20 @@ body.en [data-en]{display:block}
   var RSVP_URL='https://samantha-rsvp.onrender.com/rsvp';
   function pendingGet(){try{return JSON.parse(localStorage.getItem('sr_pending')||'[]')}catch(e){return[]}}
   function pendingSet(l){try{localStorage.setItem('sr_pending',JSON.stringify(l))}catch(e){}}
-  function pendingAdd(d){var l=pendingGet();l.push(d);pendingSet(l)}
+  function pendingAdd(d){
+    var l=pendingGet();
+    // Same attempt already queued - do not stack it up.
+    for(var i=0;i<l.length;i++){if(l[i]&&l[i].client_token===d.client_token)return}
+    l.push(d);
+    if(l.length>20) l=l.slice(-20);   // a quota error would drop the WHOLE queue
+    pendingSet(l);
+  }
 
   function postRsvp(d){
     var ctrl=new AbortController();
-    var t=setTimeout(function(){ctrl.abort()},25000); // cold start can take ~22s
+    var t=setTimeout(function(){ctrl.abort()},60000); // Render free-tier cold start
+    // measured at ~41s, and the watchdog allows 90s. 25s aborted a request the
+    // server was still answering.
     return fetch(RSVP_URL,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify(d),signal:ctrl.signal
@@ -611,15 +620,21 @@ body.en [data-en]{display:block}
   }
   resendPending();
 
+  function newToken(){return Date.now().toString(36)+Math.random().toString(36).slice(2,10)}
+  var formToken=newToken();
+
   D.getElementById('f').addEventListener('submit',function(e){
     e.preventDefault();
     var btn=e.target.querySelector('button[type=submit]');
     var origText=btn.textContent;
     btn.textContent='Enviando…';btn.disabled=true;
     var nm=D.getElementById('n').value.trim();if(!nm){btn.textContent=origText;btn.disabled=false;return;}
-    // One token per filled-in form. The 3s retry and the offline queue both resend
-    // THIS token, so a response lost in transit can never store the guest twice.
-    var d={client_token:(Date.now().toString(36)+Math.random().toString(36).slice(2,10)),name:nm,phone:D.getElementById('p').value.trim(),email:D.getElementById('e').value.trim(),address:D.getElementById('a').value.trim(),guests:Number(D.getElementById('g').value)||0,message:D.getElementById('m').value.trim()};
+    // One token per filled-in form - generated on page load, NOT per press, so a
+    // guest who taps Send three times while the network is bad is still one guest.
+    // The 3s retry and the offline queue resend THIS token, so a response lost in
+    // transit can never store them twice either. A new one is minted after a
+    // successful submit, in case the same device RSVPs again for someone else.
+    var d={client_token:formToken,name:nm,phone:D.getElementById('p').value.trim(),email:D.getElementById('e').value.trim(),address:D.getElementById('a').value.trim(),guests:Number(D.getElementById('g').value)||0,message:D.getElementById('m').value.trim()};
 
     function trySubmit(attempt){
       postRsvp(d).then(function(){
@@ -627,6 +642,7 @@ body.en [data-en]{display:block}
         D.getElementById('f').style.display='none';
         D.getElementById('err').style.display='none';
         D.getElementById('ok').style.display='block';
+        formToken=newToken();   // this guest is stored; a further RSVP is a new one
         loadCount();
       }).catch(function(){
         if(attempt < 1){
