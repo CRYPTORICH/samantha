@@ -40,6 +40,15 @@ def _clean(data, key):
     return ("" if v is None else str(v)).strip()[:FIELD_LIMITS[key]]
 
 
+def _ident(entry):
+    """Who this row is. Same name AND same phone means the same person coming
+    back to change their answer - not a second guest with an identical name and
+    an identical phone number."""
+    name = " ".join(str(entry.get("name") or "").lower().split())
+    phone = "".join(ch for ch in str(entry.get("phone") or "") if ch.isdigit())[-10:]
+    return (name, phone) if name and phone else None
+
+
 def party_of(entry):
     """People in this party. The number the guest typed IS the number of
     people - nothing is added to it."""
@@ -222,6 +231,13 @@ def _commit_note(remote, merged):
         g = fresh[0]
         who = (g.get("name") or "guest").strip()[:60]
         return f"RSVP: {who} (party of {party_of(g)}) - {len(merged)} RSVPs total"
+    if not fresh and len(merged) == len(remote):
+        changed = [n for n in merged if n.get("updated") and
+                   n != next((o for o in remote if o.get("_id") == n.get("_id")), None)]
+        if len(changed) == 1:
+            g = changed[0]
+            who = (g.get("name") or "guest").strip()[:60]
+            return f"RSVP UPDATED: {who} (party of {party_of(g)}) - {len(merged)} RSVPs total"
     if len(fresh) > 1:
         names = ", ".join((e.get("name") or "?").strip()[:24] for e in fresh[:4])
         return f"RSVP: {len(fresh)} new ({names}) - {len(merged)} RSVPs total"
@@ -448,6 +464,31 @@ def submit():
     # 2026-09-03 this returned ok:true even when nothing was stored.
     try:
         all_data = read_data()
+        # A guest who replies again is CORRECTING their answer, not arriving
+        # twice. Beverly Carroll went 1 -> 2 on 2026-09-08 and the list showed
+        # her as two separate parties. Keep their original RSVP date, take
+        # their newest numbers.
+        me = _ident(entry)
+        if me:
+            for g in all_data:
+                if _ident(g) == me:
+                    # Keep their _id. entry carries a fresh one, and letting it
+                    # through makes the merge treat this as a second person and
+                    # keep BOTH rows - the very duplicate we are removing.
+                    keep_id = g.get("_id")
+                    first_seen = g.get("date") or entry["date"]
+                    g.update(entry)
+                    g["_id"] = keep_id
+                    g["date"] = first_seen
+                    g["updated"] = entry["date"]
+                    all_data = write_data(all_data)
+                    print(f"[submit] updated existing RSVP for {name!r}")
+                    return jsonify({
+                        "ok": True, "updated": True,
+                        "confirmation_sent": bool(g.get("confirmation_sent")),
+                        "host_notified": False, "event": EVENT,
+                    })
+
         if client_token:
             for g in all_data:
                 if g.get("client_token") == client_token:

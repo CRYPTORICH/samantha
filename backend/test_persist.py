@@ -425,3 +425,60 @@ def test_a_bulk_write_does_not_pretend_someone_new_arrived():
     A.req = gh
     A.write_data(list(REMOTE_14))          # no newcomer
     assert gh.messages[-1].startswith("RSVP update"), gh.messages[-1]
+
+
+# ── 2026-09-08: a guest replying again is correcting, not arriving twice ──
+# Beverly Carroll went 1 -> 2 and the list showed her as two separate parties;
+# Biby Santiago submitted the identical form twice and was counted twice.
+
+def test_a_repeat_reply_updates_instead_of_duplicating():
+    gh = FakeGH([])
+    A.req = gh
+    c = A.app.test_client()
+    c.post("/rsvp", json={"name": "Beverly Carroll", "phone": "772-626-6001", "guests": 1})
+    r = c.post("/rsvp", json={"name": "Beverly Carroll", "phone": "7726266001", "guests": 2})
+    assert r.get_json().get("updated") is True
+    assert len(gh.rows) == 1, "she became two parties"
+    assert gh.rows[0]["guests"] == 2 and gh.rows[0]["party_size"] == 2
+
+
+def test_an_update_keeps_the_original_rsvp_date():
+    gh = FakeGH([])
+    A.req = gh
+    c = A.app.test_client()
+    c.post("/rsvp", json={"name": "Ana", "phone": "3025551234", "guests": 1})
+    first = gh.rows[0]["date"]
+    c.post("/rsvp", json={"name": "Ana", "phone": "302-555-1234", "guests": 4})
+    assert gh.rows[0]["date"] == first, "lost when they first replied"
+    assert gh.rows[0]["updated"] > first
+    assert gh.rows[0]["guests"] == 4
+
+
+def test_identical_resubmission_does_not_add_a_row():
+    gh = FakeGH([])
+    A.req = gh
+    c = A.app.test_client()
+    for _ in range(3):
+        c.post("/rsvp", json={"name": "Biby Santiago", "phone": "3059261101", "guests": 3})
+    assert len(gh.rows) == 1
+    assert A.app.test_client().get("/stats").get_json()["total_attendees"] == 3
+
+
+def test_two_different_people_are_never_merged():
+    gh = FakeGH([])
+    A.req = gh
+    c = A.app.test_client()
+    c.post("/rsvp", json={"name": "Ana Ruiz", "phone": "3025550001", "guests": 2})
+    c.post("/rsvp", json={"name": "Luis Ruiz", "phone": "3025550001", "guests": 1})  # same phone
+    c.post("/rsvp", json={"name": "Ana Ruiz", "phone": "3025559999", "guests": 1})  # same name
+    assert len(gh.rows) == 3, "distinct guests were collapsed"
+
+
+def test_a_guest_with_no_phone_is_never_merged_by_name_alone():
+    """Two cousins called Maria with no phone are two people."""
+    gh = FakeGH([])
+    A.req = gh
+    c = A.app.test_client()
+    c.post("/rsvp", json={"name": "Maria", "guests": 1})
+    c.post("/rsvp", json={"name": "Maria", "guests": 2})
+    assert len(gh.rows) == 2
