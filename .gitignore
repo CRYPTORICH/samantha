@@ -12,3 +12,6 @@ backend/.ghtoken
 # local QA backups
 *.bak_*
 rsvp_data_BACKUP_*.json
+
+# ephemeral local mirror written by the app; the real store is the repo root file
+backend/rsvp_data.json
