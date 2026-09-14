@@ -382,5 +382,19 @@
     "date": "2026-09-13T19:19:19.995071+00:00",
     "confirmation_sent": false,
     "followup_stage": 0
+  },
+  {
+    "_id": "5caddfb04ca3",
+    "name": "David Arroyo",
+    "phone": "3024386762",
+    "email": "darroyo99@gmail.com",
+    "address": "480 E Radison Run, Clayton DE 19938",
+    "guests": 3,
+    "party_size": 3,
+    "message": "May the Lord always guide your steps with faith, love, wisdom and fill your life with peace and joy in this new chapter of your life.",
+    "client_token": "mu0hkn62k5t9hkuh",
+    "date": "2026-09-14T00:13:59.879464+00:00",
+    "confirmation_sent": false,
+    "followup_stage": 0
   }
 ]
