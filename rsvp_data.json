@@ -452,5 +452,19 @@
     "date": "2026-09-16T22:03:45.487911+00:00",
     "confirmation_sent": false,
     "followup_stage": 0
+  },
+  {
+    "_id": "ec7c81a7221b",
+    "name": "Alberto Garcia y familia",
+    "phone": "3026695503",
+    "email": "",
+    "address": "",
+    "guests": 6,
+    "party_size": 6,
+    "message": "",
+    "client_token": "mu4qag1kd9z8hqx8",
+    "date": "2026-09-16T23:28:07.880285+00:00",
+    "confirmation_sent": false,
+    "followup_stage": 0
   }
 ]
