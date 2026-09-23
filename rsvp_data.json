@@ -536,5 +536,19 @@
     "date": "2026-09-22T16:26:55.789645+00:00",
     "confirmation_sent": false,
     "followup_stage": 0
+  },
+  {
+    "_id": "fea4f9693c19",
+    "name": "Dialis Santos y Peter Gracia",
+    "phone": "3029839481",
+    "email": "LadyDialis@aol.com",
+    "address": "24 Stanton Avenue, New Castle DE 19720",
+    "guests": 2,
+    "party_size": 2,
+    "message": "Samantha, we are so proud of your accomplishments. May God grant you the wisdom to see life through His eyes, the grace to make choices that honor your worth, and the courage to walk the path meant just for you. Happy Birthday!",
+    "client_token": "mue8mxdolsp9557l",
+    "date": "2026-09-23T15:16:09.626897+00:00",
+    "confirmation_sent": false,
+    "followup_stage": 0
   }
 ]
