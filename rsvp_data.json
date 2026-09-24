@@ -565,5 +565,19 @@
     "date": "2026-09-24T00:18:08.620663+00:00",
     "confirmation_sent": false,
     "followup_stage": 0
+  },
+  {
+    "_id": "b5fdb79244c8",
+    "name": "Ingrid Gonzalez",
+    "phone": "3024800094",
+    "email": "ingrid.egonzalez09@gmail.com",
+    "address": "1412 Fresno Rd Wilmington Delaware 19803",
+    "guests": 4,
+    "party_size": 4,
+    "message": "Lluvia de bendiciones",
+    "client_token": "mufo7puzeopx57rf",
+    "date": "2026-09-24T15:14:02.883454+00:00",
+    "confirmation_sent": false,
+    "followup_stage": 0
   }
 ]
