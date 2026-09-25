@@ -579,5 +579,19 @@
     "date": "2026-09-24T15:14:02.883454+00:00",
     "confirmation_sent": false,
     "followup_stage": 0
+  },
+  {
+    "_id": "2e0357a1ab70",
+    "name": "Stephaanie Welch",
+    "phone": "302-753-0950",
+    "email": "welchfcs@gmail.com",
+    "address": "",
+    "guests": 2,
+    "party_size": 2,
+    "message": "Happy birthday, Samantha!!",
+    "client_token": "mugbqj8tkib10d12",
+    "date": "2026-09-25T02:12:18.657611+00:00",
+    "confirmation_sent": false,
+    "followup_stage": 0
   }
 ]
