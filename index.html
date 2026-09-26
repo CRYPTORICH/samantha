@@ -407,85 +407,23 @@ body.en [data-en]{display:block}
   </div>
 </section>
 
-<!-- ═══ RSVP — PROMINENT, WARM, FUNCTIONAL ═══ -->
+<!-- ═══ RSVP — CLOSED 2026-09-26. Replies are in; the form is retired.
+     Stranded replies saved on guests' phones still re-send (script below). ═══ -->
 <section class="rsvp-section">
   <div class="rsvp-box">
 
     <p class="title-display reveal" style="text-align:center;margin-bottom:4px">
-      <span data-es>Confirmar Asistencia</span>
-      <span data-en>RSVP</span>
+      <span data-es>Confirmaciones Cerradas</span>
+      <span data-en>RSVP Closed</span>
     </p>
-    <p class="reveal d1" style="text-align:center;font-size:0.85rem;color:var(--muted);margin-bottom:24px">
-      <span data-es>Te esperamos para celebrar juntos</span>
-      <span data-en>We look forward to celebrating with you</span>
+    <p class="poetic reveal d1" style="text-align:center;font-size:1.3rem;margin:18px 0 14px">
+      <span data-es>¡Gracias por confirmar! Nos vemos en la celebración.</span>
+      <span data-en>Thank you for your RSVPs! See you at the celebration.</span>
     </p>
-
-    <form id="f" aria-label="Formulario de confirmación">
-      <div class="fg reveal d2">
-        <label class="fl" for="n" data-es>Nombre Completo</label>
-        <label class="fl" for="n" data-en>Full Name</label>
-        <input class="fi" id="n" type="text" placeholder="Tu nombre..." required autocomplete="name">
-      </div>
-      <div class="fg reveal d2">
-        <label class="fl" for="p" data-es>Teléfono</label>
-        <label class="fl" for="p" data-en>Phone</label>
-        <input class="fi" id="p" type="tel" placeholder="(302) 555-0123" autocomplete="tel">
-      </div>
-      <div class="fg reveal d2">
-        <label class="fl" for="e" data-es>Correo Electrónico</label>
-        <label class="fl" for="e" data-en>Email</label>
-        <input class="fi" id="e" type="email" placeholder="tu@email.com" autocomplete="email">
-      </div>
-      <div class="fg reveal d3">
-        <label class="fl" for="a" data-es>Dirección (para enviarte una nota de agradecimiento después)</label>
-        <label class="fl" for="a" data-en>Mailing Address (for a handwritten thank-you note after the celebration)</label>
-        <input class="fi" id="a" type="text" placeholder="Tu dirección..." autocomplete="street-address">
-      </div>
-      <div class="fg reveal d3">
-        <label class="fl" for="g" data-es>Número de Invitados</label>
-        <label class="fl" for="g" data-en>Number of Guests</label>
-        <input class="fi" id="g" type="number" min="1" max="10" value="1" inputmode="numeric">
-      </div>
-      <div class="fg reveal d3">
-        <label class="fl" for="m" data-es>Mensaje para Samantha</label>
-        <label class="fl" for="m" data-en>Message for Samantha</label>
-        <textarea class="fi" id="m" rows="2" placeholder="Tus deseos y bendiciones..."></textarea>
-      </div>
-      <div class="reveal d4">
-        <button type="submit" class="btn">
-          <span data-es>Confirmar Asistencia</span>
-          <span data-en>Send RSVP</span>
-        </button>
-      </div>
-    </form>
-
-    <!-- Social proof -->
-    <!-- Public confirmed-guest count removed at the family's request.
-         The running total lives in the private dashboard and the host
-         notification email, not on the public invitation. -->
-
-
-    <div id="ok" style="display:none;text-align:center;padding:40px 10px">
-      <p class="poetic" style="font-size:1.3rem"><span data-es>Gracias. Te esperamos el 3 de Octubre.</span><span data-en>Thank you. See you October 3rd.</span></p>
-      <p style="font-size:0.8rem;color:var(--muted);margin-top:12px"><span data-es>Fairwind Baptist Church · 3:00 – 6:00 PM</span><span data-en>Fairwind Baptist Church · 3:00 – 6:00 PM</span></p>
-    </div>
-
-    <!-- Shown when the RSVP could NOT be stored. Before 2026-09-03 this case
-         displayed the thank-you screen above and dropped the guest into
-         localStorage, so people believed they had replied and never appeared. -->
-    <div id="err" style="display:none;text-align:center;padding:28px 10px">
-      <p style="font-size:1.05rem;color:#b8763a">
-        <span data-es>No pudimos confirmar tu respuesta ahora mismo.</span>
-        <span data-en>We could not confirm your reply right now.</span>
-      </p>
-      <p style="font-size:0.85rem;color:var(--muted);margin-top:10px">
-        <span data-es>La guardamos en este dispositivo y la reenviaremos sola cuando vuelvas a abrir esta página. Si quieres estar seguro, intenta de nuevo o escríbenos.</span>
-        <span data-en>We saved it on this device and it will resend itself next time you open this page. To be sure, try again or message us.</span>
-      </p>
-      <button type="button" id="retry" style="margin-top:16px;padding:10px 22px;cursor:pointer">
-        <span data-es>Intentar de nuevo</span><span data-en>Try again</span>
-      </button>
-    </div>
+    <p class="reveal d2" style="text-align:center;font-size:0.85rem;color:var(--muted);line-height:1.8">
+      <span data-es>Sábado, 3 de Octubre · 3:00 – 6:00 PM<br>Fairwind Baptist Church · Bear, DE</span>
+      <span data-en>Saturday, October 3 · 3:00 – 6:00 PM<br>Fairwind Baptist Church · Bear, DE</span>
+    </p>
 
   </div>
 </section>
@@ -552,9 +490,7 @@ body.en [data-en]{display:block}
     D.getElementById('cd-s').textContent=String(Math.floor((df%60000)/1000)).padStart(2,'0');
   }tk();setInterval(tk,1000);
 
-  /* ═══ WARM RENDER ═══ */
-  // Fire on page load so Render is awake by the time someone submits
-  fetch('https://samantha-rsvp.onrender.com/', {mode:'no-cors'}).catch(function(){});
+  /* ═══ WARM RENDER ═══ removed 2026-09-26: RSVP is closed, nothing to submit. */
 
   /* ═══ RSVP COUNT ═══ */
   function loadCount(){
@@ -620,52 +556,8 @@ body.en [data-en]{display:block}
   }
   resendPending();
 
-  function newToken(){return Date.now().toString(36)+Math.random().toString(36).slice(2,10)}
-  var formToken=newToken();
-
-  D.getElementById('f').addEventListener('submit',function(e){
-    e.preventDefault();
-    var btn=e.target.querySelector('button[type=submit]');
-    var origText=btn.textContent;
-    btn.textContent='Enviando…';btn.disabled=true;
-    var nm=D.getElementById('n').value.trim();if(!nm){btn.textContent=origText;btn.disabled=false;return;}
-    // One token per filled-in form - generated on page load, NOT per press, so a
-    // guest who taps Send three times while the network is bad is still one guest.
-    // The 3s retry and the offline queue resend THIS token, so a response lost in
-    // transit can never store them twice either. A new one is minted after a
-    // successful submit, in case the same device RSVPs again for someone else.
-    var d={client_token:formToken,name:nm,phone:D.getElementById('p').value.trim(),email:D.getElementById('e').value.trim(),address:D.getElementById('a').value.trim(),guests:Number(D.getElementById('g').value)||1,message:D.getElementById('m').value.trim()};
-
-    function trySubmit(attempt){
-      postRsvp(d).then(function(){
-        // Stored on the server for real — only now may we say thank you.
-        D.getElementById('f').style.display='none';
-        D.getElementById('err').style.display='none';
-        D.getElementById('ok').style.display='block';
-        formToken=newToken();   // this guest is stored; a further RSVP is a new one
-        loadCount();
-      }).catch(function(){
-        if(attempt < 1){
-          btn.textContent='Reintentando…';
-          setTimeout(function(){trySubmit(attempt+1)}, 3000);
-          return;
-        }
-        // Keep it on the device AND tell the truth. It is re-sent on next load.
-        pendingAdd(Object.assign({}, d, {date:new Date().toISOString()}));
-        D.getElementById('f').style.display='none';
-        D.getElementById('err').style.display='block';
-        btn.textContent=origText; btn.disabled=false;
-      });
-    }
-    trySubmit(0);
-  });
-
-  var rb=D.getElementById('retry');
-  if(rb) rb.addEventListener('click',function(){
-    D.getElementById('err').style.display='none';
-    D.getElementById('f').style.display='';
-    resendPending();
-  });
+  /* RSVP closed 2026-09-26: the form and its submit/retry handlers were removed.
+     resendPending() above still delivers replies that were stranded on a guest's device. */
 
 })();
 </script>
